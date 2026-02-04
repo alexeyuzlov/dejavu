@@ -1,3 +1,5 @@
+import { onResume } from '../../events';
+import { collideArcade } from '../../physics';
 import { Bullet } from '../bullets/bullet';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -27,7 +29,7 @@ export class Shooter extends AbstractEnemy {
     }
     this.health = 100;
 
-    this.game.onResume.add(() => {
+    onResume(this.game, () => {
       this.lastBulletShotAt += this.game.time.pauseDuration;
     });
 
@@ -40,7 +42,7 @@ export class Shooter extends AbstractEnemy {
   update() {
     super.update();
 
-    this.game.physics.arcade.collide(this, this.level.layer);
+    collideArcade(this.game, this, this.level.layer);
 
     if (!this.inCamera || !this.alive) {
       this.body.velocity.setTo(0, 0);

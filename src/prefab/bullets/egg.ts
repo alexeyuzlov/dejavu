@@ -1,3 +1,4 @@
+import { collideArcade, enableArcade } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class Egg extends AbstractPrefab {
@@ -8,7 +9,7 @@ export class Egg extends AbstractPrefab {
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, 'egg');
 
-    game.physics.arcade.enable(this);
+    enableArcade(game, this);
     this.anchor.set(0.5, 0.5);
     this.kill();
 
@@ -32,7 +33,7 @@ export class Egg extends AbstractPrefab {
   }
 
   update() {
-    this.game.physics.arcade.collide(this, this.level.player, (egg: any, player: any) => {
+    collideArcade(this.game, this, this.level.player, (egg: any, player: any) => {
       egg.kill();
 
       if (!this.level.player.immortalState && !this.level.player.attackState) {
@@ -41,7 +42,7 @@ export class Egg extends AbstractPrefab {
       }
     });
 
-    this.game.physics.arcade.collide(this, this.level.layer, (egg: any, layer: any) => {
+    collideArcade(this.game, this, this.level.layer, (egg: any, layer: any) => {
       if (!this.eggCrashState) {
         egg.setEggCrash();
       }

@@ -1,3 +1,4 @@
+import { overlapArcade, enableArcade } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 import { AbstractZone } from '../../state/levels/abstract-zone';
 
@@ -6,11 +7,11 @@ export class Bottle extends AbstractPrefab {
 
   constructor(game: Phaser.Game, x: number, y: number, texture: string) {
     super(game, x, y, texture);
-    game.physics.arcade.enable(this);
+    enableArcade(game, this);
   }
 
   update() {
-    this.game.physics.arcade.overlap(this.level.player, this, (player: any, bottle: any) => {
+    overlapArcade(this.game, this.level.player, this, (player: any, bottle: any) => {
       bottle.makeAction();
       bottle.kill();
     });

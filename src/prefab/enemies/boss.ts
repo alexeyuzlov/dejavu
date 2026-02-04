@@ -1,3 +1,6 @@
+import { onKilled, onResume } from '../../events';
+import { overlapArcade } from '../../physics';
+import { addTween } from '../../tweens';
 import { BulletReject } from '../bullets/bullet-reject';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -38,7 +41,7 @@ export class Boss extends AbstractEnemy {
       this.bullets.add(bullet);
     }
 
-    this.game.onResume.add(() => {
+    onResume(this.game, () => {
       this.lastBulletShotAt += this.game.time.pauseDuration;
     });
 
@@ -70,11 +73,10 @@ export class Boss extends AbstractEnemy {
     this.flash.alpha = 0;
     this.flash.fixedToCamera = true;
 
-    this.events.onKilled.add(() => {
+    onKilled(this, () => {
       this.boom();
 
-      this.game.add
-        .tween(this.level.blackScreen)
+      addTween(this.game, this.level.blackScreen)
         .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
         .onComplete.add(() => {
           this.level.startNextLevel();
@@ -90,7 +92,7 @@ export class Boss extends AbstractEnemy {
     } while (rand == this.activeTweenID);
     this.activeTweenID = rand;
 
-    var tween = this.game.add.tween(this);
+    var tween = addTween(this.game, this);
     tween.to(
       {
         x: this.bossTweens.children[this.activeTweenID].x,
@@ -112,19 +114,15 @@ export class Boss extends AbstractEnemy {
   update() {
     if (!this.alive) return;
 
-    this.game.physics.arcade.overlap(
-      this,
-      this.bullets,
-      (shooterReject: any, bulletReject: any) => {
-        if (bulletReject.rejectState) {
-          bulletReject.kill();
-          this.animations.play('blue');
-          this.isProtect = false;
-        }
-      },
-    );
+    overlapArcade(this.game, this, this.bullets, (shooterReject: any, bulletReject: any) => {
+      if (bulletReject.rejectState) {
+        bulletReject.kill();
+        this.animations.play('blue');
+        this.isProtect = false;
+      }
+    });
 
-    this.game.physics.arcade.overlap(this.level.player, this, (player: any, enemy: any) => {
+    overlapArcade(this.game, this.level.player, this, (player: any, enemy: any) => {
       if (player.attackState) {
         if (this.isProtect) {
           this.makeDamage(1);
@@ -187,8 +185,7 @@ export class Boss extends AbstractEnemy {
 
     // Fade out the lightning sprite using a tween on the alpha property.
     // Check out the "Easing function" examples for more info.
-    this.game.add
-      .tween(this.lightning)
+    addTween(this.game, this.lightning)
       .to({ alpha: 0.5 }, 100, Phaser.Easing.Bounce.Out)
       .to({ alpha: 1.0 }, 100, Phaser.Easing.Bounce.Out)
       .to({ alpha: 0.5 }, 100, Phaser.Easing.Bounce.Out)
@@ -198,7 +195,7 @@ export class Boss extends AbstractEnemy {
 
     // Create the flash
     this.flash.alpha = 1;
-    this.game.add.tween(this.flash).to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In).start();
+    addTween(this.game, this.flash).to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In).start();
   }
 
   createLightningTexture(

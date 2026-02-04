@@ -1,3 +1,5 @@
+import { onResume } from '../../events';
+import { collideArcade, overlapArcade } from '../../physics';
 import { BulletReject } from '../bullets/bullet-reject';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -26,7 +28,7 @@ export class ShooterReject extends AbstractEnemy {
     }
     this.health = 100;
 
-    this.game.onResume.add(() => {
+    onResume(this.game, () => {
       this.lastBulletShotAt += this.game.time.pauseDuration;
     });
 
@@ -39,18 +41,14 @@ export class ShooterReject extends AbstractEnemy {
   update() {
     super.update();
 
-    this.game.physics.arcade.collide(this, this.level.layer);
+    collideArcade(this.game, this, this.level.layer);
 
-    this.game.physics.arcade.overlap(
-      this,
-      this.bullets,
-      (shooterReject: any, bulletReject: any) => {
-        if (bulletReject.rejectState) {
-          bulletReject.kill();
-          this.makeDamage(bulletReject.damageRejectPoints);
-        }
-      },
-    );
+    overlapArcade(this.game, this, this.bullets, (shooterReject: any, bulletReject: any) => {
+      if (bulletReject.rejectState) {
+        bulletReject.kill();
+        this.makeDamage(bulletReject.damageRejectPoints);
+      }
+    });
 
     if (!this.inCamera || !this.alive) {
       this.body.velocity.setTo(0, 0);

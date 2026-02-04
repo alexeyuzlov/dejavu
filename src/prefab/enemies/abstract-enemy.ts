@@ -1,3 +1,5 @@
+import { overlapArcade, enableArcade } from '../../physics';
+import { addTween } from '../../tweens';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class AbstractEnemy extends AbstractPrefab {
@@ -10,7 +12,7 @@ export class AbstractEnemy extends AbstractPrefab {
   constructor(game: Phaser.Game, x: number, y: number, sprite: string) {
     super(game, x, y, sprite);
 
-    game.physics.arcade.enable(this);
+    enableArcade(game, this);
     this.alive = true;
     this.anchor.set(0, 0.5);
 
@@ -38,9 +40,15 @@ export class AbstractEnemy extends AbstractPrefab {
       };
 
       var text = this.game.add.text(this.x, this.y, damagePoint.toString(), textStyle);
-      var tween = this.game.add
-        .tween(text)
-        .to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true, 0, 0, false);
+      var tween = addTween(this.game, text).to(
+        { alpha: 0 },
+        1000,
+        Phaser.Easing.Linear.None,
+        true,
+        0,
+        0,
+        false,
+      );
 
       tween.onComplete.add(() => {
         text.destroy();
@@ -52,7 +60,7 @@ export class AbstractEnemy extends AbstractPrefab {
   }
 
   update() {
-    this.game.physics.arcade.overlap(this.level.player, this, (player: any, enemy: any) => {
+    overlapArcade(this.game, this.level.player, this, (player: any, enemy: any) => {
       if (player.attackState) {
         enemy.makeDamage(player.damagePoints);
       } else if (!this.level.player.immortalState) {

@@ -1,4 +1,5 @@
-import { addDelayedEvent, addRepeatEvent } from '../../phaser-helpers';
+import { bindKeyDown } from '../../input';
+import { addDelayedEvent, addRepeatEvent } from '../phaser-helpers';
 import { settings } from '../../global-config';
 
 export class AbstractStory extends Phaser.State {
@@ -19,7 +20,7 @@ export class AbstractStory extends Phaser.State {
     this.text = this.game.add.text(10, 10, '', settings.font.whiteBig);
     this.text.wordWrap = true;
     this.text.wordWrapWidth = this.game.width;
-    this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.skipStory, this);
+    bindKeyDown(this.game, Phaser.Keyboard.SPACEBAR, this.skipStory, this);
     this.nextLine();
   }
 

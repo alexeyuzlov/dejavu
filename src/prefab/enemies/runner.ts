@@ -1,3 +1,4 @@
+import { collideArcade } from '../../physics';
 import { Direction } from '../../global-config';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -54,15 +55,11 @@ export class Runner extends AbstractEnemy {
   update() {
     super.update();
 
-    this.game.physics.arcade.collide(this, this.level.layer);
+    collideArcade(this.game, this, this.level.layer);
 
-    this.game.physics.arcade.collide(
-      this,
-      this.level.transparents,
-      (runner: any, transparent: any) => {
-        runner.toggleDirection();
-      },
-    );
+    collideArcade(this.game, this, this.level.transparents, (runner: any, transparent: any) => {
+      runner.toggleDirection();
+    });
 
     if (this.body.blocked.left || this.body.blocked.right) {
       this.toggleDirection();

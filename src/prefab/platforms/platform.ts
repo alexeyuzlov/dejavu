@@ -1,3 +1,4 @@
+import { collideArcade, enableArcade } from '../../physics';
 import { Direction } from '../../global-config';
 import { AbstractPrefab } from '../abstract-prefab';
 
@@ -8,7 +9,7 @@ export class Platform extends AbstractPrefab {
   constructor(game: Phaser.Game, x: number, y: number, texture: string) {
     super(game, x, y, texture);
 
-    game.physics.arcade.enable(this);
+    enableArcade(game, this);
     this.body.immovable = true;
     this.velocity = 100;
   }
@@ -38,7 +39,8 @@ export class Platform extends AbstractPrefab {
   }
 
   update() {
-    this.game.physics.arcade.collide(
+    collideArcade(
+      this.game,
       this.level.player,
       this,
       null,
@@ -47,7 +49,8 @@ export class Platform extends AbstractPrefab {
       },
     );
 
-    this.game.physics.arcade.collide(
+    collideArcade(
+      this.game,
       this,
       this.level.transparents,
       (platform: any, transparent: any) => {

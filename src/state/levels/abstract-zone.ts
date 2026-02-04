@@ -1,6 +1,9 @@
 import * as Prefab from '../../prefab';
 import { Levels, StateKeys, Stories, settings } from '../../global-config';
-import { followLockonCamera } from '../../phaser-helpers';
+import { bindKeyDown } from '../../input';
+import { followLockonCamera } from '../phaser-helpers';
+import { createLevelMap, createObjectsFromMap } from '../../tilemap';
+import { addTween } from '../../tweens';
 
 export class AbstractZone extends Phaser.State {
   map: Phaser.Tilemap;
@@ -39,12 +42,9 @@ export class AbstractZone extends Phaser.State {
     this.game.stage.backgroundColor = '#000000';
 
     // MAP AND LAYERS
-    this.map = this.game.add.tilemap('map');
-    this.map.addTilesetImage('ground');
-    this.map.setCollisionBetween(1, 5);
-
-    this.layer = this.map.createLayer('layer');
-    this.layer.resizeWorld();
+    const levelMap = createLevelMap(this.game, 'map', 'ground', 'layer');
+    this.map = levelMap.map;
+    this.layer = levelMap.layer;
 
     // PREFABS SINGLE
     this.player = new Prefab.Player(this.game, 120, this.game.world.height - 200);
@@ -72,14 +72,13 @@ export class AbstractZone extends Phaser.State {
 
     this.blackScreen = new Prefab.BlackScreen(this.game);
     this.blackScreen.setText(this.game.state.current);
-    this.game.add
-      .tween(this.blackScreen)
+    addTween(this.game, this.blackScreen)
       .to({ alpha: 0 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
       .onComplete.add(() => {
         this.hud.alpha = 1;
       });
 
-    this.game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
+    bindKeyDown(this.game, Phaser.Keyboard.P, () => {
       this.game.paused = !this.game.paused;
     });
   }
@@ -87,32 +86,7 @@ export class AbstractZone extends Phaser.State {
   getPrefabsFromMap(name: string, className?: Object): Phaser.Group {
     var group = this.game.add.group();
 
-    var index = this.map.getTilesetIndex(name);
-
-    if (className && index) {
-      this.map.createFromObjects(
-        'objects',
-        this.map.tilesets[index].firstgid,
-        name,
-        0,
-        true,
-        false,
-        group,
-        className,
-      );
-    } else if (index) {
-      this.map.createFromObjects(
-        'objects',
-        this.map.tilesets[index].firstgid,
-        name,
-        0,
-        true,
-        false,
-        group,
-      );
-    }
-
-    return group;
+    return createObjectsFromMap(this.map, 'objects', name, group, className);
   }
 
   render() {
@@ -125,7 +99,7 @@ export class AbstractZone extends Phaser.State {
 
      if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
          this.blackScreen.setText("");
-         this.game.add.tween(this.blackScreen)
+        addTween(this.game, this.blackScreen)
             .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
             .onComplete.add(()=> {
                 this.startNextLevel();
@@ -137,8 +111,7 @@ export class AbstractZone extends Phaser.State {
 
   gameOver() {
     this.blackScreen.setText('Game Over. Reload Level.');
-    this.game.add
-      .tween(this.blackScreen)
+    addTween(this.game, this.blackScreen)
       .to({ alpha: 1 }, Phaser.Timer.SECOND * 1, Phaser.Easing.Linear.None, true)
       .onComplete.add(() => {
         this.game.state.start(StateKeys.GameOver);
@@ -147,8 +120,7 @@ export class AbstractZone extends Phaser.State {
 
   startNextLevel() {
     this.blackScreen.setText(this.getNextLevel());
-    this.game.add
-      .tween(this.blackScreen)
+    addTween(this.game, this.blackScreen)
       .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
       .onComplete.add(() => {
         this.game.state.start(this.getNextLevel());

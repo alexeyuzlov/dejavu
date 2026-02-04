@@ -1,3 +1,7 @@
+import { isKeyDown } from '../input';
+import { collideArcade, enableArcade } from '../physics';
+import { addTween } from '../tweens';
+import { onKilled } from '../events';
 import { Direction, settings } from '../global-config';
 import { AbstractPrefab } from './abstract-prefab';
 
@@ -23,7 +27,7 @@ export class Player extends AbstractPrefab {
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, 'player');
-    game.physics.arcade.enable(this);
+    enableArcade(game, this);
 
     this.gravity = 500;
     this.acceleration = 500;
@@ -70,7 +74,7 @@ export class Player extends AbstractPrefab {
       true,
     );
 
-    this.events.onKilled.add(() => {
+    onKilled(this, () => {
       this.level.gameOver();
     });
   }
@@ -90,9 +94,15 @@ export class Player extends AbstractPrefab {
 
   write(text: any, style: any) {
     var textSprite = this.game.add.text(this.x, this.y, text, style);
-    var tween = this.game.add
-      .tween(textSprite)
-      .to({ alpha: 0 }, Phaser.Timer.SECOND, Phaser.Easing.Linear.None, true, 0, 0, false);
+    var tween = addTween(this.game, textSprite).to(
+      { alpha: 0 },
+      Phaser.Timer.SECOND,
+      Phaser.Easing.Linear.None,
+      true,
+      0,
+      0,
+      false,
+    );
 
     tween.onComplete.add(() => {
       textSprite.destroy();
@@ -113,7 +123,7 @@ export class Player extends AbstractPrefab {
 
   jump() {
     if (
-      this.game.input.keyboard.isDown(settings.keys.jump) &&
+      isKeyDown(this.game, settings.keys.jump) &&
       (this.body.blocked.down || this.body.touching.down) &&
       !this.isActiveJumpKey
     ) {
@@ -121,18 +131,18 @@ export class Player extends AbstractPrefab {
       this.body.velocity.y = -this.jumpPower;
     }
 
-    if (!this.game.input.keyboard.isDown(settings.keys.jump)) {
+    if (!isKeyDown(this.game, settings.keys.jump)) {
       this.isActiveJumpKey = false;
     }
   }
 
   move() {
-    if (this.game.input.keyboard.isDown(settings.keys.moveRight)) {
+    if (isKeyDown(this.game, settings.keys.moveRight)) {
       this.moveState = true;
       this.body.acceleration.x = this.acceleration;
       this.direction = Direction.Right;
       this.scale.x = 1;
-    } else if (this.game.input.keyboard.isDown(settings.keys.moveLeft)) {
+    } else if (isKeyDown(this.game, settings.keys.moveLeft)) {
       this.moveState = true;
       this.body.acceleration.x = -this.acceleration;
       this.direction = Direction.Left;
@@ -145,7 +155,7 @@ export class Player extends AbstractPrefab {
 
   attack() {
     if (
-      this.game.input.keyboard.isDown(settings.keys.attack) &&
+      isKeyDown(this.game, settings.keys.attack) &&
       !this.attackState &&
       !this.isAttackKeyPressed
     ) {
@@ -154,7 +164,7 @@ export class Player extends AbstractPrefab {
       this.attackStateAt = this.game.time.now;
     }
 
-    if (!this.game.input.keyboard.isDown(settings.keys.attack)) {
+    if (!isKeyDown(this.game, settings.keys.attack)) {
       this.isAttackKeyPressed = false;
     }
 
@@ -182,7 +192,7 @@ export class Player extends AbstractPrefab {
   }
 
   update() {
-    this.game.physics.arcade.collide(this, this.level.layer);
+    collideArcade(this.game, this, this.level.layer);
 
     this.move();
     this.jump();

@@ -1,3 +1,4 @@
+import { enableArcade } from '../../physics';
 import { Bottle } from './bottle';
 
 export class BottleHP extends Bottle {
@@ -5,7 +6,7 @@ export class BottleHP extends Bottle {
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, 'bottle-hp');
-    game.physics.arcade.enable(this);
+    enableArcade(game, this);
   }
 
   makeAction() {

@@ -1,3 +1,4 @@
+import { overlapArcade, enableArcade } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class BulletReject extends AbstractPrefab {
@@ -9,7 +10,7 @@ export class BulletReject extends AbstractPrefab {
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, 'bullet-reject');
 
-    game.physics.arcade.enable(this);
+    enableArcade(game, this);
     this.anchor.set(0.5, 0.5);
     this.kill();
 
@@ -18,7 +19,7 @@ export class BulletReject extends AbstractPrefab {
   }
 
   update() {
-    this.game.physics.arcade.overlap(this, this.level.player, (bulletReject: any, player: any) => {
+    overlapArcade(this.game, this, this.level.player, (bulletReject: any, player: any) => {
       if (bulletReject.rejectState) return;
 
       if (this.level.player.attackState) {
