@@ -4,13 +4,14 @@ const { spawn } = require("node:child_process");
 const mode = process.argv[2] || "preview";
 const port = Number(process.env.SMOKE_PORT) || 4173;
 const host = "127.0.0.1";
+const bindHost = "0.0.0.0";
 const timeoutMs = Number(process.env.SMOKE_TIMEOUT_MS) || 60_000;
 const isWindows = process.platform === "win32";
 
 const serverArgs =
   mode === "dev"
-    ? ["run", "dev", "--", "--port", String(port), "--strictPort"]
-    : ["run", "preview", "--", "--port", String(port), "--strictPort"];
+    ? ["run", "dev", "--", "--host", bindHost, "--port", String(port), "--strictPort"]
+    : ["run", "preview", "--", "--host", bindHost, "--port", String(port), "--strictPort"];
 
 let serverProcess;
 

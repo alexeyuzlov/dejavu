@@ -29,42 +29,26 @@ This build outputs to `dist/`.
    ```bash
    npm run build
    ```
-3. **Dev (open browser)**:
-   ```bash
-   npm run dev:open
-   ```
-4. **Preview the `dist/` output**:
+3. **Preview the `dist/` output**:
    ```bash
    npm run preview
    ```
-5. **Preview and auto-open the browser**:
-   ```bash
-   npm run preview:open
-   ```
-6. **Clean output**:
+4. **Clean output**:
    ```bash
    npm run clean
    ```
-7. **Check required assets**:
+5. **Check required assets**:
    ```bash
    npm run assets:check
    ```
-8. **Run smoke test**:
+6. **Run smoke test**:
    ```bash
    npm run test:smoke
    ```
-9. **Run smoke test in Docker**:
+7. **Run smoke test UI**:
    ```bash
-   npm run test:smoke:docker
+   npm run test:ui
    ```
-10. **Run smoke test against dev server**:
-    ```bash
-    npm run test:smoke:dev
-    ```
-11. **Run smoke test locally (no Docker)**:
-    ```bash
-    npm run test:smoke:local
-    ```
 
 Notes:
 

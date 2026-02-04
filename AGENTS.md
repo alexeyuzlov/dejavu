@@ -26,11 +26,9 @@ Update this file when build/test workflows, dependencies, or project structure c
 ### Playwright Smoke Test
 
 - Config and test live in `playwright.config.ts` and `tests/smoke.spec.ts`.
-- Docker fallback script exists; see npm scripts.
 - Smoke tests start the Vite server via `scripts/run-smoke.js` to manage
   lifecycle and avoid background process hangs.
-- `npm run test:smoke` runs inside Docker by default; use
-  `npm run test:smoke:local` for a local run.
+- `npm run test:smoke` runs inside Docker by default.
 - Local browser install may fail due to TLS (`UNABLE_TO_GET_ISSUER_CERT_LOCALLY`).
 - Prefer running smoke tests via Docker to avoid local TLS/browser install issues.
 

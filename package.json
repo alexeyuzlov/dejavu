@@ -3,10 +3,8 @@
   "version": "0.2.0",
   "scripts": {
     "dev": "vite",
-    "dev:open": "vite --open",
     "build": "npm run clean && vite build",
     "preview": "vite preview",
-    "preview:open": "vite preview --open",
     "clean": "rm -rf dist",
     "assets:check": "node scripts/check-assets.js",
     "format": "prettier --write .",
@@ -14,11 +12,8 @@
     "lint:types": "tsc --noEmit -p tsconfig.vite.json",
     "prepare": "husky install",
     "check": "npm run assets:check && npm run lint && npm run lint:types && npm run build",
-    "test:smoke": "npm run test:smoke:docker",
-    "test:smoke:local": "npm run build && node scripts/run-smoke.js preview",
-    "test:smoke:dev": "node scripts/run-smoke.js dev",
-    "test:ui": "npx playwright test --ui",
-    "test:smoke:docker": "docker run --rm --shm-size=1gb -e CI=1 -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm ci --ignore-scripts --no-fund --no-audit && npm run test:smoke:local\""
+    "test:smoke": "docker run --rm --shm-size=1gb -e CI=1 -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm ci --ignore-scripts --no-fund --no-audit && npm run build && node scripts/run-smoke.js preview\"",
+    "test:ui": "npx playwright test --ui"
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
