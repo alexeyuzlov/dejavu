@@ -55,8 +55,8 @@ export class FlierCrash extends AbstractEnemy {
     this.anims.play('flier-crash-fly');
   }
 
-  update() {
-    super.update();
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
 
     if (!this.scene.cameras.main.worldView.contains(this.x, this.y) || !this.active) {
       applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: 0, velocityY: 0 });

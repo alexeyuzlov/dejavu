@@ -1,4 +1,4 @@
-import { applyBodyConfig, collideArcade, enableArcade } from '../physics';
+import { applyBodyConfig, collideArcade } from '../physics';
 import { AbstractPrefab } from './abstract-prefab';
 
 export class Spike extends AbstractPrefab {
@@ -7,12 +7,11 @@ export class Spike extends AbstractPrefab {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'spike');
 
-    enableArcade(scene, this);
-
     applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { immovable: true });
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     collideArcade(this.scene, this.level.player, this, (player: any, spike: any) => {
       if (!this.level.player.immortalState) {
         this.level.player.makeDamage(spike.damagePoints);

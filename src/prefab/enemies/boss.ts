@@ -135,7 +135,8 @@ export class Boss extends AbstractEnemy {
     });
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     if (!this.active) return;
 
     overlapArcade(this.scene, this, this.bullets, (shooterReject: any, bulletReject: any) => {

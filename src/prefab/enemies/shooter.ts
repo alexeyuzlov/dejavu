@@ -56,8 +56,8 @@ export class Shooter extends AbstractEnemy {
     this.setOrigin(0.5, 0.5);
   }
 
-  update() {
-    super.update();
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
 
     collideArcade(this.scene, this, this.level.layer);
 

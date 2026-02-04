@@ -1,4 +1,4 @@
-import { collideArcade, enableArcade, killSprite } from '../../physics';
+import { collideArcade, killSprite } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class Bullet extends AbstractPrefab {
@@ -8,12 +8,12 @@ export class Bullet extends AbstractPrefab {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'bullet');
 
-    enableArcade(scene, this);
     this.setOrigin(0.5, 0.5);
     killSprite(this);
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     collideArcade(this.scene, this, this.level.player, (bullet: any, player: any) => {
       killSprite(bullet);
       if (!this.level.player.immortalState) {

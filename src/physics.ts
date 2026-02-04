@@ -1,6 +1,3 @@
-export const enableArcade = (scene: Phaser.Scene, target: any) =>
-  scene.physics.add.existing(target);
-
 export const collideArcade = (
   scene: Phaser.Scene,
   object1: any,

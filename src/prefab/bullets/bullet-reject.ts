@@ -1,4 +1,4 @@
-import { applyBodyConfig, overlapArcade, enableArcade, killSprite } from '../../physics';
+import { applyBodyConfig, overlapArcade, killSprite } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class BulletReject extends AbstractPrefab {
@@ -10,12 +10,12 @@ export class BulletReject extends AbstractPrefab {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'bullet-reject');
 
-    enableArcade(scene, this);
     this.setOrigin(0.5, 0.5);
     killSprite(this);
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     overlapArcade(this.scene, this, this.level.player, (bulletReject: any, player: any) => {
       if (bulletReject.rejectState) return;
 

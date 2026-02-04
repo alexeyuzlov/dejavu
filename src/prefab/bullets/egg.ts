@@ -1,4 +1,4 @@
-import { collideArcade, enableArcade, killSprite } from '../../physics';
+import { collideArcade, killSprite } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class Egg extends AbstractPrefab {
@@ -9,7 +9,6 @@ export class Egg extends AbstractPrefab {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'egg');
 
-    enableArcade(scene, this);
     this.setOrigin(0.5, 0.5);
     killSprite(this);
 
@@ -47,7 +46,8 @@ export class Egg extends AbstractPrefab {
     }
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     collideArcade(this.scene, this, this.level.player, (egg: any, player: any) => {
       killSprite(egg);
 

@@ -1,4 +1,4 @@
-import { overlapArcade, enableArcade, killSprite } from '../../physics';
+import { overlapArcade, killSprite } from '../../physics';
 import { timeNow, secondsToMs } from '../../time';
 import { AbstractPrefab } from '../abstract-prefab';
 
@@ -13,7 +13,6 @@ export class AbstractEnemy extends AbstractPrefab {
   constructor(scene: Phaser.Scene, x: number, y: number, sprite: string) {
     super(scene, x, y, sprite);
 
-    enableArcade(scene, this);
     this.setActive(true);
     this.setOrigin(0, 0.5);
 
@@ -59,7 +58,8 @@ export class AbstractEnemy extends AbstractPrefab {
     }
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     overlapArcade(this.scene, this.level.player, this, (player: any, enemy: any) => {
       if (player.attackState) {
         enemy.makeDamage(player.damagePoints);

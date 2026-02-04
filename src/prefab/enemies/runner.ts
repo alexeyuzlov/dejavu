@@ -62,8 +62,8 @@ export class Runner extends AbstractEnemy {
     }
   }
 
-  update() {
-    super.update();
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
 
     collideArcade(this.scene, this, this.level.layer);
 

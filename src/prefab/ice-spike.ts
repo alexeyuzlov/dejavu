@@ -1,4 +1,4 @@
-import { applyBodyConfig, overlapArcade, enableArcade, killSprite } from '../physics';
+import { applyBodyConfig, overlapArcade, killSprite } from '../physics';
 import { AbstractPrefab } from './abstract-prefab';
 
 export class IceSpike extends AbstractPrefab {
@@ -7,10 +7,10 @@ export class IceSpike extends AbstractPrefab {
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'ice-spike');
-    enableArcade(scene, this);
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     overlapArcade(this.scene, this.level.player, this, (player: any, ice: any) => {
       if (!this.level.player.immortalState) {
         this.level.player.makeDamage(ice.damagePoints);

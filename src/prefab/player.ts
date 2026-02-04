@@ -1,5 +1,5 @@
 import { isKeyDown } from '../input';
-import { applyBodyConfig, collideArcade, enableArcade, killSprite } from '../physics';
+import { applyBodyConfig, collideArcade, killSprite } from '../physics';
 import { onKilled } from '../events';
 import { timeNow, secondsToMs } from '../time';
 import { Direction, settings } from '../global-config';
@@ -28,7 +28,6 @@ export class Player extends AbstractPrefab {
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'player');
-    enableArcade(scene, this);
 
     this.gravity = 500;
     this.acceleration = 500;
@@ -221,7 +220,8 @@ export class Player extends AbstractPrefab {
     }
   }
 
-  update() {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     collideArcade(this.scene, this, this.level.layer);
 
     this.move();
