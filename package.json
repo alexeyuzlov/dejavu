@@ -10,6 +10,10 @@
     "vite:serve:open": "vite --open",
     "vite:preview": "vite preview",
     "vite:preview:open": "vite preview --open",
+    "dev": "npm run vite:dev & npm run vite:serve",
+    "dev:open": "npm run vite:dev & npm run vite:serve:open",
+    "prod": "npm run vite:build && npm run vite:preview",
+    "prod:open": "npm run vite:build && npm run vite:preview:open",
     "clean": "rm -rf dist",
     "assets:check": "node scripts/check-assets.js"
   },

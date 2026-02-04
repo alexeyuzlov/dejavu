@@ -18,19 +18,18 @@ To set up and build the project, follow these steps:
 ## Vite Build
 This build outputs to `dist/`.
 
+1. **Dev (server + TS watch)**:
+    ```bash
+    npm run dev
+    ```
 1. **Build to `dist/`**:
     ```bash
     npm run vite:build
     ```
-2. **Watch TypeScript (rebuild `dist/js/main.js`)**:
+2. **Dev (open browser)**:
     ```bash
-    npm run vite:dev
+    npm run dev:open
     ```
-3. **Run a dev server (serve `app/`)**:
-    ```bash
-    npm run vite:serve
-    ```
-   Open another terminal for `npm run vite:dev` so `dist/js/main.js` keeps updating.
 4. **Preview the `dist/` output**:
     ```bash
     npm run vite:preview
@@ -53,6 +52,9 @@ Notes:
 - The build step copies `node_modules/phaser/build/phaser.min.js` into `dist/vendor/`.
 - Vite requires Node 18+.
 - Node version is pinned in `.nvmrc`.
+
+## CI
+GitHub Actions runs `npm run assets:check` and `npm run vite:tsc` on push and pull requests.
 
 ## Game Features
 - Classic platformer mechanics.
