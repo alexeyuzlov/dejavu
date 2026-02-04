@@ -12,6 +12,12 @@ export enum Levels {
   Zone4Level1,
 }
 
+export const StateKeys = {
+  Boot: 'boot',
+  Preload: 'preload',
+  GameOver: 'gameOver',
+} as const;
+
 export enum Direction {
   Left,
   Right,

@@ -1,12 +1,12 @@
 import * as State from './state';
-import { Levels, Stories } from './global-config';
+import { Levels, StateKeys, Stories } from './global-config';
 
 export class Game extends Phaser.Game {
   constructor() {
     super(640, 480, Phaser.AUTO, 'game');
 
-    this.state.add('boot', State.Boot);
-    this.state.add('preload', State.Preload);
+    this.state.add(StateKeys.Boot, State.Boot);
+    this.state.add(StateKeys.Preload, State.Preload);
 
     this.state.add(Stories[Stories.Story1], State.Story1);
     this.state.add(Stories[Stories.Story2], State.Story2);
@@ -18,8 +18,8 @@ export class Game extends Phaser.Game {
     this.state.add(Levels[Levels.Zone3Level1], State.Zone3Level1);
     this.state.add(Levels[Levels.Zone4Level1], State.Zone4Level1);
 
-    this.state.add('gameOver', State.GameOver);
+    this.state.add(StateKeys.GameOver, State.GameOver);
 
-    this.state.start('boot');
+    this.state.start(StateKeys.Boot);
   }
 }

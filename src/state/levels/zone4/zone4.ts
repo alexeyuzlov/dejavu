@@ -1,10 +1,11 @@
+import { Assets } from '../../../assets';
 import { AbstractZone } from '../abstract-zone';
 
 export class Zone4 extends AbstractZone {
   bg: Phaser.TileSprite;
 
   preload() {
-    this.game.load.image('bg', 'assets/images/zone4.jpg');
+    this.game.load.image(Assets.images.zone4.key, Assets.images.zone4.path);
     super.preload();
   }
 

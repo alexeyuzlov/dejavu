@@ -1,3 +1,4 @@
+import { Assets } from '../assets';
 import * as Prefab from '../prefab';
 import { settings } from '../global-config';
 
@@ -11,70 +12,70 @@ export class Preload extends Phaser.State {
     this.load.setPreloadSprite(preloadBar);
 
     this.load.atlasXML(
-      'player',
-      'assets/images/prefabs/player/player.png',
-      'assets/images/prefabs/player/player.xml',
+      Assets.atlas.player.key,
+      Assets.atlas.player.image,
+      Assets.atlas.player.data,
     );
 
     //this.load.image('tween', 'assets/images/prefabs/tween.png');
-    this.load.image('tween', 'assets/images/prefabs/transparent.png');
+    this.load.image(Assets.images.tween.key, Assets.images.tween.path);
     //this.load.image('transparent', 'assets/images/prefabs/transparent-debug.png');
-    this.load.image('transparent', 'assets/images/prefabs/transparent.png');
+    this.load.image(Assets.images.transparent.key, Assets.images.transparent.path);
 
-    this.load.image('hud', 'assets/images/prefabs/hud.png');
-    this.load.image('ground', 'assets/images/ground.png');
+    this.load.image(Assets.images.hud.key, Assets.images.hud.path);
+    this.load.image(Assets.images.ground.key, Assets.images.ground.path);
 
-    this.load.image('platform-h', 'assets/images/prefabs/platform-h.png');
-    this.load.image('platform-v', 'assets/images/prefabs/platform-v.png');
+    this.load.image(Assets.images.platformH.key, Assets.images.platformH.path);
+    this.load.image(Assets.images.platformV.key, Assets.images.platformV.path);
 
-    this.load.image('bottle-hp', 'assets/images/prefabs/bottles/bottle-hp.png');
-    this.load.image('bottle-super', 'assets/images/prefabs/bottles/bottle-super.png');
+    this.load.image(Assets.images.bottleHp.key, Assets.images.bottleHp.path);
+    this.load.image(Assets.images.bottleSuper.key, Assets.images.bottleSuper.path);
 
-    this.load.image('exit', 'assets/images/prefabs/exit.png');
-    this.load.image('spike', 'assets/images/prefabs/spike.png');
-    this.load.image('ice-spike', 'assets/images/prefabs/ice-spike.png');
+    this.load.image(Assets.images.exit.key, Assets.images.exit.path);
+    this.load.image(Assets.images.spike.key, Assets.images.spike.path);
+    this.load.image(Assets.images.iceSpike.key, Assets.images.iceSpike.path);
 
     this.load.atlasXML(
-      'runner',
-      'assets/images/prefabs/enemies/runner.png',
-      'assets/images/prefabs/enemies/runner.xml',
+      Assets.atlas.runner.key,
+      Assets.atlas.runner.image,
+      Assets.atlas.runner.data,
     );
 
     this.load.atlasXML(
-      'flier',
-      'assets/images/prefabs/enemies/flier.png',
-      'assets/images/prefabs/enemies/flier.xml',
+      Assets.atlas.flier.key,
+      Assets.atlas.flier.image,
+      Assets.atlas.flier.data,
     );
     this.load.atlasXML(
-      'flier-crash',
-      'assets/images/prefabs/enemies/flier-crash.png',
-      'assets/images/prefabs/enemies/flier-crash.xml',
+      Assets.atlas.flierCrash.key,
+      Assets.atlas.flierCrash.image,
+      Assets.atlas.flierCrash.data,
     );
 
     this.load.atlasXML(
-      'shooter',
-      'assets/images/prefabs/enemies/shooter.png',
-      'assets/images/prefabs/enemies/shooter.xml',
+      Assets.atlas.shooter.key,
+      Assets.atlas.shooter.image,
+      Assets.atlas.shooter.data,
     );
     this.load.atlasXML(
-      'shooter-reject',
-      'assets/images/prefabs/enemies/shooter-reject.png',
-      'assets/images/prefabs/enemies/shooter-reject.xml',
+      Assets.atlas.shooterReject.key,
+      Assets.atlas.shooterReject.image,
+      Assets.atlas.shooterReject.data,
     );
 
     this.load.atlasXML(
-      'boss',
-      'assets/images/prefabs/enemies/boss.png',
-      'assets/images/prefabs/enemies/boss.xml',
+      Assets.atlas.boss.key,
+      Assets.atlas.boss.image,
+      Assets.atlas.boss.data,
     );
 
     this.load.atlasXML(
-      'egg',
-      'assets/images/prefabs/bullets/egg.png',
-      'assets/images/prefabs/bullets/egg.xml',
+      Assets.atlas.egg.key,
+      Assets.atlas.egg.image,
+      Assets.atlas.egg.data,
     );
-    this.load.image('bullet', 'assets/images/prefabs/bullets/bullet.png');
-    this.load.image('bullet-reject', 'assets/images/prefabs/bullets/bullet-reject.png');
+    this.load.image(Assets.images.bullet.key, Assets.images.bullet.path);
+    this.load.image(Assets.images.bulletReject.key, Assets.images.bulletReject.path);
   }
 
   create() {

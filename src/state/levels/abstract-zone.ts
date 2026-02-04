@@ -1,5 +1,6 @@
 import * as Prefab from '../../prefab';
-import { Levels, Stories, settings } from '../../global-config';
+import { Levels, StateKeys, Stories, settings } from '../../global-config';
+import { followLockonCamera } from '../../phaser-helpers';
 
 export class AbstractZone extends Phaser.State {
   map: Phaser.Tilemap;
@@ -67,7 +68,7 @@ export class AbstractZone extends Phaser.State {
     this.platformsVertical = this.getPrefabsFromMap('platform-v', Prefab.PlatformVertical);
 
     // POST-SETTINGS
-    this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
+    followLockonCamera(this.game, this.player);
 
     this.blackScreen = new Prefab.BlackScreen(this.game);
     this.blackScreen.setText(this.game.state.current);
@@ -140,7 +141,7 @@ export class AbstractZone extends Phaser.State {
       .tween(this.blackScreen)
       .to({ alpha: 1 }, Phaser.Timer.SECOND * 1, Phaser.Easing.Linear.None, true)
       .onComplete.add(() => {
-        this.game.state.start('gameOver');
+        this.game.state.start(StateKeys.GameOver);
       });
   }
 
@@ -169,10 +170,10 @@ export class AbstractZone extends Phaser.State {
         return Stories[Stories.Story4];
 
       case Levels[Levels.Zone4Level1]:
-        return 'gameOver';
+        return StateKeys.GameOver;
 
       default:
-        return 'gameOver';
+        return StateKeys.GameOver;
     }
   }
 }

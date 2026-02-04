@@ -1,3 +1,4 @@
+import { Assets } from '../../../assets';
 import { AbstractZone } from '../abstract-zone';
 
 export class Zone1 extends AbstractZone {
@@ -5,8 +6,13 @@ export class Zone1 extends AbstractZone {
 
   preload() {
     super.preload();
-    this.game.load.image('bg', 'assets/images/zone1.png');
-    this.game.load.spritesheet('rain', 'assets/images/rain.png', 8, 8);
+    this.game.load.image(Assets.images.zone1.key, Assets.images.zone1.path);
+    this.game.load.spritesheet(
+      Assets.spritesheets.rain.key,
+      Assets.spritesheets.rain.path,
+      Assets.spritesheets.rain.frameWidth,
+      Assets.spritesheets.rain.frameHeight,
+    );
   }
 
   create() {

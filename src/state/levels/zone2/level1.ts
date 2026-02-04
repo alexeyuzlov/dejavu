@@ -1,9 +1,15 @@
+import { Assets } from '../../../assets';
 import { Zone2 } from './zone2';
 
 export class Zone2Level1 extends Zone2 {
   preload() {
     super.preload();
-    this.game.load.tilemap('map', 'assets/levels/2-1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.game.load.tilemap(
+      Assets.tilemaps.key,
+      Assets.tilemaps.zone2,
+      null,
+      Phaser.Tilemap.TILED_JSON,
+    );
   }
 
   create() {

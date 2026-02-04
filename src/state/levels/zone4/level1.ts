@@ -1,3 +1,4 @@
+import { Assets } from '../../../assets';
 import * as Prefab from '../../../prefab';
 import { Zone4 } from './zone4';
 
@@ -6,7 +7,12 @@ export class Zone4Level1 extends Zone4 {
 
   preload() {
     super.preload();
-    this.game.load.tilemap('map', 'assets/levels/4-1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.game.load.tilemap(
+      Assets.tilemaps.key,
+      Assets.tilemaps.zone4,
+      null,
+      Phaser.Tilemap.TILED_JSON,
+    );
   }
 
   create() {

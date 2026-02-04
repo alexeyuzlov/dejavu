@@ -1,3 +1,4 @@
+import { addDelayedEvent, addRepeatEvent } from '../../phaser-helpers';
 import { settings } from '../../global-config';
 
 export class AbstractStory extends Phaser.State {
@@ -31,7 +32,8 @@ export class AbstractStory extends Phaser.State {
         this.game.time.events.remove(this.nextEvent);
         this.nextEvent = null;
       }
-      this.lineEvent = this.game.time.events.repeat(
+      this.lineEvent = addRepeatEvent(
+        this.game,
         80,
         this.content[this.index].length + 1,
         this.updateLine,
@@ -50,7 +52,12 @@ export class AbstractStory extends Phaser.State {
       if (this.lineEvent) {
         this.lineEvent = null;
       }
-      this.nextEvent = this.game.time.events.add(Phaser.Timer.SECOND * 2, this.nextLine, this);
+      this.nextEvent = addDelayedEvent(
+        this.game,
+        Phaser.Timer.SECOND * 2,
+        this.nextLine,
+        this,
+      );
     }
   }
 

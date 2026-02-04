@@ -22,7 +22,7 @@ const nodeGlobals = {
 
 module.exports = [
   {
-    ignores: ['dist/**', 'node_modules/**', 'public/**'],
+    ignores: ['dist/**', 'node_modules/**', 'public/**', 'tmp/**'],
   },
   js.configs.recommended,
   {

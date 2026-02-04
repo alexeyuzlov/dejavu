@@ -10,5 +10,8 @@
 # IDE/editor settings
 /.idea
 
+# Temporary files
+/tmp
+
 # OS files
 /.DS_Store

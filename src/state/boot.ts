@@ -1,3 +1,5 @@
+import { StateKeys } from '../global-config';
+
 export class Boot extends Phaser.State {
   preload() {
     this.load.image('preload-bar', 'assets/images/prefabs/preload-bar.png');
@@ -5,6 +7,6 @@ export class Boot extends Phaser.State {
 
   create() {
     this.game.stage.backgroundColor = '#000000';
-    this.game.state.start('preload');
+    this.game.state.start(StateKeys.Preload);
   }
 }
