@@ -16,9 +16,14 @@
     "prod:open": "npm run vite:build && npm run vite:preview:open",
     "clean": "rm -rf dist",
     "assets:check": "node scripts/check-assets.js",
-    "check": "npm run assets:check && npm run vite:tsc && npm run vite:build"
+    "check": "npm run assets:check && npm run vite:tsc && npm run vite:build",
+    "test:smoke": "npm run vite:build && npm run vite:preview -- --port 4173 --strictPort & npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "test:smoke:docker": "docker run --rm -t -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm ci && npm run test:smoke\""
   },
   "devDependencies": {
+    "@playwright/test": "1.58.1",
+    "playwright": "1.58.1",
     "typescript": "5.9.3",
     "vite": "6.4.1"
   },

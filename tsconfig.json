@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["dom", "es2015"],
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["@playwright/test"]
+  },
+  "include": [
+    "app/scripts/**/*.ts",
+    "tests/**/*.ts",
+    "playwright.config.ts",
+    "node_modules/phaser/build/phaser.d.ts"
+  ]
+}
