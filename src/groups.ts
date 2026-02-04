@@ -5,10 +5,7 @@ export const getFirstDead = <T extends Phaser.GameObjects.GameObject>(group: Pha
 
 export const reviveAndReset = (
   sprite: Phaser.GameObjects.Sprite & {
-    body?:
-      | Phaser.Physics.Arcade.Body
-      | Phaser.Physics.Arcade.StaticBody
-      | { enable?: boolean; reset?: (x: number, y: number) => void };
+    body?: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody;
   },
   x: number,
   y: number,

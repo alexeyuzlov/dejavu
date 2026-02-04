@@ -18,8 +18,6 @@ export class Zone4Level1 extends Zone4 {
   create() {
     super.create();
 
-    //this.player.x = this.game.world.width - 600;
-
     var bossTweens = this.getPrefabsFromMap('tween');
     this.boss = new Prefab.Boss(this, bossTweens);
   }

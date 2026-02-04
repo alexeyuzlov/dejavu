@@ -1,4 +1,3 @@
-import { bindKeyDown } from '../../input';
 import { addDelayedEvent, addRepeatEvent } from '../phaser-helpers';
 import { secondsToMs } from '../../time';
 import { settings } from '../../global-config';
@@ -24,7 +23,9 @@ export class AbstractStory extends Phaser.Scene {
 
     this.text = this.add.text(10, 10, '', settings.font.whiteBig);
     this.text.setWordWrapWidth(this.scale.width, true);
-    bindKeyDown(this, 'advance', this.skipStory, this);
+    const keyboard = this.input.keyboard;
+    const advanceKey = keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    advanceKey?.on('down', this.skipStory, this);
     this.nextLine();
   }
 

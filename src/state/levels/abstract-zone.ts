@@ -1,10 +1,10 @@
 import * as Prefab from '../../prefab';
 import { Levels, StateKeys, Stories, settings } from '../../global-config';
-import { bindKeyDown } from '../../input';
 import { createGroup } from '../../groups';
 import { secondsToMs } from '../../time';
 import { followLockonCamera } from '../phaser-helpers';
 import { createLevelMap, createObjectsFromMap, PrefabConstructor } from '../../tilemap';
+import { PlayerInput } from '../../prefab/player';
 
 export class AbstractZone extends Phaser.Scene {
   map: Phaser.Tilemaps.Tilemap;
@@ -13,6 +13,8 @@ export class AbstractZone extends Phaser.Scene {
   player: Prefab.Player;
   hud: Prefab.HUD;
   blackScreen: Prefab.BlackScreen;
+  playerInput: PlayerInput | null;
+  pauseKey: Phaser.Input.Keyboard.Key | null;
 
   transparents: Phaser.GameObjects.Group;
   spikes: Phaser.GameObjects.Group;
@@ -50,7 +52,8 @@ export class AbstractZone extends Phaser.Scene {
     this.layer = levelMap.layer;
 
     // PREFABS SINGLE
-    this.player = new Prefab.Player(this, 120, this.scale.height - 200);
+    this.playerInput = this.createPlayerInput();
+    this.player = new Prefab.Player(this, 120, this.scale.height - 200, this.playerInput);
 
     this.hud = new Prefab.HUD(this, 10, 10);
     this.hud.setAlpha(0);
@@ -85,7 +88,8 @@ export class AbstractZone extends Phaser.Scene {
       },
     });
 
-    bindKeyDown(this, 'pause', () => {
+    this.pauseKey = this.createPauseKey();
+    this.pauseKey?.on('down', () => {
       const isPaused = this.physics.world.isPaused;
       this.physics.world.isPaused = !isPaused;
       this.time.timeScale = isPaused ? 1 : 0;
@@ -97,30 +101,28 @@ export class AbstractZone extends Phaser.Scene {
     });
   }
 
+  createPlayerInput(): PlayerInput | null {
+    const keyboard = this.input.keyboard;
+    if (!keyboard) return null;
+    return {
+      cursors: keyboard.createCursorKeys(),
+      jump: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z),
+      attack: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
+      left: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      right: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+    };
+  }
+
+  createPauseKey(): Phaser.Input.Keyboard.Key | null {
+    const keyboard = this.input.keyboard;
+    if (!keyboard) return null;
+    return keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+  }
+
   getPrefabsFromMap(name: string, className?: PrefabConstructor): Phaser.GameObjects.Group {
     var group = createGroup(this);
 
     return createObjectsFromMap(this, this.map, 'objects', name, group, className);
-  }
-
-  render() {
-    //this.game.debug.spriteInfo(this.player, 100, 100);
-  }
-
-  update() {
-    /*
-    DEBUG FEATURE
-
-     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-         this.blackScreen.setText("");
-        addTween(this.game, this.blackScreen)
-           .to({ alpha: 1 }, secondsToMs(3), Phaser.Easing.Linear.None, true)
-            .onComplete.add(()=> {
-                this.startNextLevel();
-            });
-     }
-
-    */
   }
 
   gameOver() {

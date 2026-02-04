@@ -1,9 +1,16 @@
-import { isKeyDown } from '../input';
 import { applyBodyConfig, collideArcade, killSprite } from '../physics';
 import { onKilled } from '../events';
 import { timeNow, secondsToMs } from '../time';
 import { Direction, settings } from '../global-config';
 import { AbstractPrefab } from './abstract-prefab';
+
+export type PlayerInput = {
+  cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  jump: Phaser.Input.Keyboard.Key;
+  attack: Phaser.Input.Keyboard.Key;
+  left: Phaser.Input.Keyboard.Key;
+  right: Phaser.Input.Keyboard.Key;
+};
 
 export class Player extends AbstractPrefab {
   health: number;
@@ -25,8 +32,9 @@ export class Player extends AbstractPrefab {
   attackDuration: number;
   isActiveJumpKey: boolean;
   isAttackKeyPressed: boolean;
+  inputState: PlayerInput | null;
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
+  constructor(scene: Phaser.Scene, x: number, y: number, inputState: PlayerInput | null) {
     super(scene, x, y, 'player');
 
     this.gravity = 500;
@@ -47,6 +55,7 @@ export class Player extends AbstractPrefab {
     this.attackDuration = secondsToMs(1 / 3);
     this.isActiveJumpKey = false;
     this.isAttackKeyPressed = false;
+    this.inputState = inputState;
 
     applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { gravityY: this.gravity });
     this.setOrigin(0.5, 1);
@@ -145,8 +154,11 @@ export class Player extends AbstractPrefab {
   }
 
   jump() {
+    const input = this.inputState;
+    if (!input) return;
+
     if (
-      isKeyDown(this.scene, 'jump') &&
+      input.jump.isDown &&
       ((this.body as Phaser.Physics.Arcade.Body).blocked.down ||
         (this.body as Phaser.Physics.Arcade.Body).touching.down) &&
       !this.isActiveJumpKey
@@ -155,18 +167,25 @@ export class Player extends AbstractPrefab {
       applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityY: -this.jumpPower });
     }
 
-    if (!isKeyDown(this.scene, 'jump')) {
+    if (!input.jump.isDown) {
       this.isActiveJumpKey = false;
     }
   }
 
   move() {
-    if (isKeyDown(this.scene, 'moveRight')) {
+    const input = this.inputState;
+    if (!input) {
+      this.moveState = false;
+      applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { accelerationX: 0 });
+      return;
+    }
+
+    if (input.cursors.right?.isDown || input.right.isDown) {
       this.moveState = true;
       applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { accelerationX: this.acceleration });
       this.direction = Direction.Right;
       this.scaleX = 1;
-    } else if (isKeyDown(this.scene, 'moveLeft')) {
+    } else if (input.cursors.left?.isDown || input.left.isDown) {
       this.moveState = true;
       applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { accelerationX: -this.acceleration });
       this.direction = Direction.Left;
@@ -178,8 +197,11 @@ export class Player extends AbstractPrefab {
   }
 
   attack() {
+    const input = this.inputState;
+    if (!input) return;
+
     if (
-      isKeyDown(this.scene, 'attack') &&
+      input.attack.isDown &&
       !this.attackState &&
       !this.isAttackKeyPressed
     ) {
@@ -188,7 +210,7 @@ export class Player extends AbstractPrefab {
       this.attackStateAt = timeNow(this.scene);
     }
 
-    if (!isKeyDown(this.scene, 'attack')) {
+    if (!input.attack.isDown) {
       this.isAttackKeyPressed = false;
     }
 
