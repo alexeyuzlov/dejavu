@@ -1,8 +1,12 @@
 import { addDelayedEvent, addRepeatEvent } from './phaser-helpers';
 import { secondsToMs } from '../time';
-import { settings } from '../global-config';
+import { StateKeys, settings } from '../global-config';
 
-export class GameOver extends Phaser.State {
+export class GameOver extends Phaser.Scene {
+  constructor() {
+    super({ key: StateKeys.GameOver });
+  }
+
   content: string[] = [
     ' ',
     'Выбравшись из лабиринтов замка, твои глаза ослепил солнечный свет.',
@@ -12,16 +16,15 @@ export class GameOver extends Phaser.State {
     'Продолжение следует...',
     ' ',
   ];
-  text: Phaser.Text;
+  text: Phaser.GameObjects.Text;
   index = 0;
   line = '';
 
   create() {
-    this.game.stage.backgroundColor = '#000000';
+    this.cameras.main.setBackgroundColor('#000000');
 
-    this.text = this.game.add.text(10, 10, '', settings.font.whiteBig);
-    this.text.wordWrap = true;
-    this.text.wordWrapWidth = this.game.width;
+    this.text = this.add.text(10, 10, '', settings.font.whiteBig);
+    this.text.setWordWrapWidth(this.scale.width, true);
     this.nextLine();
   }
 
@@ -30,7 +33,7 @@ export class GameOver extends Phaser.State {
 
     if (this.index < this.content.length) {
       this.line = '';
-      addRepeatEvent(this.game, 80, this.content[this.index].length + 1, this.updateLine, this);
+      addRepeatEvent(this, 80, this.content[this.index].length + 1, this.updateLine, this);
     } else {
       // HERE LAST ACTION
     }
@@ -41,7 +44,7 @@ export class GameOver extends Phaser.State {
       this.line = this.content[this.index].substr(0, this.line.length + 1);
       this.text.setText(this.line);
     } else {
-      addDelayedEvent(this.game, secondsToMs(2), this.nextLine, this);
+      addDelayedEvent(this, secondsToMs(2), this.nextLine, this);
     }
   }
 }

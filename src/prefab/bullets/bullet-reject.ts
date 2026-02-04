@@ -1,4 +1,4 @@
-import { applyBodyConfig, overlapArcade, enableArcade } from '../../physics';
+import { applyBodyConfig, overlapArcade, enableArcade, killSprite } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class BulletReject extends AbstractPrefab {
@@ -7,32 +7,36 @@ export class BulletReject extends AbstractPrefab {
   damageRejectPoints: number = 300;
   rejectState: boolean = false;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'bullet-reject');
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, 'bullet-reject');
 
-    enableArcade(game, this);
-    this.anchor.set(0.5, 0.5);
-    this.kill();
-
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
+    enableArcade(scene, this);
+    this.setOrigin(0.5, 0.5);
+    killSprite(this);
   }
 
   update() {
-    overlapArcade(this.game, this, this.level.player, (bulletReject: any, player: any) => {
+    overlapArcade(this.scene, this, this.level.player, (bulletReject: any, player: any) => {
       if (bulletReject.rejectState) return;
 
       if (this.level.player.attackState) {
-        bulletReject.scale.x = bulletReject.scale.x == 1 ? -1 : 1;
-        applyBodyConfig(bulletReject.body, { velocityX: -bulletReject.body.velocity.x });
+        bulletReject.scaleX = bulletReject.scaleX === 1 ? -1 : 1;
+        applyBodyConfig(bulletReject.body as Phaser.Physics.Arcade.Body, {
+          velocityX: -(bulletReject.body as Phaser.Physics.Arcade.Body).velocity.x,
+        });
         bulletReject.rejectState = true;
       } else {
-        bulletReject.kill();
+        killSprite(bulletReject);
         if (!this.level.player.immortalState) {
           this.level.player.makeDamage(bulletReject.damagePoints);
           this.level.hud.updateHealthState();
         }
       }
     });
+
+    const bounds = this.scene.physics.world.bounds;
+    if (this.x < bounds.x || this.x > bounds.right || this.y < bounds.y || this.y > bounds.bottom) {
+      killSprite(this);
+    }
   }
 }

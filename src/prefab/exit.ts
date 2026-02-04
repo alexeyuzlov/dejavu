@@ -2,16 +2,16 @@ import { applyBodyConfig, collideArcade, enableArcade } from '../physics';
 import { AbstractPrefab } from './abstract-prefab';
 
 export class Exit extends AbstractPrefab {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'exit');
-    enableArcade(game, this);
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, 'exit');
+    enableArcade(scene, this);
 
-    applyBodyConfig(this.body, { immovable: true });
+    applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { immovable: true });
   }
 
   update() {
     collideArcade(
-      this.game,
+      this.scene,
       this.level.player,
       this.level.exits,
       (player: any, exit: any) => {

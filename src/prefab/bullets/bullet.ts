@@ -1,28 +1,30 @@
-import { collideArcade, enableArcade } from '../../physics';
+import { collideArcade, enableArcade, killSprite } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class Bullet extends AbstractPrefab {
   speed: number = 300;
   damagePoints: number = 20;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'bullet');
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, 'bullet');
 
-    enableArcade(game, this);
-    this.anchor.set(0.5, 0.5);
-    this.kill();
-
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
+    enableArcade(scene, this);
+    this.setOrigin(0.5, 0.5);
+    killSprite(this);
   }
 
   update() {
-    collideArcade(this.game, this, this.level.player, (bullet: any, player: any) => {
-      bullet.kill();
+    collideArcade(this.scene, this, this.level.player, (bullet: any, player: any) => {
+      killSprite(bullet);
       if (!this.level.player.immortalState) {
         this.level.player.makeDamage(bullet.damagePoints);
         this.level.hud.updateHealthState();
       }
     });
+
+    const bounds = this.scene.physics.world.bounds;
+    if (this.x < bounds.x || this.x > bounds.right || this.y < bounds.y || this.y > bounds.bottom) {
+      killSprite(this);
+    }
   }
 }

@@ -8,6 +8,6 @@
     "src/**/*.ts",
     "tests/**/*.ts",
     "playwright.config.ts",
-    "node_modules/phaser/typescript/phaser.d.ts"
+    "node_modules/phaser/types/phaser.d.ts"
   ]
 }

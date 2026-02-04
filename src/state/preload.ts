@@ -1,8 +1,12 @@
 import { Assets } from '../assets';
 import * as Prefab from '../prefab';
-import { settings } from '../global-config';
+import { StateKeys, settings } from '../global-config';
 
-export class Preload extends Phaser.State {
+export class Preload extends Phaser.Scene {
+  constructor() {
+    super({ key: StateKeys.Preload });
+  }
+
   preload() {
     const errorEl = document.getElementById('loading-error');
     const show = (el: HTMLElement | null) => {
@@ -14,17 +18,15 @@ export class Preload extends Phaser.State {
       show(errorEl);
     };
 
-    this.load.onFileError.add((file: any) => {
+    this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
       const key = file && file.key ? ` (${file.key})` : '';
       showError(`Failed to load assets${key}. Check console.`);
     });
 
-    var preloadBar = new Prefab.PreloadBar(
-      this.game,
-      this.game.world.width - 10,
-      this.game.world.height - 10,
-    );
-    this.load.setPreloadSprite(preloadBar);
+    const preloadBar = new Prefab.PreloadBar(this, this.scale.width - 10, this.scale.height - 10);
+    this.load.on(Phaser.Loader.Events.PROGRESS, (value: number) => {
+      preloadBar.setCrop(0, 0, preloadBar.width * value, preloadBar.height);
+    });
 
     this.load.atlasXML(
       Assets.atlas.player.key,
@@ -115,6 +117,6 @@ export class Preload extends Phaser.State {
     hide(loadingEl);
     show(gameEl);
     show(descriptionEl);
-    this.game.state.start(settings.storage.getCurrentState());
+    this.scene.start(settings.storage.getCurrentState());
   }
 }

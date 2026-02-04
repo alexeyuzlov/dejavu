@@ -1,23 +1,23 @@
-export const enableArcade = (game: Phaser.Game, target: any) =>
-  game.physics.arcade.enable(target);
+export const enableArcade = (scene: Phaser.Scene, target: any) =>
+  scene.physics.add.existing(target);
 
 export const collideArcade = (
-  game: Phaser.Game,
+  scene: Phaser.Scene,
   object1: any,
   object2: any,
   collideCallback?: (obj1: any, obj2: any) => void,
   processCallback?: (obj1: any, obj2: any) => boolean,
   callbackContext?: any,
-) => game.physics.arcade.collide(object1, object2, collideCallback, processCallback, callbackContext);
+) => scene.physics.world.collide(object1, object2, collideCallback, processCallback, callbackContext);
 
 export const overlapArcade = (
-  game: Phaser.Game,
+  scene: Phaser.Scene,
   object1: any,
   object2: any,
   overlapCallback?: (obj1: any, obj2: any) => void,
   processCallback?: (obj1: any, obj2: any) => boolean,
   callbackContext?: any,
-) => game.physics.arcade.overlap(object1, object2, overlapCallback, processCallback, callbackContext);
+) => scene.physics.world.overlap(object1, object2, overlapCallback, processCallback, callbackContext);
 
 export const applyBodyConfig = (
   body: Phaser.Physics.Arcade.Body,
@@ -37,17 +37,42 @@ export const applyBodyConfig = (
     accelerationY: number;
   }>,
 ) => {
-  if (config.gravityX !== undefined) body.gravity.x = config.gravityX;
-  if (config.gravityY !== undefined) body.gravity.y = config.gravityY;
-  if (config.dragX !== undefined) body.drag.x = config.dragX;
-  if (config.dragY !== undefined) body.drag.y = config.dragY;
-  if (config.maxVelocityX !== undefined) body.maxVelocity.x = config.maxVelocityX;
-  if (config.maxVelocityY !== undefined) body.maxVelocity.y = config.maxVelocityY;
-  if (config.collideWorldBounds !== undefined) body.collideWorldBounds = config.collideWorldBounds;
-  if (config.immovable !== undefined) body.immovable = config.immovable;
+  if (config.gravityX !== undefined || config.gravityY !== undefined) {
+    body.setGravity(config.gravityX ?? body.gravity.x, config.gravityY ?? body.gravity.y);
+  }
+  if (config.dragX !== undefined || config.dragY !== undefined) {
+    body.setDrag(config.dragX ?? body.drag.x, config.dragY ?? body.drag.y);
+  }
+  if (config.maxVelocityX !== undefined || config.maxVelocityY !== undefined) {
+    body.setMaxVelocity(
+      config.maxVelocityX ?? body.maxVelocity.x,
+      config.maxVelocityY ?? body.maxVelocity.y,
+    );
+  }
+  if (config.collideWorldBounds !== undefined) body.setCollideWorldBounds(config.collideWorldBounds);
+  if (config.immovable !== undefined) body.setImmovable(config.immovable);
   if (config.moves !== undefined) body.moves = config.moves;
-  if (config.velocityX !== undefined) body.velocity.x = config.velocityX;
-  if (config.velocityY !== undefined) body.velocity.y = config.velocityY;
-  if (config.accelerationX !== undefined) body.acceleration.x = config.accelerationX;
-  if (config.accelerationY !== undefined) body.acceleration.y = config.accelerationY;
+  if (config.velocityX !== undefined || config.velocityY !== undefined) {
+    body.setVelocity(config.velocityX ?? body.velocity.x, config.velocityY ?? body.velocity.y);
+  }
+  if (config.accelerationX !== undefined || config.accelerationY !== undefined) {
+    body.setAcceleration(
+      config.accelerationX ?? body.acceleration.x,
+      config.accelerationY ?? body.acceleration.y,
+    );
+  }
+};
+
+type ArcadeBodyLike =
+  | Phaser.Physics.Arcade.Body
+  | Phaser.Physics.Arcade.StaticBody
+  | { enable?: boolean };
+
+export const killSprite = (sprite: Phaser.GameObjects.Sprite & { body?: ArcadeBodyLike }) => {
+  sprite.setActive(false);
+  sprite.setVisible(false);
+  if (sprite.body) {
+    sprite.body.enable = false;
+  }
+  sprite.emit('killed');
 };

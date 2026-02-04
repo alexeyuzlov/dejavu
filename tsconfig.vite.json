@@ -2,7 +2,8 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": ["dom", "es2015"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "node_modules/phaser/typescript/phaser.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "node_modules/phaser/types/phaser.d.ts"]
 }

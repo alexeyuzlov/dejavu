@@ -1,25 +1,29 @@
 import * as State from './state';
-import { Levels, StateKeys, Stories } from './global-config';
 
-export class Game extends Phaser.Game {
-  constructor() {
-    super(640, 480, Phaser.AUTO, 'game');
-
-    this.state.add(StateKeys.Boot, State.Boot);
-    this.state.add(StateKeys.Preload, State.Preload);
-
-    this.state.add(Stories[Stories.Story1], State.Story1);
-    this.state.add(Stories[Stories.Story2], State.Story2);
-    this.state.add(Stories[Stories.Story3], State.Story3);
-    this.state.add(Stories[Stories.Story4], State.Story4);
-
-    this.state.add(Levels[Levels.Zone1Level1], State.Zone1Level1);
-    this.state.add(Levels[Levels.Zone2Level1], State.Zone2Level1);
-    this.state.add(Levels[Levels.Zone3Level1], State.Zone3Level1);
-    this.state.add(Levels[Levels.Zone4Level1], State.Zone4Level1);
-
-    this.state.add(StateKeys.GameOver, State.GameOver);
-
-    this.state.start(StateKeys.Boot);
-  }
-}
+export const createGame = () =>
+  new Phaser.Game({
+    type: Phaser.AUTO,
+    width: 640,
+    height: 480,
+    parent: 'game',
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: { x: 0, y: 0 },
+        debug: false,
+      },
+    },
+    scene: [
+      State.Boot,
+      State.Preload,
+      State.Story1,
+      State.Story2,
+      State.Story3,
+      State.Story4,
+      State.Zone1Level1,
+      State.Zone2Level1,
+      State.Zone3Level1,
+      State.Zone4Level1,
+      State.GameOver,
+    ],
+  });

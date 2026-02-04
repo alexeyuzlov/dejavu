@@ -1,7 +1,11 @@
-import { Levels } from '../../global-config';
+import { Levels, Stories } from '../../global-config';
 import { AbstractStory } from './abstract-story';
 
 export class Story2 extends AbstractStory {
+  constructor() {
+    super({ key: Stories[Stories.Story2] });
+  }
+
   nextLevel: string = Levels[Levels.Zone2Level1];
   content = [
     '',
@@ -11,15 +15,4 @@ export class Story2 extends AbstractStory {
     'Стало совсем темно, но тебе поможет твое дежавю...',
   ];
 
-  preload() {
-    super.preload();
-  }
-
-  create() {
-    super.create();
-  }
-
-  update() {
-    super.update();
-  }
 }

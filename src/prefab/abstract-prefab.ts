@@ -1,13 +1,13 @@
 import { AbstractZone } from '../state/levels/abstract-zone';
 
-export class AbstractPrefab extends Phaser.Sprite {
+export class AbstractPrefab extends Phaser.GameObjects.Sprite {
   level: AbstractZone;
 
-  constructor(game: Phaser.Game, x: number, y: number, texture: string | Phaser.BitmapData) {
-    super(game, x, y, texture);
+  constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
+    super(scene, x, y, texture);
 
-    this.level = (this.game.state.states as any)[this.game.state.current];
+    this.level = scene as AbstractZone;
 
-    game.add.existing(this);
+    scene.add.existing(this);
   }
 }

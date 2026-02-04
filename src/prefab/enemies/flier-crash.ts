@@ -12,20 +12,20 @@ export class FlierCrash extends AbstractEnemy {
   velocity: number;
   defensePoints: number;
   lastEggShotAt: number;
-  eggs: Phaser.Group;
+  eggs: Phaser.GameObjects.Group;
   countEggs: number;
   shotDelay: number;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'flier-crash');
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, 'flier-crash');
 
-    this.anchor.set(0.5, 0.5);
+    this.setOrigin(0.5, 0.5);
     this.health = 52;
 
-    this.eggs = createGroup(this.game);
+    this.eggs = createGroup(this.scene);
     this.countEggs = 10;
     for (var i = 0; i < this.countEggs; i++) {
-      var egg = new Egg(game, 0, 0);
+      var egg = new Egg(scene, 0, 0);
       this.eggs.add(egg);
     }
 
@@ -35,65 +35,74 @@ export class FlierCrash extends AbstractEnemy {
     this.velocity = 100;
     this.isActive = false;
     this.defensePoints = 6;
-    this.lastEggShotAt = timeNow(this.game);
+    this.lastEggShotAt = timeNow(this.scene);
     this.shotDelay = 1500;
 
-    this.animations.add(
-      'fly',
-      Phaser.Animation.generateFrameNames('flier-crash-', 1, 4, '.png', 0),
-      20,
-      true,
-    );
-    this.animations.play('fly');
+    const anims = this.scene.anims;
+    if (!anims.exists('flier-crash-fly')) {
+      anims.create({
+        key: 'flier-crash-fly',
+        frames: anims.generateFrameNames('flier-crash', {
+          prefix: 'flier-crash-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 20,
+        repeat: -1,
+      });
+    }
+    this.anims.play('flier-crash-fly');
   }
 
   update() {
     super.update();
 
-    if (!this.inCamera || !this.alive) {
-      applyBodyConfig(this.body, { velocityX: 0, velocityY: 0 });
+    if (!this.scene.cameras.main.worldView.contains(this.x, this.y) || !this.active) {
+      applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: 0, velocityY: 0 });
       return;
     }
 
     if (!this.isAttackOver) {
-      var distance = Phaser.Math.distance(
+      const playerBody = this.level.player.body as Phaser.Physics.Arcade.Body;
+      const distance = Phaser.Math.Distance.Between(
         this.x,
         this.y,
         this.level.player.x,
-        this.level.player.y - this.level.player.body.height * 4,
+        this.level.player.y - playerBody.height * 4,
       );
 
       if (distance > this.minDistance) {
-        var rotation = Phaser.Math.angleBetween(
+        const rotation = Phaser.Math.Angle.Between(
           this.x,
           this.y,
           this.level.player.x,
-          this.level.player.y - this.level.player.body.height * 4,
+          this.level.player.y - playerBody.height * 4,
         );
 
-        applyBodyConfig(this.body, {
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, {
           velocityX: Math.cos(rotation) * this.velocity,
           velocityY: Math.sin(rotation) * this.velocity,
         });
       } else {
-        applyBodyConfig(this.body, { velocityY: -30 });
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityY: -30 });
 
         if (this.level.player.x > this.x) {
-          applyBodyConfig(this.body, { velocityX: this.velocity });
+          applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: this.velocity });
         } else {
-          applyBodyConfig(this.body, { velocityX: -this.velocity });
+          applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: -this.velocity });
         }
       }
     }
 
-    if (timeNow(this.game) - this.lastEggShotAt < this.shotDelay) return;
-    this.lastEggShotAt = timeNow(this.game);
+    if (timeNow(this.scene) - this.lastEggShotAt < this.shotDelay) return;
+    this.lastEggShotAt = timeNow(this.scene);
 
     var egg = getFirstDead<Egg>(this.eggs);
     if (egg === null || egg === undefined) return;
 
     reviveAndReset(egg, this.x, this.y);
-    applyBodyConfig(egg.body, { velocityY: egg.speed });
-    egg.animations.play('egg');
+    applyBodyConfig(egg.body as Phaser.Physics.Arcade.Body, { velocityY: egg.speed });
+    egg.anims.play('egg');
   }
 }

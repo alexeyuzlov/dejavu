@@ -1,7 +1,11 @@
-import { Levels } from '../../global-config';
+import { Levels, Stories } from '../../global-config';
 import { AbstractStory } from './abstract-story';
 
 export class Story3 extends AbstractStory {
+  constructor() {
+    super({ key: Stories[Stories.Story3] });
+  }
+
   nextLevel: string = Levels[Levels.Zone3Level1];
   content = [
     '',
@@ -10,15 +14,4 @@ export class Story3 extends AbstractStory {
     'Один из путников одолжил тебе коньки: «На твоём пути встретится немало горных озер!»',
   ];
 
-  preload() {
-    super.preload();
-  }
-
-  create() {
-    super.create();
-  }
-
-  update() {
-    super.update();
-  }
 }

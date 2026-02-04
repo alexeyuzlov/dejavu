@@ -1,3 +1,3 @@
-import { Game } from './game';
+import { createGame } from './game';
 
-export const bootstrapGame = () => new Game();
+export const bootstrapGame = () => createGame();

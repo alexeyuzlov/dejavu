@@ -1,30 +1,31 @@
 import { settings } from '../global-config';
-import { AbstractPrefab } from './abstract-prefab';
 
-export class BlackScreen extends AbstractPrefab {
-  text: Phaser.Text;
+export class BlackScreen extends Phaser.GameObjects.Container {
+  text: Phaser.GameObjects.Text;
+  background: Phaser.GameObjects.Rectangle;
 
-  constructor(game: Phaser.Game) {
-    var blackTexture = game.add.bitmapData(game.width, game.height);
-    blackTexture.ctx.beginPath();
-    blackTexture.ctx.rect(0, 0, game.width, game.height);
-    blackTexture.ctx.fillStyle = '#000000';
-    blackTexture.ctx.fill();
+  constructor(scene: Phaser.Scene) {
+    super(scene, 0, 0);
+    scene.add.existing(this);
 
-    super(game, 0, 0, blackTexture);
+    this.background = scene.add.rectangle(0, 0, scene.scale.width, scene.scale.height, 0x000000, 1);
+    this.background.setOrigin(0, 0);
+    this.background.setScrollFactor(0);
 
-    this.alpha = 1;
-    this.fixedToCamera = true;
+    this.text = scene.add.text(10, scene.scale.height - 30, '', settings.font.whiteBig);
+    this.text.setScrollFactor(0);
 
-    this.text = game.add.text(10, game.height - 30, '', settings.font.whiteBig);
-    this.addChild(this.text);
+    this.add([this.background, this.text]);
+    this.setAlpha(1);
+    this.setScrollFactor(0);
+    this.setDepth(1000);
   }
 
   setText(text: string) {
-    this.text.text = text;
+    this.text.setText(text);
   }
 
   update() {
-    this.bringToTop();
+    this.setDepth(1000);
   }
 }

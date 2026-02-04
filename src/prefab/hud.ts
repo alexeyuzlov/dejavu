@@ -1,25 +1,35 @@
-import { AbstractPrefab } from './abstract-prefab';
+import { AbstractZone } from '../state/levels/abstract-zone';
 
-export class HUD extends AbstractPrefab {
-  healthState: Phaser.Text;
+export class HUD extends Phaser.GameObjects.Container {
+  level: AbstractZone;
+  background: Phaser.GameObjects.Image;
+  healthState: Phaser.GameObjects.Text;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'hud');
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y);
+    scene.add.existing(this);
 
-    this.fixedToCamera = true;
+    this.level = scene as AbstractZone;
 
-    var font = {
+    const font = {
       font: '13px Arial',
       fill: '#ffffff',
     };
 
-    this.healthState = game.add.text(14, 1, '', font);
+    this.background = scene.add.image(0, 0, 'hud');
+    this.background.setOrigin(0, 0);
+    this.background.setScrollFactor(0);
+
+    this.healthState = scene.add.text(14, 1, '', font);
+    this.healthState.setScrollFactor(0);
     this.updateHealthState();
-    this.addChild(this.healthState);
+
+    this.add([this.background, this.healthState]);
+    this.setScrollFactor(0);
   }
 
   updateHealthState() {
-    this.healthState.text = this.level.player.health.toString();
+    this.healthState.setText(this.level.player.health.toString());
   }
 
   update() {}

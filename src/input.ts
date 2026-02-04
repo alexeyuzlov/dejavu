@@ -1,20 +1,27 @@
 export const Keys = {
-  moveLeft: Phaser.Keyboard.LEFT,
-  moveRight: Phaser.Keyboard.RIGHT,
-  jump: Phaser.Keyboard.Z,
-  attack: Phaser.Keyboard.X,
-  pause: Phaser.Keyboard.P,
-  advance: Phaser.Keyboard.SPACEBAR,
+  moveLeft: Phaser.Input.Keyboard.KeyCodes.LEFT,
+  moveRight: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+  jump: Phaser.Input.Keyboard.KeyCodes.Z,
+  attack: Phaser.Input.Keyboard.KeyCodes.X,
+  pause: Phaser.Input.Keyboard.KeyCodes.P,
+  advance: Phaser.Input.Keyboard.KeyCodes.SPACE,
 } as const;
 
 export type KeyName = keyof typeof Keys;
 
-export const isKeyDown = (game: Phaser.Game, key: KeyName) =>
-  game.input.keyboard.isDown(Keys[key]);
+export const isKeyDown = (scene: Phaser.Scene, key: KeyName) => {
+  const keyboard = scene.input.keyboard;
+  if (!keyboard) return false;
+  return keyboard.addKey(Keys[key]).isDown;
+};
 
 export const bindKeyDown = (
-  game: Phaser.Game,
+  scene: Phaser.Scene,
   key: KeyName,
   handler: () => void,
   context?: any,
-) => game.input.keyboard.addKey(Keys[key]).onDown.add(handler, context);
+) => {
+  const keyboard = scene.input.keyboard;
+  if (!keyboard) return;
+  keyboard.addKey(Keys[key]).on('down', handler, context);
+};

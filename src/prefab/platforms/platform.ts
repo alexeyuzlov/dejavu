@@ -6,11 +6,11 @@ export class Platform extends AbstractPrefab {
   direction: Direction;
   velocity: number;
 
-  constructor(game: Phaser.Game, x: number, y: number, texture: string) {
-    super(game, x, y, texture);
+  constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
+    super(scene, x, y, texture);
 
-    enableArcade(game, this);
-    applyBodyConfig(this.body, { immovable: true });
+    enableArcade(scene, this);
+    applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { immovable: true });
     this.velocity = 100;
   }
 
@@ -18,19 +18,19 @@ export class Platform extends AbstractPrefab {
     switch (this.direction) {
       case Direction.Up:
         this.direction = Direction.Down;
-        applyBodyConfig(this.body, { velocityY: this.velocity });
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityY: this.velocity });
         break;
       case Direction.Down:
         this.direction = Direction.Up;
-        applyBodyConfig(this.body, { velocityY: -this.velocity });
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityY: -this.velocity });
         break;
       case Direction.Left:
         this.direction = Direction.Right;
-        applyBodyConfig(this.body, { velocityX: this.velocity });
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: this.velocity });
         break;
       case Direction.Right:
         this.direction = Direction.Left;
-        applyBodyConfig(this.body, { velocityX: -this.velocity });
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: -this.velocity });
         break;
       default:
         // Don't doing something
@@ -40,7 +40,7 @@ export class Platform extends AbstractPrefab {
 
   update() {
     collideArcade(
-      this.game,
+      this.scene,
       this.level.player,
       this,
       null,
@@ -50,7 +50,7 @@ export class Platform extends AbstractPrefab {
     );
 
     collideArcade(
-      this.game,
+      this.scene,
       this,
       this.level.transparents,
       (platform: any, transparent: any) => {

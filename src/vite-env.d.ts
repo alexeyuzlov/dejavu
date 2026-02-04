@@ -7,3 +7,7 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+interface Window {
+  Phaser: typeof import('phaser');
+}

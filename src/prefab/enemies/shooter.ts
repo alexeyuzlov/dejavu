@@ -8,57 +8,72 @@ import { AbstractEnemy } from './abstract-enemy';
 export class Shooter extends AbstractEnemy {
   gravity: number;
   lastBulletShotAt: number;
-  bullets: Phaser.Group;
+  bullets: Phaser.GameObjects.Group;
   countBullets: number;
   shotDelay: number;
   damagePoints: number;
   defensePoints: number;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'shooter');
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, 'shooter');
 
-    applyBodyConfig(this.body, { gravityY: 300 });
-    this.lastBulletShotAt = timeNow(this.game);
+    applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { gravityY: 300 });
+    this.lastBulletShotAt = timeNow(this.scene);
     this.countBullets = 10;
     this.shotDelay = secondsToMs(3);
     this.damagePoints = 10;
     this.defensePoints = 5;
 
-    this.bullets = createGroup(this.game);
+    this.bullets = createGroup(this.scene);
     for (var i = 0; i < this.countBullets; i++) {
-      var bullet = new Bullet(game, 0, 0);
+      var bullet = new Bullet(scene, 0, 0);
       this.bullets.add(bullet);
     }
     this.health = 100;
 
-    onResume(this.game, () => {
-      this.lastBulletShotAt += this.game.time.pauseDuration;
+    onResume(this.scene, (pauseDuration: number) => {
+      this.lastBulletShotAt += pauseDuration;
     });
 
-    this.animations.add('stay', ['shooter-stay-1.png'], 10, true);
-    this.animations.add('shot', ['shooter-shot-1.png'], 10, true);
-    this.animations.play('stay');
-    this.anchor.set(0.5, 0.5);
+    const anims = this.scene.anims;
+    if (!anims.exists('shooter-stay')) {
+      anims.create({
+        key: 'shooter-stay',
+        frames: [{ key: 'shooter', frame: 'shooter-stay-1.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+    if (!anims.exists('shooter-shot')) {
+      anims.create({
+        key: 'shooter-shot',
+        frames: [{ key: 'shooter', frame: 'shooter-shot-1.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+    this.anims.play('shooter-stay');
+    this.setOrigin(0.5, 0.5);
   }
 
   update() {
     super.update();
 
-    collideArcade(this.game, this, this.level.layer);
+    collideArcade(this.scene, this, this.level.layer);
 
-    if (!this.inCamera || !this.alive) {
-      applyBodyConfig(this.body, { velocityX: 0, velocityY: 0 });
+    if (!this.scene.cameras.main.worldView.contains(this.x, this.y) || !this.active) {
+      applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: 0, velocityY: 0 });
       return;
     }
 
-    if (timeNow(this.game) - this.lastBulletShotAt < secondsToMs(1 / 4)) {
-      this.animations.play('shot');
+    if (timeNow(this.scene) - this.lastBulletShotAt < secondsToMs(1 / 4)) {
+      this.anims.play('shooter-shot');
     } else {
-      this.animations.play('stay');
+      this.anims.play('shooter-stay');
     }
 
-    if (timeNow(this.game) - this.lastBulletShotAt < this.shotDelay) return;
-    this.lastBulletShotAt = timeNow(this.game);
+    if (timeNow(this.scene) - this.lastBulletShotAt < this.shotDelay) return;
+    this.lastBulletShotAt = timeNow(this.scene);
 
     var bullet = getFirstDead<Bullet>(this.bullets);
 
@@ -67,13 +82,13 @@ export class Shooter extends AbstractEnemy {
     reviveAndReset(bullet, this.x, this.y);
 
     if (this.x > this.level.player.x) {
-      this.scale.x = -1;
-      bullet.scale.x = -1;
-      applyBodyConfig(bullet.body, { velocityX: -bullet.speed });
+      this.scaleX = -1;
+      bullet.scaleX = -1;
+      applyBodyConfig(bullet.body as Phaser.Physics.Arcade.Body, { velocityX: -bullet.speed });
     } else {
-      this.scale.x = 1;
-      bullet.scale.x = 1;
-      applyBodyConfig(bullet.body, { velocityX: bullet.speed });
+      this.scaleX = 1;
+      bullet.scaleX = 1;
+      applyBodyConfig(bullet.body as Phaser.Physics.Arcade.Body, { velocityX: bullet.speed });
     }
   }
 }

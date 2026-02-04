@@ -1,34 +1,43 @@
+export type PrefabConstructor = new (
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  ...args: any[]
+) => Phaser.GameObjects.GameObject;
+
 export const createLevelMap = (
-  game: Phaser.Game,
+  scene: Phaser.Scene,
   mapKey: string,
   tilesetKey: string,
   layerName: string,
   collisionStart: number = 1,
   collisionEnd: number = 5,
 ) => {
-  const map = game.add.tilemap(mapKey);
-  map.addTilesetImage(tilesetKey);
-  map.setCollisionBetween(collisionStart, collisionEnd);
-  const layer = map.createLayer(layerName);
-  layer.resizeWorld();
+  const map = scene.make.tilemap({ key: mapKey });
+  const tileset = map.addTilesetImage(tilesetKey);
+  const layer = map.createLayer(layerName, tileset, 0, 0);
+  layer.setCollisionBetween(collisionStart, collisionEnd);
+  scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
   return { map, layer };
 };
 
 export const createObjectsFromMap = (
-  map: Phaser.Tilemap,
+  scene: Phaser.Scene,
+  map: Phaser.Tilemaps.Tilemap,
   objectLayer: string,
   name: string,
-  group: Phaser.Group,
-  className?: object,
+  group: Phaser.GameObjects.Group,
+  className?: PrefabConstructor,
 ) => {
-  const index = map.getTilesetIndex(name);
-  if (!index) return group;
-
-  const firstGid = map.tilesets[index].firstgid;
-  if (className) {
-    map.createFromObjects(objectLayer, firstGid, name, 0, true, false, group, className);
-  } else {
-    map.createFromObjects(objectLayer, firstGid, name, 0, true, false, group);
+  const objects = map.createFromObjects(objectLayer, {
+    name,
+    classType: className as unknown as Phaser.Types.Tilemaps.CreateFromObjectsClassTypeConstructor,
+    scene,
+    key: name,
+  });
+  if (objects.length) {
+    group.addMultiple(objects);
   }
   return group;
 };

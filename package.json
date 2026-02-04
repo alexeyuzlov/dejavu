@@ -2,15 +2,22 @@
   "name": "sample",
   "version": "0.2.0",
   "scripts": {
+    "node:check": "node scripts/check-node.js",
+    "predev": "npm run node:check",
     "dev": "vite",
+    "prebuild": "npm run node:check",
     "build": "npm run clean && vite build",
+    "prepreview": "npm run node:check",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "assets:check": "node scripts/check-assets.js",
     "format": "prettier --write .",
+    "prelint": "npm run node:check",
     "lint": "eslint .",
+    "prelint:types": "npm run node:check",
     "lint:types": "tsc --noEmit -p tsconfig.vite.json",
     "prepare": "husky install",
+    "precheck": "npm run node:check",
     "check": "npm run assets:check && npm run lint && npm run lint:types && npm run build",
     "test:smoke": "docker run --rm --shm-size=1gb -e CI=1 -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm ci --ignore-scripts --no-fund --no-audit && npm run build && node scripts/run-smoke.js preview\"",
     "test:ui": "npx playwright test --ui"
@@ -28,6 +35,6 @@
     "vite": "6.4.1"
   },
   "dependencies": {
-    "phaser": "2.6.2"
+    "phaser": "3.90.0"
   }
 }

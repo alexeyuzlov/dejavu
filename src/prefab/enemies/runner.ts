@@ -9,43 +9,54 @@ export class Runner extends AbstractEnemy {
   damagePoints: number;
   defensePoints: number;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'runner');
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, 'runner');
 
     this.gravity = 300;
     this.velocity = 100;
 
     this.direction = Direction.Right;
-    applyBodyConfig(this.body, { velocityX: this.velocity });
+    applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: this.velocity });
 
     this.damagePoints = 9;
     this.defensePoints = 3;
 
-    applyBodyConfig(this.body, { gravityY: this.gravity, collideWorldBounds: true });
+    applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, {
+      gravityY: this.gravity,
+      collideWorldBounds: true,
+    });
     this.health = 90;
 
-    this.anchor.set(0.5, 1);
+    this.setOrigin(0.5, 1);
 
-    this.animations.add(
-      'walk',
-      Phaser.Animation.generateFrameNames('runner-', 1, 4, '.png', 0),
-      5,
-      true,
-    );
-    this.animations.play('walk');
+    const anims = this.scene.anims;
+    if (!anims.exists('runner-walk')) {
+      anims.create({
+        key: 'runner-walk',
+        frames: anims.generateFrameNames('runner', {
+          prefix: 'runner-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 5,
+        repeat: -1,
+      });
+    }
+    this.anims.play('runner-walk');
   }
 
   toggleDirection() {
     switch (this.direction) {
       case Direction.Left:
         this.direction = Direction.Right;
-        applyBodyConfig(this.body, { velocityX: this.velocity });
-        this.scale.x = 1;
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: this.velocity });
+        this.scaleX = 1;
         break;
       case Direction.Right:
         this.direction = Direction.Left;
-        applyBodyConfig(this.body, { velocityX: -this.velocity });
-        this.scale.x = -1;
+        applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: -this.velocity });
+        this.scaleX = -1;
         break;
       default:
     }
@@ -54,13 +65,14 @@ export class Runner extends AbstractEnemy {
   update() {
     super.update();
 
-    collideArcade(this.game, this, this.level.layer);
+    collideArcade(this.scene, this, this.level.layer);
 
-    collideArcade(this.game, this, this.level.transparents, (runner: any, transparent: any) => {
+    collideArcade(this.scene, this, this.level.transparents, (runner: any, transparent: any) => {
       runner.toggleDirection();
     });
 
-    if (this.body.blocked.left || this.body.blocked.right) {
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    if (body.blocked.left || body.blocked.right) {
       this.toggleDirection();
     }
   }

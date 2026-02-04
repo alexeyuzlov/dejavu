@@ -4,35 +4,36 @@ import { bindKeyDown } from '../../input';
 import { createGroup } from '../../groups';
 import { secondsToMs } from '../../time';
 import { followLockonCamera } from '../phaser-helpers';
-import { createLevelMap, createObjectsFromMap } from '../../tilemap';
-import { addTween } from '../../tweens';
+import { createLevelMap, createObjectsFromMap, PrefabConstructor } from '../../tilemap';
 
-export class AbstractZone extends Phaser.State {
-  map: Phaser.Tilemap;
-  layer: Phaser.TilemapLayer;
+export class AbstractZone extends Phaser.Scene {
+  map: Phaser.Tilemaps.Tilemap;
+  layer: Phaser.Tilemaps.TilemapLayer;
 
   player: Prefab.Player;
   hud: Prefab.HUD;
   blackScreen: Prefab.BlackScreen;
 
-  transparents: Phaser.Group;
-  spikes: Phaser.Group;
-  iceSpikes: Phaser.Group;
-  exits: Phaser.Group;
+  transparents: Phaser.GameObjects.Group;
+  spikes: Phaser.GameObjects.Group;
+  iceSpikes: Phaser.GameObjects.Group;
+  exits: Phaser.GameObjects.Group;
 
-  platformsHorizontal: Phaser.Group;
-  platformsVertical: Phaser.Group;
+  platformsHorizontal: Phaser.GameObjects.Group;
+  platformsVertical: Phaser.GameObjects.Group;
 
-  shooters: Phaser.Group;
-  shootersReject: Phaser.Group;
-  runners: Phaser.Group;
-  fliers: Phaser.Group;
-  fliersCrash: Phaser.Group;
+  shooters: Phaser.GameObjects.Group;
+  shootersReject: Phaser.GameObjects.Group;
+  runners: Phaser.GameObjects.Group;
+  fliers: Phaser.GameObjects.Group;
+  fliersCrash: Phaser.GameObjects.Group;
 
-  bottlesHP: Phaser.Group;
-  bottlesSuper: Phaser.Group;
+  bottlesHP: Phaser.GameObjects.Group;
+  bottlesSuper: Phaser.GameObjects.Group;
 
-  game: Phaser.Game;
+  constructor(config: Phaser.Types.Scenes.SettingsConfig) {
+    super(config);
+  }
 
   preload() {
     // All in preload file
@@ -40,19 +41,19 @@ export class AbstractZone extends Phaser.State {
   }
 
   create() {
-    settings.storage.setCurrentState(this.game.state.current);
-    this.game.stage.backgroundColor = '#000000';
+    settings.storage.setCurrentState(this.scene.key);
+    this.cameras.main.setBackgroundColor('#000000');
 
     // MAP AND LAYERS
-    const levelMap = createLevelMap(this.game, 'map', 'ground', 'layer');
+    const levelMap = createLevelMap(this, 'map', 'ground', 'layer');
     this.map = levelMap.map;
     this.layer = levelMap.layer;
 
     // PREFABS SINGLE
-    this.player = new Prefab.Player(this.game, 120, this.game.world.height - 200);
+    this.player = new Prefab.Player(this, 120, this.scale.height - 200);
 
-    this.hud = new Prefab.HUD(this.game, 10, 10);
-    this.hud.alpha = 0;
+    this.hud = new Prefab.HUD(this, 10, 10);
+    this.hud.setAlpha(0);
 
     // PREFABS MULTIPLE
     this.transparents = this.getPrefabsFromMap('transparent', Prefab.Transparent);
@@ -70,25 +71,36 @@ export class AbstractZone extends Phaser.State {
     this.platformsVertical = this.getPrefabsFromMap('platform-v', Prefab.PlatformVertical);
 
     // POST-SETTINGS
-    followLockonCamera(this.game, this.player);
+    followLockonCamera(this, this.player);
 
-    this.blackScreen = new Prefab.BlackScreen(this.game);
-    this.blackScreen.setText(this.game.state.current);
-    addTween(this.game, this.blackScreen)
-      .to({ alpha: 0 }, secondsToMs(3), Phaser.Easing.Linear.None, true)
-      .onComplete.add(() => {
-        this.hud.alpha = 1;
-      });
+    this.blackScreen = new Prefab.BlackScreen(this);
+    this.blackScreen.setText(this.scene.key);
+    this.tweens.add({
+      targets: this.blackScreen,
+      alpha: 0,
+      duration: secondsToMs(3),
+      ease: 'Linear',
+      onComplete: () => {
+        this.hud.setAlpha(1);
+      },
+    });
 
-    bindKeyDown(this.game, 'pause', () => {
-      this.game.paused = !this.game.paused;
+    bindKeyDown(this, 'pause', () => {
+      const isPaused = this.physics.world.isPaused;
+      this.physics.world.isPaused = !isPaused;
+      this.time.timeScale = isPaused ? 1 : 0;
+      if (isPaused) {
+        this.anims.resumeAll();
+      } else {
+        this.anims.pauseAll();
+      }
     });
   }
 
-  getPrefabsFromMap(name: string, className?: object): Phaser.Group {
-    var group = createGroup(this.game);
+  getPrefabsFromMap(name: string, className?: PrefabConstructor): Phaser.GameObjects.Group {
+    var group = createGroup(this);
 
-    return createObjectsFromMap(this.map, 'objects', name, group, className);
+    return createObjectsFromMap(this, this.map, 'objects', name, group, className);
   }
 
   render() {
@@ -113,24 +125,32 @@ export class AbstractZone extends Phaser.State {
 
   gameOver() {
     this.blackScreen.setText('Game Over. Reload Level.');
-    addTween(this.game, this.blackScreen)
-      .to({ alpha: 1 }, secondsToMs(1), Phaser.Easing.Linear.None, true)
-      .onComplete.add(() => {
-        this.game.state.start(StateKeys.GameOver);
-      });
+    this.tweens.add({
+      targets: this.blackScreen,
+      alpha: 1,
+      duration: secondsToMs(1),
+      ease: 'Linear',
+      onComplete: () => {
+        this.scene.start(StateKeys.GameOver);
+      },
+    });
   }
 
   startNextLevel() {
     this.blackScreen.setText(this.getNextLevel());
-    addTween(this.game, this.blackScreen)
-      .to({ alpha: 1 }, secondsToMs(3), Phaser.Easing.Linear.None, true)
-      .onComplete.add(() => {
-        this.game.state.start(this.getNextLevel());
-      });
+    this.tweens.add({
+      targets: this.blackScreen,
+      alpha: 1,
+      duration: secondsToMs(3),
+      ease: 'Linear',
+      onComplete: () => {
+        this.scene.start(this.getNextLevel());
+      },
+    });
   }
 
   getNextLevel(): string {
-    switch (this.game.state.current) {
+    switch (this.scene.key) {
       case Levels[Levels.Zone1Level1]:
         //return Levels[Levels.Zone2Level1];
         return Stories[Stories.Story2];

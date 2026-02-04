@@ -1,4 +1,4 @@
-import { collideArcade, enableArcade } from '../../physics';
+import { collideArcade, enableArcade, killSprite } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class Egg extends AbstractPrefab {
@@ -6,35 +6,50 @@ export class Egg extends AbstractPrefab {
   damagePoints: number = 35;
   eggCrashState: boolean;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, 'egg');
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, 'egg');
 
-    enableArcade(game, this);
-    this.anchor.set(0.5, 0.5);
-    this.kill();
-
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
+    enableArcade(scene, this);
+    this.setOrigin(0.5, 0.5);
+    killSprite(this);
 
     this.eggCrashState = false;
 
-    this.animations.add('egg', ['egg.png'], 10, true);
-    this.animations.add('egg-crash', ['egg-crash.png'], 10, true);
+    const anims = this.scene.anims;
+    if (!anims.exists('egg')) {
+      anims.create({
+        key: 'egg',
+        frames: [{ key: 'egg', frame: 'egg.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+    if (!anims.exists('egg-crash')) {
+      anims.create({
+        key: 'egg-crash',
+        frames: [{ key: 'egg', frame: 'egg-crash.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
 
-    this.animations.play('egg');
+    this.anims.play('egg');
   }
 
   setEggCrash() {
     this.eggCrashState = true;
-    this.animations.play('egg-crash');
+    this.anims.play('egg-crash');
 
-    this.body.width = this.animations.currentFrame.width;
-    this.body.height = this.animations.currentFrame.height;
+    const currentFrame = this.anims.currentFrame;
+    if (currentFrame) {
+      const body = this.body as Phaser.Physics.Arcade.Body;
+      body.setSize(currentFrame.frame.width, currentFrame.frame.height);
+    }
   }
 
   update() {
-    collideArcade(this.game, this, this.level.player, (egg: any, player: any) => {
-      egg.kill();
+    collideArcade(this.scene, this, this.level.player, (egg: any, player: any) => {
+      killSprite(egg);
 
       if (!this.level.player.immortalState && !this.level.player.attackState) {
         this.level.player.makeDamage(egg.damagePoints);
@@ -42,10 +57,15 @@ export class Egg extends AbstractPrefab {
       }
     });
 
-    collideArcade(this.game, this, this.level.layer, (egg: any, layer: any) => {
+    collideArcade(this.scene, this, this.level.layer, (egg: any, layer: any) => {
       if (!this.eggCrashState) {
         egg.setEggCrash();
       }
     });
+
+    const bounds = this.scene.physics.world.bounds;
+    if (this.x < bounds.x || this.x > bounds.right || this.y < bounds.y || this.y > bounds.bottom) {
+      killSprite(this);
+    }
   }
 }
