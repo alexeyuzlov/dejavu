@@ -1,4 +1,4 @@
-import { AbstractPrefab } from "../AbstractPrefab";
+import { AbstractPrefab } from '../AbstractPrefab';
 
 export class BulletReject extends AbstractPrefab {
   speed: number = 300;
@@ -7,7 +7,7 @@ export class BulletReject extends AbstractPrefab {
   rejectState: boolean = false;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "bullet-reject");
+    super(game, x, y, 'bullet-reject');
 
     game.physics.arcade.enable(this);
     this.anchor.set(0.5, 0.5);

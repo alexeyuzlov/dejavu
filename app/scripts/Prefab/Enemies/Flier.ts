@@ -1,4 +1,4 @@
-import { AbstractEnemy } from "./AbstractEnemy";
+import { AbstractEnemy } from './AbstractEnemy';
 
 export class Flier extends AbstractEnemy {
   isActive: boolean = false;
@@ -8,7 +8,7 @@ export class Flier extends AbstractEnemy {
   defensePoints: number = 7;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "flier");
+    super(game, x, y, 'flier');
 
     this.anchor.set(0.5, 0.5);
     this.health = 84;
@@ -17,12 +17,12 @@ export class Flier extends AbstractEnemy {
     this.isActive = true;
 
     this.animations.add(
-      "fly",
-      Phaser.Animation.generateFrameNames("flier-", 1, 4, ".png", 0),
+      'fly',
+      Phaser.Animation.generateFrameNames('flier-', 1, 4, '.png', 0),
       20,
-      true
+      true,
     );
-    this.animations.play("fly");
+    this.animations.play('fly');
   }
 
   update() {
@@ -33,19 +33,14 @@ export class Flier extends AbstractEnemy {
       return;
     }
 
-    var distance = Phaser.Math.distance(
-      this.x,
-      this.y,
-      this.level.player.x,
-      this.level.player.y
-    );
+    var distance = Phaser.Math.distance(this.x, this.y, this.level.player.x, this.level.player.y);
 
     if (distance > this.minDistance) {
       var rotation = Phaser.Math.angleBetween(
         this.x,
         this.y,
         this.level.player.x,
-        this.level.player.y
+        this.level.player.y,
       );
 
       this.body.velocity.x = Math.cos(rotation) * this.speed;

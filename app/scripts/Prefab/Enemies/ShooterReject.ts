@@ -1,5 +1,5 @@
-import { BulletReject } from "../Bullets/BulletReject";
-import { AbstractEnemy } from "./AbstractEnemy";
+import { BulletReject } from '../Bullets/BulletReject';
+import { AbstractEnemy } from './AbstractEnemy';
 
 export class ShooterReject extends AbstractEnemy {
   lastBulletShotAt: number;
@@ -10,7 +10,7 @@ export class ShooterReject extends AbstractEnemy {
   defensePoints: number;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "shooter-reject");
+    super(game, x, y, 'shooter-reject');
 
     this.body.gravity.y = 300;
     this.damagePoints = 10;
@@ -30,9 +30,9 @@ export class ShooterReject extends AbstractEnemy {
       this.lastBulletShotAt += this.game.time.pauseDuration;
     });
 
-    this.animations.add("stay", ["shooter-reject-stay-1.png"], 10, true);
-    this.animations.add("shot", ["shooter-reject-shot-1.png"], 10, true);
-    this.animations.play("stay");
+    this.animations.add('stay', ['shooter-reject-stay-1.png'], 10, true);
+    this.animations.add('shot', ['shooter-reject-shot-1.png'], 10, true);
+    this.animations.play('stay');
     this.anchor.set(0.5, 0.5);
   }
 
@@ -41,12 +41,16 @@ export class ShooterReject extends AbstractEnemy {
 
     this.game.physics.arcade.collide(this, this.level.layer);
 
-    this.game.physics.arcade.overlap(this, this.bullets, (shooterReject: any, bulletReject: any) => {
-      if (bulletReject.rejectState) {
-        bulletReject.kill();
-        this.makeDamage(bulletReject.damageRejectPoints);
-      }
-    });
+    this.game.physics.arcade.overlap(
+      this,
+      this.bullets,
+      (shooterReject: any, bulletReject: any) => {
+        if (bulletReject.rejectState) {
+          bulletReject.kill();
+          this.makeDamage(bulletReject.damageRejectPoints);
+        }
+      },
+    );
 
     if (!this.inCamera || !this.alive) {
       this.body.velocity.setTo(0, 0);
@@ -54,9 +58,9 @@ export class ShooterReject extends AbstractEnemy {
     }
 
     if (this.game.time.now - this.lastBulletShotAt < Phaser.Timer.SECOND / 3) {
-      this.animations.play("shot");
+      this.animations.play('shot');
     } else {
-      this.animations.play("stay");
+      this.animations.play('stay');
     }
 
     if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;

@@ -1,5 +1,5 @@
-import { AbstractPrefab } from "../AbstractPrefab";
-import { AbstractZone } from "../../State/Levels/AbstractZone";
+import { AbstractPrefab } from '../AbstractPrefab';
+import { AbstractZone } from '../../State/Levels/AbstractZone';
 
 export class Bottle extends AbstractPrefab {
   level: AbstractZone;

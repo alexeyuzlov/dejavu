@@ -1,4 +1,4 @@
-import { AbstractZone } from "../State/Levels/AbstractZone";
+import { AbstractZone } from '../State/Levels/AbstractZone';
 
 export class AbstractPrefab extends Phaser.Sprite {
   level: AbstractZone;

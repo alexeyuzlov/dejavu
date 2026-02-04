@@ -1,5 +1,5 @@
-import { Egg } from "../Bullets/Egg";
-import { AbstractEnemy } from "./AbstractEnemy";
+import { Egg } from '../Bullets/Egg';
+import { AbstractEnemy } from './AbstractEnemy';
 
 export class FlierCrash extends AbstractEnemy {
   isActive: boolean;
@@ -14,7 +14,7 @@ export class FlierCrash extends AbstractEnemy {
   shotDelay: number;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "flier-crash");
+    super(game, x, y, 'flier-crash');
 
     this.anchor.set(0.5, 0.5);
     this.health = 52;
@@ -36,12 +36,12 @@ export class FlierCrash extends AbstractEnemy {
     this.shotDelay = 1500;
 
     this.animations.add(
-      "fly",
-      Phaser.Animation.generateFrameNames("flier-crash-", 1, 4, ".png", 0),
+      'fly',
+      Phaser.Animation.generateFrameNames('flier-crash-', 1, 4, '.png', 0),
       20,
-      true
+      true,
     );
-    this.animations.play("fly");
+    this.animations.play('fly');
   }
 
   update() {
@@ -57,7 +57,7 @@ export class FlierCrash extends AbstractEnemy {
         this.x,
         this.y,
         this.level.player.x,
-        this.level.player.y - this.level.player.body.height * 4
+        this.level.player.y - this.level.player.body.height * 4,
       );
 
       if (distance > this.minDistance) {
@@ -65,7 +65,7 @@ export class FlierCrash extends AbstractEnemy {
           this.x,
           this.y,
           this.level.player.x,
-          this.level.player.y - this.level.player.body.height * 4
+          this.level.player.y - this.level.player.body.height * 4,
         );
 
         this.body.velocity.x = Math.cos(rotation) * this.velocity;
@@ -90,6 +90,6 @@ export class FlierCrash extends AbstractEnemy {
     egg.revive();
     egg.reset(this.x, this.y);
     egg.body.velocity.y = egg.speed;
-    egg.animations.play("egg");
+    egg.animations.play('egg');
   }
 }

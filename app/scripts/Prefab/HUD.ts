@@ -1,19 +1,19 @@
-import { AbstractPrefab } from "./AbstractPrefab";
+import { AbstractPrefab } from './AbstractPrefab';
 
 export class HUD extends AbstractPrefab {
   healthState: Phaser.Text;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "hud");
+    super(game, x, y, 'hud');
 
     this.fixedToCamera = true;
 
     var font = {
-      font: "13px Arial",
-      fill: "#ffffff",
+      font: '13px Arial',
+      fill: '#ffffff',
     };
 
-    this.healthState = game.add.text(14, 1, "", font);
+    this.healthState = game.add.text(14, 1, '', font);
     this.updateHealthState();
     this.addChild(this.healthState);
   }

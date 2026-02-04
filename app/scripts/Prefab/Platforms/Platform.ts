@@ -1,5 +1,5 @@
-import { Direction } from "../../GlobalConfig";
-import { AbstractPrefab } from "../AbstractPrefab";
+import { Direction } from '../../GlobalConfig';
+import { AbstractPrefab } from '../AbstractPrefab';
 
 export class Platform extends AbstractPrefab {
   direction: Direction;
@@ -38,12 +38,21 @@ export class Platform extends AbstractPrefab {
   }
 
   update() {
-    this.game.physics.arcade.collide(this.level.player, this, null, (player: any, platform: any) => {
-      return player.y - platform.body.height <= platform.y;
-    });
+    this.game.physics.arcade.collide(
+      this.level.player,
+      this,
+      null,
+      (player: any, platform: any) => {
+        return player.y - platform.body.height <= platform.y;
+      },
+    );
 
-    this.game.physics.arcade.collide(this, this.level.transparents, (platform: any, transparent: any) => {
-      platform.toggleDirection();
-    });
+    this.game.physics.arcade.collide(
+      this,
+      this.level.transparents,
+      (platform: any, transparent: any) => {
+        platform.toggleDirection();
+      },
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { settings } from "../../GlobalConfig";
+import { settings } from '../../GlobalConfig';
 
 export class AbstractStory extends Phaser.State {
   nextLevel: string;
@@ -6,21 +6,19 @@ export class AbstractStory extends Phaser.State {
   content: string[];
   text: Phaser.Text;
   index = 0;
-  line = "";
+  line = '';
   lineEvent: Phaser.TimerEvent;
   nextEvent: Phaser.TimerEvent;
 
   preload() {}
 
   create() {
-    this.game.stage.backgroundColor = "#000000";
+    this.game.stage.backgroundColor = '#000000';
 
-    this.text = this.game.add.text(10, 10, "", settings.font.whiteBig);
+    this.text = this.game.add.text(10, 10, '', settings.font.whiteBig);
     this.text.wordWrap = true;
     this.text.wordWrapWidth = this.game.width;
-    this.game.input.keyboard
-      .addKey(Phaser.Keyboard.SPACEBAR)
-      .onDown.add(this.skipStory, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.skipStory, this);
     this.nextLine();
   }
 
@@ -28,7 +26,7 @@ export class AbstractStory extends Phaser.State {
     this.index++;
 
     if (this.index < this.content.length) {
-      this.line = "";
+      this.line = '';
       if (this.nextEvent) {
         this.game.time.events.remove(this.nextEvent);
         this.nextEvent = null;
@@ -37,7 +35,7 @@ export class AbstractStory extends Phaser.State {
         80,
         this.content[this.index].length + 1,
         this.updateLine,
-        this
+        this,
       );
     } else {
       this.game.state.start(this.nextLevel);
@@ -52,11 +50,7 @@ export class AbstractStory extends Phaser.State {
       if (this.lineEvent) {
         this.lineEvent = null;
       }
-      this.nextEvent = this.game.time.events.add(
-        Phaser.Timer.SECOND * 2,
-        this.nextLine,
-        this
-      );
+      this.nextEvent = this.game.time.events.add(Phaser.Timer.SECOND * 2, this.nextLine, this);
     }
   }
 

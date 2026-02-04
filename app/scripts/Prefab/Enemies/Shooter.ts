@@ -1,5 +1,5 @@
-import { Bullet } from "../Bullets/Bullet";
-import { AbstractEnemy } from "./AbstractEnemy";
+import { Bullet } from '../Bullets/Bullet';
+import { AbstractEnemy } from './AbstractEnemy';
 
 export class Shooter extends AbstractEnemy {
   gravity: number;
@@ -11,7 +11,7 @@ export class Shooter extends AbstractEnemy {
   defensePoints: number;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "shooter");
+    super(game, x, y, 'shooter');
 
     this.body.gravity.y = 300;
     this.lastBulletShotAt = this.game.time.now;
@@ -31,9 +31,9 @@ export class Shooter extends AbstractEnemy {
       this.lastBulletShotAt += this.game.time.pauseDuration;
     });
 
-    this.animations.add("stay", ["shooter-stay-1.png"], 10, true);
-    this.animations.add("shot", ["shooter-shot-1.png"], 10, true);
-    this.animations.play("stay");
+    this.animations.add('stay', ['shooter-stay-1.png'], 10, true);
+    this.animations.add('shot', ['shooter-shot-1.png'], 10, true);
+    this.animations.play('stay');
     this.anchor.set(0.5, 0.5);
   }
 
@@ -48,9 +48,9 @@ export class Shooter extends AbstractEnemy {
     }
 
     if (this.game.time.now - this.lastBulletShotAt < Phaser.Timer.SECOND / 4) {
-      this.animations.play("shot");
+      this.animations.play('shot');
     } else {
-      this.animations.play("stay");
+      this.animations.play('stay');
     }
 
     if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;

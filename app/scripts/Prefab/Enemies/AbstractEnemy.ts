@@ -1,4 +1,4 @@
-import { AbstractPrefab } from "../AbstractPrefab";
+import { AbstractPrefab } from '../AbstractPrefab';
 
 export class AbstractEnemy extends AbstractPrefab {
   immortalState: boolean;
@@ -31,9 +31,9 @@ export class AbstractEnemy extends AbstractPrefab {
       this.damage(damagePoint);
 
       var textStyle = {
-        font: "20px Arial",
-        fill: "#ffffff",
-        stroke: "#0000ff",
+        font: '20px Arial',
+        fill: '#ffffff',
+        stroke: '#0000ff',
         strokeThickness: 1,
       };
 

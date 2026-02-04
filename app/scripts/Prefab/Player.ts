@@ -1,5 +1,5 @@
-import { Direction, settings } from "../GlobalConfig";
-import { AbstractPrefab } from "./AbstractPrefab";
+import { Direction, settings } from '../GlobalConfig';
+import { AbstractPrefab } from './AbstractPrefab';
 
 export class Player extends AbstractPrefab {
   gravity: number;
@@ -22,7 +22,7 @@ export class Player extends AbstractPrefab {
   isAttackKeyPressed: boolean;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "player");
+    super(game, x, y, 'player');
     game.physics.arcade.enable(this);
 
     this.gravity = 500;
@@ -56,18 +56,18 @@ export class Player extends AbstractPrefab {
 
     this.health = +settings.storage.getHealthPoints();
 
-    this.animations.add("stay", ["player-walk-1.png"], 10, true);
+    this.animations.add('stay', ['player-walk-1.png'], 10, true);
     this.animations.add(
-      "walk",
-      Phaser.Animation.generateFrameNames("player-walk-", 1, 4, ".png", 0),
+      'walk',
+      Phaser.Animation.generateFrameNames('player-walk-', 1, 4, '.png', 0),
       15,
-      true
+      true,
     );
     this.animations.add(
-      "attack",
-      Phaser.Animation.generateFrameNames("player-attack-", 1, 3, ".png", 0),
+      'attack',
+      Phaser.Animation.generateFrameNames('player-attack-', 1, 3, '.png', 0),
       10,
-      true
+      true,
     );
 
     this.events.onKilled.add(() => {
@@ -78,7 +78,7 @@ export class Player extends AbstractPrefab {
   getHP(healthPoints: number) {
     this.health += +healthPoints;
     this.level.hud.updateHealthState();
-    this.write(healthPoints.toString() + "HP", settings.font.whiteWithBlue);
+    this.write(healthPoints.toString() + 'HP', settings.font.whiteWithBlue);
   }
 
   immortal(duration: any) {
@@ -164,20 +164,17 @@ export class Player extends AbstractPrefab {
   }
 
   state() {
-    if (
-      this.immortalState &&
-      this.game.time.now - this.immortalStateAt > this.immortalDuration
-    ) {
+    if (this.immortalState && this.game.time.now - this.immortalStateAt > this.immortalDuration) {
       this.alpha = 1;
       this.immortalState = false;
     }
 
     if (this.attackState) {
-      this.animations.play("attack");
+      this.animations.play('attack');
     } else if (this.moveState) {
-      this.animations.play("walk");
+      this.animations.play('walk');
     } else {
-      this.animations.play("stay");
+      this.animations.play('stay');
     }
 
     this.body.width = this.animations.currentFrame.width;

@@ -10,8 +10,5 @@
     "noImplicitReturns": true,
     "noEmit": true
   },
-  "include": [
-    "app/scripts/**/*.ts",
-    "node_modules/phaser/typescript/phaser.d.ts"
-  ]
+  "include": ["app/scripts/**/*.ts", "node_modules/phaser/typescript/phaser.d.ts"]
 }

@@ -1,11 +1,11 @@
-import { AbstractPrefab } from "../AbstractPrefab";
+import { AbstractPrefab } from '../AbstractPrefab';
 
 export class Bullet extends AbstractPrefab {
   speed: number = 300;
   damagePoints: number = 20;
 
   constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, "bullet");
+    super(game, x, y, 'bullet');
 
     game.physics.arcade.enable(this);
     this.anchor.set(0.5, 0.5);

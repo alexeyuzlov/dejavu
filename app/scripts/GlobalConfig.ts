@@ -31,7 +31,7 @@ class Storage {
   constructor() {}
 
   getCurrentState(): string {
-    var currentLevel = localStorage.getItem("currentLevel");
+    var currentLevel = localStorage.getItem('currentLevel');
     if (currentLevel) {
       return currentLevel;
     } else {
@@ -41,11 +41,11 @@ class Storage {
   }
 
   setCurrentState(currentState: string) {
-    localStorage.setItem("currentLevel", currentState);
+    localStorage.setItem('currentLevel', currentState);
   }
 
   getHealthPoints(): string {
-    var healthPoints = localStorage.getItem("healthPoints");
+    var healthPoints = localStorage.getItem('healthPoints');
     if (healthPoints) {
       return healthPoints;
     } else {
@@ -56,7 +56,7 @@ class Storage {
   }
 
   setHealthPoints(healthPoints: string) {
-    localStorage.setItem("healthPoints", healthPoints);
+    localStorage.setItem('healthPoints', healthPoints);
   }
 }
 
@@ -66,30 +66,30 @@ class SettingsClass {
   keys: any;
   font = {
     whiteWithRed: {
-      font: "20px Arial",
-      fill: "#ffffff",
-      stroke: "ff0000",
+      font: '20px Arial',
+      fill: '#ffffff',
+      stroke: 'ff0000',
       strokeThickness: 2,
     },
     whiteWithBlue: {
-      font: "20px Arial",
-      fill: "#ffffff",
-      stroke: "0000ff",
+      font: '20px Arial',
+      fill: '#ffffff',
+      stroke: '0000ff',
       strokeThickness: 2,
     },
     whiteWithGreen: {
-      font: "20px Arial",
-      fill: "#ffffff",
-      stroke: "00ff00",
+      font: '20px Arial',
+      fill: '#ffffff',
+      stroke: '00ff00',
       strokeThickness: 2,
     },
     whiteBig: {
-      font: "20px Arial",
-      fill: "#ffffff",
+      font: '20px Arial',
+      fill: '#ffffff',
     },
     blackBig: {
-      font: "20px Arial",
-      fill: "#000000",
+      font: '20px Arial',
+      fill: '#000000',
     },
   };
 

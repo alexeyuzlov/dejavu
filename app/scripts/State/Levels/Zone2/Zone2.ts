@@ -1,4 +1,4 @@
-import { AbstractZone } from "../AbstractZone";
+import { AbstractZone } from '../AbstractZone';
 
 export class Zone2 extends AbstractZone {
   bg: Phaser.TileSprite;
@@ -7,28 +7,19 @@ export class Zone2 extends AbstractZone {
   lightSprite: Phaser.Image;
 
   preload() {
-    this.game.load.image("bg", "assets/images/zone2.png");
+    this.game.load.image('bg', 'assets/images/zone2.png');
     super.preload();
   }
 
   create() {
-    this.bg = this.game.add.tileSprite(
-      0,
-      0,
-      this.game.world.width,
-      this.game.world.height,
-      "bg"
-    );
+    this.bg = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'bg');
     this.bg.fixedToCamera = true;
 
     super.create();
 
-    this.game.stage.backgroundColor = "#330169";
+    this.game.stage.backgroundColor = '#330169';
 
-    this.shadowTexture = this.game.add.bitmapData(
-      this.map.widthInPixels,
-      this.map.heightInPixels
-    );
+    this.shadowTexture = this.game.add.bitmapData(this.map.widthInPixels, this.map.heightInPixels);
     this.lightSprite = this.game.add.image(0, 0, this.shadowTexture);
     this.lightSprite.blendMode = PIXI.blendModes.MULTIPLY;
   }
@@ -43,13 +34,8 @@ export class Zone2 extends AbstractZone {
   }
 
   shadowUpdate() {
-    this.shadowTexture.context.fillStyle = "#222222";
-    this.shadowTexture.context.fillRect(
-      0,
-      0,
-      this.map.widthInPixels,
-      this.map.heightInPixels
-    );
+    this.shadowTexture.context.fillStyle = '#222222';
+    this.shadowTexture.context.fillRect(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
     var gradient = this.shadowTexture.context.createRadialGradient(
       this.player.body.x,
@@ -57,10 +43,10 @@ export class Zone2 extends AbstractZone {
       this.lightRadius * 0.75,
       this.player.body.x,
       this.player.body.y,
-      this.lightRadius
+      this.lightRadius,
     );
-    gradient.addColorStop(0, "rgba(255, 255, 255, 1.0)");
-    gradient.addColorStop(1, "rgba(255, 255, 255, 0.0)");
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
     this.shadowTexture.context.beginPath();
     this.shadowTexture.context.fillStyle = gradient;
@@ -69,7 +55,7 @@ export class Zone2 extends AbstractZone {
       this.player.body.y,
       this.lightRadius,
       0,
-      Math.PI * 2
+      Math.PI * 2,
     );
     this.shadowTexture.context.fill();
 
