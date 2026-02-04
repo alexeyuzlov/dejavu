@@ -14,4 +14,9 @@ module.exports = defineConfig(() => ({
       input: path.resolve(__dirname, 'index.html'),
     },
   },
+  server: {
+    watch: {
+      usePolling: true,
+    },
+  },
 }));
