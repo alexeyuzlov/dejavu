@@ -58,7 +58,7 @@ Notes:
 
 ## CI
 
-GitHub Actions runs `npm run check` and `npm run test:smoke:docker` on push and pull requests.
+GitHub Actions runs `npm run check` and `npm run test:smoke` on push and pull requests.
 
 ## Tiled Sources
 
