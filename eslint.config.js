@@ -22,17 +22,13 @@ const nodeGlobals = {
 
 module.exports = [
   {
-    ignores: ['dist/**', 'node_modules/**', 'public/**', 'tmp/**'],
+    ignores: ['dist/**', 'node_modules/**', 'public/**'],
   },
   js.configs.recommended,
   {
     files: ['**/*.ts'],
     languageOptions: {
       parser: tsParser,
-      parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 'latest',
-      },
       globals: browserGlobals,
     },
     plugins: {
@@ -42,7 +38,6 @@ module.exports = [
       ...tseslint.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-wrapper-object-types': 'off',
       'no-undef': 'off',
     },
   },

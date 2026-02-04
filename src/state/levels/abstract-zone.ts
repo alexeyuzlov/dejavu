@@ -83,7 +83,7 @@ export class AbstractZone extends Phaser.State {
     });
   }
 
-  getPrefabsFromMap(name: string, className?: Object): Phaser.Group {
+  getPrefabsFromMap(name: string, className?: object): Phaser.Group {
     var group = this.game.add.group();
 
     return createObjectsFromMap(this.map, 'objects', name, group, className);

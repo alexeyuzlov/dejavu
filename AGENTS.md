@@ -34,7 +34,8 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 ### CI
 
-- GitHub Actions workflow lives in `.github/workflows/ci.yml` and runs `npm run check`.
+- GitHub Actions workflows live in `.github/workflows/ci.yml` (PR checks/tests)
+  and `.github/workflows/deploy-pages.yml` (checks + Pages deploy on `master`).
 
 ### Assets & Levels
 

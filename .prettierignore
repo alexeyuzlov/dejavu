@@ -1,9 +1,6 @@
 dist
-node_modules
-app/assets/images
-app/assets/levels
-tools/tiled
 coverage
 playwright-report
 test-results
 .vite
+tools/tiled

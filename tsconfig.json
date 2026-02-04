@@ -1,12 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "lib": ["dom", "es2015"],
-    "noEmit": true,
-    "skipLibCheck": true,
-    "types": ["@playwright/test"]
+    "module": "esnext",
+    "lib": ["dom", "es2015"]
   },
   "include": [
     "src/**/*.ts",

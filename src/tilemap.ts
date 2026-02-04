@@ -19,7 +19,7 @@ export const createObjectsFromMap = (
   objectLayer: string,
   name: string,
   group: Phaser.Group,
-  className?: Object,
+  className?: object,
 ) => {
   const index = map.getTilesetIndex(name);
   if (!index) return group;
