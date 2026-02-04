@@ -3,8 +3,14 @@ import { Levels, StateKeys, Stories, settings } from '../../global-config';
 import { createGroup } from '../../groups';
 import { secondsToMs } from '../../time';
 import { followLockonCamera } from '../phaser-helpers';
-import { createLevelMap, createObjectsFromMap, PrefabConstructor } from '../../tilemap';
 import { PlayerInput } from '../../prefab/player';
+
+type PrefabConstructor = new (
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  ...args: any[]
+) => Phaser.GameObjects.GameObject;
 
 export class AbstractZone extends Phaser.Scene {
   map: Phaser.Tilemaps.Tilemap;
@@ -47,13 +53,19 @@ export class AbstractZone extends Phaser.Scene {
     this.cameras.main.setBackgroundColor('#000000');
 
     // MAP AND LAYERS
-    const levelMap = createLevelMap(this, 'map', 'ground', 'layer');
-    this.map = levelMap.map;
-    this.layer = levelMap.layer;
+    const map = this.make.tilemap({ key: 'map' });
+    const tileset = map.addTilesetImage('ground');
+    const layer = map.createLayer('layer', tileset, 0, 0);
+    map.setCollisionBetween(1, 5, true, true, layer);
+    layer.setCollisionBetween(1, 5);
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.map = map;
+    this.layer = layer;
 
     // PREFABS SINGLE
     this.playerInput = this.createPlayerInput();
-    this.player = new Prefab.Player(this, 120, this.scale.height - 200, this.playerInput);
+    this.player = new Prefab.Player(this, 120, map.heightInPixels - 200, this.playerInput);
 
     this.hud = new Prefab.HUD(this, 10, 10);
     this.hud.setAlpha(0);
@@ -120,9 +132,35 @@ export class AbstractZone extends Phaser.Scene {
   }
 
   getPrefabsFromMap(name: string, className?: PrefabConstructor): Phaser.GameObjects.Group {
-    var group = createGroup(this);
+    const group = createGroup(this);
+    const tilesetIndex = this.map.getTilesetIndex(name);
+    if (tilesetIndex === null || tilesetIndex === -1) return group;
 
-    return createObjectsFromMap(this, this.map, 'objects', name, group, className);
+    const firstGid = this.map.tilesets[tilesetIndex]?.firstgid;
+    if (firstGid === undefined) return group;
+
+    const config: Phaser.Types.Tilemaps.CreateFromObjectLayerConfig = {
+      gid: firstGid,
+      key: name,
+      scene: this,
+    };
+
+    if (className) {
+      config.classType =
+        className as unknown as Phaser.Types.Tilemaps.CreateFromObjectsClassTypeConstructor;
+    }
+
+    const objects = this.map.createFromObjects('objects', config);
+    if (objects.length) {
+      objects.forEach((object) => {
+        const sprite = object as Phaser.GameObjects.Sprite;
+        if (sprite.setOrigin) {
+          sprite.setOrigin(0, 1);
+        }
+      });
+      group.addMultiple(objects);
+    }
+    return group;
   }
 
   gameOver() {

@@ -26,14 +26,17 @@ export class Zone1 extends AbstractZone {
     this.rainCreate();
   }
 
-  update() {
+  update(time: number, delta: number) {
+    super.update(time, delta);
     this.bg.tilePositionX -= 2;
   }
 
   rainCreate() {
+    const mapWidth = this.map.widthInPixels;
+    const mapHeight = this.map.heightInPixels;
     this.rainEmitter = this.add.particles(0, 0, Assets.spritesheets.rain.key, {
-      x: this.scale.width / 2,
-      y: -this.scale.height / 2,
+      x: mapWidth / 2,
+      y: -mapHeight / 2,
       lifespan: 10000,
       quantity: 5,
       frequency: 5,
@@ -44,7 +47,7 @@ export class Zone1 extends AbstractZone {
       rotate: 0,
       emitZone: {
         type: 'random',
-        source: new Phaser.Geom.Rectangle(0, 0, this.scale.width + this.scale.width * 0.2, 1),
+        source: new Phaser.Geom.Rectangle(-mapWidth * 0.6, 0, mapWidth * 1.2, 1),
       },
     });
   }

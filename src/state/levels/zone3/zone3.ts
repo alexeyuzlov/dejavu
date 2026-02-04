@@ -46,7 +46,10 @@ export class Zone3 extends AbstractZone {
   }
 
   update() {
-    this.emitter.setPosition(this.scale.width / 2, this.cameras.main.scrollY);
+    this.emitter.setPosition(
+      this.cameras.main.scrollX + this.scale.width / 2,
+      this.cameras.main.scrollY,
+    );
     this.bg.tilePositionX = -this.player.x / 50;
   }
 }
