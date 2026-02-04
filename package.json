@@ -19,6 +19,7 @@
     "lint": "npm run vite:tsc",
     "check": "npm run assets:check && npm run vite:tsc && npm run vite:build",
     "test:smoke": "npm run vite:build && npm run vite:preview -- --port 4173 --strictPort & npx playwright test",
+    "test:smoke:dev": "npm run vite:tsc && npm run vite:serve -- --port 4173 --strictPort & npx playwright test",
     "test:ui": "npx playwright test --ui",
     "test:smoke:docker": "docker run --rm -t -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm ci && npm run test:smoke\""
   },

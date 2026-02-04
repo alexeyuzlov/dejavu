@@ -54,6 +54,10 @@ This build outputs to `dist/`.
     ```bash
     npm run test:smoke:docker
     ```
+10. **Run smoke test against dev server**:
+    ```bash
+    npm run test:smoke:dev
+    ```
 
 Notes:
 - If you change assets or `app/index.html`, re-run `npm run vite:build`.
@@ -62,7 +66,7 @@ Notes:
 - Node version is pinned in `.nvmrc`.
 
 ## CI
-GitHub Actions runs `npm run assets:check`, `npm run vite:tsc`, and `npm run test:smoke` on push and pull requests.
+GitHub Actions runs `npm run assets:check`, `npm run vite:tsc`, and `npm run test:smoke:docker` on push and pull requests.
 
 ## Tiled Sources
 The `tools/tiled/` folder contains level source exports from Tiled Map Editor.
