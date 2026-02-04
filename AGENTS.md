@@ -6,6 +6,9 @@ Update this file when build/test workflows, dependencies, or project structure c
 - Build outputs to `dist/` (see build scripts in `package.json`).
 - Dev and preview flows are defined in npm scripts.
 
+### Dependencies
+- Use exact versions in `package.json` (no `~` or `^`).
+
 ### Phaser
 - Phaser is sourced from npm; typings are referenced from the package.
 

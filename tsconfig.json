@@ -12,6 +12,6 @@
     "app/scripts/**/*.ts",
     "tests/**/*.ts",
     "playwright.config.ts",
-    "node_modules/phaser/build/phaser.d.ts"
+    "node_modules/phaser/typescript/phaser.d.ts"
   ]
 }

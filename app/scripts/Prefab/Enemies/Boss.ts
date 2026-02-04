@@ -255,7 +255,7 @@ module Sample.Prefab {
 
                 // Draw a branch 20% of the time off the main bolt only
                 if (!branch) {
-                    if (Phaser.Math.chanceRoll(20)) {
+                    if (Phaser.Utils.chanceRoll(20)) {
                         // Draws another, thinner, bolt starting from this position
                         this.createLightningTexture(x, y, 10, 1, true, distance);
                     }
