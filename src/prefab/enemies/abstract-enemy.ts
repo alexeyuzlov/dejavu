@@ -1,5 +1,4 @@
 import { overlapArcade, killSprite } from '../../physics';
-import { timeNow, secondsToMs } from '../../time';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class AbstractEnemy extends AbstractPrefab {
@@ -17,8 +16,8 @@ export class AbstractEnemy extends AbstractPrefab {
     this.setOrigin(0, 0.5);
 
     this.immortalState = false;
-    this.immortalStateAt = timeNow(scene);
-    this.immortalStateDuration = secondsToMs(1 / 3);
+    this.immortalStateAt = scene.time.now;
+    this.immortalStateDuration = (1 / 3) * 1000;
     this.defensePoints = 0;
   }
 
@@ -46,14 +45,14 @@ export class AbstractEnemy extends AbstractPrefab {
       this.scene.tweens.add({
         targets: text,
         alpha: 0,
-        duration: secondsToMs(1),
+        duration: 1 * 1000,
         ease: 'Linear',
         onComplete: () => {
           text.destroy();
         },
       });
 
-      this.immortalStateAt = timeNow(this.scene);
+      this.immortalStateAt = this.scene.time.now;
       this.immortalState = true;
     }
   }
@@ -69,7 +68,10 @@ export class AbstractEnemy extends AbstractPrefab {
       }
     });
 
-    if (this.immortalState && timeNow(this.scene) - this.immortalStateAt > this.immortalStateDuration) {
+    if (
+      this.immortalState &&
+      this.scene.time.now - this.immortalStateAt > this.immortalStateDuration
+    ) {
       this.immortalState = false;
     }
   }

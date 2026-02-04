@@ -1,5 +1,4 @@
 import { addDelayedEvent, addRepeatEvent } from '../phaser-helpers';
-import { secondsToMs } from '../../time';
 import { settings } from '../../global-config';
 
 export class AbstractStory extends Phaser.Scene {
@@ -58,7 +57,7 @@ export class AbstractStory extends Phaser.Scene {
       if (this.lineEvent) {
         this.lineEvent = null;
       }
-      this.nextEvent = addDelayedEvent(this, secondsToMs(2), this.nextLine, this);
+      this.nextEvent = addDelayedEvent(this, 2 * 1000, this.nextLine, this);
     }
   }
 

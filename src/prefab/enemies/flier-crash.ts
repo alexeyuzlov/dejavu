@@ -1,6 +1,5 @@
 import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig } from '../../physics';
-import { timeNow } from '../../time';
 import { Egg } from '../bullets/egg';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -35,7 +34,7 @@ export class FlierCrash extends AbstractEnemy {
     this.velocity = 100;
     this.isActive = false;
     this.defensePoints = 6;
-    this.lastEggShotAt = timeNow(this.scene);
+    this.lastEggShotAt = this.scene.time.now;
     this.shotDelay = 1500;
 
     const anims = this.scene.anims;
@@ -95,8 +94,8 @@ export class FlierCrash extends AbstractEnemy {
       }
     }
 
-    if (timeNow(this.scene) - this.lastEggShotAt < this.shotDelay) return;
-    this.lastEggShotAt = timeNow(this.scene);
+    if (this.scene.time.now - this.lastEggShotAt < this.shotDelay) return;
+    this.lastEggShotAt = this.scene.time.now;
 
     var egg = getFirstDead<Egg>(this.eggs);
     if (egg === null || egg === undefined) return;

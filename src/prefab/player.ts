@@ -1,6 +1,5 @@
 import { applyBodyConfig, collideArcade, killSprite } from '../physics';
 import { onKilled } from '../events';
-import { timeNow, secondsToMs } from '../time';
 import { Direction, settings } from '../global-config';
 import { AbstractPrefab } from './abstract-prefab';
 
@@ -48,11 +47,11 @@ export class Player extends AbstractPrefab {
     this.defensePoints = 5;
     this.direction = Direction.Right;
     this.damagePoints = 50;
-    this.immortalStateAt = timeNow(this.scene);
-    this.attackStateAt = timeNow(this.scene);
-    this.immortalDuration = secondsToMs(3);
-    this.immortalDefaultDuration = secondsToMs(3);
-    this.attackDuration = secondsToMs(1 / 3);
+    this.immortalStateAt = this.scene.time.now;
+    this.attackStateAt = this.scene.time.now;
+    this.immortalDuration = 3 * 1000;
+    this.immortalDefaultDuration = 3 * 1000;
+    this.attackDuration = (1 / 3) * 1000;
     this.isActiveJumpKey = false;
     this.isAttackKeyPressed = false;
     this.inputState = inputState;
@@ -120,7 +119,7 @@ export class Player extends AbstractPrefab {
 
   immortal(duration: any) {
     this.immortalDuration = duration;
-    this.immortalStateAt = timeNow(this.scene);
+    this.immortalStateAt = this.scene.time.now;
     this.immortalState = true;
     this.setAlpha(0.5);
   }
@@ -130,7 +129,7 @@ export class Player extends AbstractPrefab {
     this.scene.tweens.add({
       targets: textSprite,
       alpha: 0,
-      duration: secondsToMs(1),
+      duration: 1 * 1000,
       ease: 'Linear',
       onComplete: () => {
         textSprite.destroy();
@@ -207,30 +206,30 @@ export class Player extends AbstractPrefab {
     ) {
       this.isAttackKeyPressed = true;
       this.attackState = true;
-      this.attackStateAt = timeNow(this.scene);
+      this.attackStateAt = this.scene.time.now;
     }
 
     if (!input.attack.isDown) {
       this.isAttackKeyPressed = false;
     }
 
-    if (timeNow(this.scene) - this.attackStateAt > this.attackDuration) {
+    if (this.scene.time.now - this.attackStateAt > this.attackDuration) {
       this.attackState = false;
     }
   }
 
   updateState() {
-    if (this.immortalState && timeNow(this.scene) - this.immortalStateAt > this.immortalDuration) {
+    if (this.immortalState && this.scene.time.now - this.immortalStateAt > this.immortalDuration) {
       this.setAlpha(1);
       this.immortalState = false;
     }
 
     if (this.attackState) {
-      this.anims.play('player-attack');
+      this.anims.play('player-attack', true);
     } else if (this.moveState) {
-      this.anims.play('player-walk');
+      this.anims.play('player-walk', true);
     } else {
-      this.anims.play('player-stay');
+      this.anims.play('player-stay', true);
     }
 
     const currentFrame = this.anims.currentFrame;

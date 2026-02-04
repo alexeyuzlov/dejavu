@@ -1,8 +1,7 @@
-import { secondsToMs } from '../../time';
 import { Bottle } from './bottle';
 
 export class BottleSuper extends Bottle {
-  duration: number = secondsToMs(10);
+  duration: number = 10 * 1000;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'bottle-super');

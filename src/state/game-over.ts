@@ -1,5 +1,4 @@
 import { addDelayedEvent, addRepeatEvent } from './phaser-helpers';
-import { secondsToMs } from '../time';
 import { StateKeys, settings } from '../global-config';
 
 export class GameOver extends Phaser.Scene {
@@ -44,7 +43,7 @@ export class GameOver extends Phaser.Scene {
       this.line = this.content[this.index].substr(0, this.line.length + 1);
       this.text.setText(this.line);
     } else {
-      addDelayedEvent(this, secondsToMs(2), this.nextLine, this);
+      addDelayedEvent(this, 2 * 1000, this.nextLine, this);
     }
   }
 }

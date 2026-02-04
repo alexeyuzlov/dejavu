@@ -1,7 +1,6 @@
 import { onKilled, onResume } from '../../events';
 import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig, overlapArcade, killSprite } from '../../physics';
-import { timeNow, secondsToMs } from '../../time';
 import { BulletReject } from '../bullets/bullet-reject';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -33,10 +32,10 @@ export class Boss extends AbstractEnemy {
     this.activeTweenID = 0;
     this.bossTweens = bossTweens;
 
-    this.lastEventAt = timeNow(this.scene);
-    this.lastBulletShotAt = timeNow(this.scene);
+    this.lastEventAt = this.scene.time.now;
+    this.lastBulletShotAt = this.scene.time.now;
     this.countBullets = 10;
-    this.shotDelay = secondsToMs(3);
+    this.shotDelay = 3 * 1000;
 
     this.bullets = createGroup(this.scene);
     for (var i = 0; i < this.countBullets; i++) {
@@ -105,7 +104,7 @@ export class Boss extends AbstractEnemy {
       this.scene.tweens.add({
         targets: this.level.blackScreen,
         alpha: 1,
-        duration: secondsToMs(3),
+        duration: 3 * 1000,
         ease: 'Linear',
         onComplete: () => {
           this.level.startNextLevel();
@@ -115,7 +114,7 @@ export class Boss extends AbstractEnemy {
   }
 
   generateAction() {
-    this.lastEventAt = timeNow(this.scene);
+    this.lastEventAt = this.scene.time.now;
 
     do {
       var rand = Math.floor(Math.random() * this.bossTweens.getChildren().length);
@@ -167,8 +166,8 @@ export class Boss extends AbstractEnemy {
       this.generateAction();
     }
 
-    if (timeNow(this.scene) - this.lastBulletShotAt < this.shotDelay) return;
-    this.lastBulletShotAt = timeNow(this.scene);
+    if (this.scene.time.now - this.lastBulletShotAt < this.shotDelay) return;
+    this.lastBulletShotAt = this.scene.time.now;
 
     var bullet = getFirstDead<BulletReject>(this.bullets);
 
@@ -187,7 +186,10 @@ export class Boss extends AbstractEnemy {
       this.scaleX = 1;
     }
 
-    if (this.immortalState && timeNow(this.scene) - this.immortalStateAt > this.immortalStateDuration) {
+    if (
+      this.immortalState &&
+      this.scene.time.now - this.immortalStateAt > this.immortalStateDuration
+    ) {
       this.immortalState = false;
     }
   }

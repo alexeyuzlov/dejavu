@@ -1,7 +1,6 @@
 import { onResume } from '../../events';
 import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig, collideArcade, overlapArcade, killSprite } from '../../physics';
-import { timeNow, secondsToMs } from '../../time';
 import { BulletReject } from '../bullets/bullet-reject';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -19,9 +18,9 @@ export class ShooterReject extends AbstractEnemy {
     applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { gravityY: 300 });
     this.damagePoints = 10;
     this.defensePoints = 50;
-    this.lastBulletShotAt = timeNow(this.scene);
+    this.lastBulletShotAt = this.scene.time.now;
     this.countBullets = 10;
-    this.shotDelay = secondsToMs(3);
+    this.shotDelay = 3 * 1000;
 
     this.bullets = createGroup(this.scene);
     for (var i = 0; i < this.countBullets; i++) {
@@ -72,14 +71,14 @@ export class ShooterReject extends AbstractEnemy {
       return;
     }
 
-    if (timeNow(this.scene) - this.lastBulletShotAt < secondsToMs(1 / 3)) {
+    if (this.scene.time.now - this.lastBulletShotAt < (1 / 3) * 1000) {
       this.anims.play('shooter-reject-shot');
     } else {
       this.anims.play('shooter-reject-stay');
     }
 
-    if (timeNow(this.scene) - this.lastBulletShotAt < this.shotDelay) return;
-    this.lastBulletShotAt = timeNow(this.scene);
+    if (this.scene.time.now - this.lastBulletShotAt < this.shotDelay) return;
+    this.lastBulletShotAt = this.scene.time.now;
 
     var bullet = getFirstDead<BulletReject>(this.bullets);
 

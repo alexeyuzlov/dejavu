@@ -1,7 +1,6 @@
 import * as Prefab from '../../prefab';
 import { Levels, StateKeys, Stories, settings } from '../../global-config';
 import { createGroup } from '../../groups';
-import { secondsToMs } from '../../time';
 import { followLockonCamera } from '../phaser-helpers';
 import { PlayerInput } from '../../prefab/player';
 
@@ -93,7 +92,7 @@ export class AbstractZone extends Phaser.Scene {
     this.tweens.add({
       targets: this.blackScreen,
       alpha: 0,
-      duration: secondsToMs(3),
+      duration: 3 * 1000,
       ease: 'Linear',
       onComplete: () => {
         this.hud.setAlpha(1);
@@ -168,7 +167,7 @@ export class AbstractZone extends Phaser.Scene {
     this.tweens.add({
       targets: this.blackScreen,
       alpha: 1,
-      duration: secondsToMs(1),
+      duration: 1 * 1000,
       ease: 'Linear',
       onComplete: () => {
         this.scene.start(StateKeys.GameOver);
@@ -181,7 +180,7 @@ export class AbstractZone extends Phaser.Scene {
     this.tweens.add({
       targets: this.blackScreen,
       alpha: 1,
-      duration: secondsToMs(3),
+      duration: 3 * 1000,
       ease: 'Linear',
       onComplete: () => {
         this.scene.start(this.getNextLevel());
