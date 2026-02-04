@@ -14,20 +14,20 @@ To set up and build the project, follow these steps:
    ```
 2. **Build the project**:
    ```bash
-   npm run vite:build
+   npm run build
    ```
 
 ## Vite Build
 
 This build outputs to `dist/`.
 
-1. **Dev (server + TS watch)**:
+1. **Dev (server)**:
    ```bash
    npm run dev
    ```
 2. **Build to `dist/`**:
    ```bash
-   npm run vite:build
+   npm run build
    ```
 3. **Dev (open browser)**:
    ```bash
@@ -35,11 +35,11 @@ This build outputs to `dist/`.
    ```
 4. **Preview the `dist/` output**:
    ```bash
-   npm run vite:preview
+   npm run preview
    ```
 5. **Preview and auto-open the browser**:
    ```bash
-   npm run vite:preview:open
+   npm run preview:open
    ```
 6. **Clean output**:
    ```bash
@@ -61,23 +61,26 @@ This build outputs to `dist/`.
     ```bash
     npm run test:smoke:dev
     ```
+11. **Run smoke test locally (no Docker)**:
+    ```bash
+    npm run test:smoke:local
+    ```
 
 Notes:
 
-- If you change assets or `app/index.html`, re-run `npm run vite:build`.
-- The build step copies `node_modules/phaser/build/phaser.min.js` into `dist/vendor/`.
-- Vite requires Node 18+.
+- If you change assets or `index.html`, re-run `npm run build`.
+- Vite requires Node 20+.
 - Node version is pinned in `.nvmrc`.
 
 ## CI
 
-GitHub Actions runs `npm run assets:check`, `npm run vite:tsc`, and `npm run test:smoke:docker` on push and pull requests.
+GitHub Actions runs `npm run check` and `npm run test:smoke:docker` on push and pull requests.
 
 ## Tiled Sources
 
 The `tools/tiled/` folder contains level source exports from Tiled Map Editor.
 Edit levels in Tiled, export JSON into `tools/tiled/`, then copy the final JSON
-into `app/assets/levels/` for runtime use.
+into `public/assets/levels/` for runtime use.
 
 ## Game Features
 

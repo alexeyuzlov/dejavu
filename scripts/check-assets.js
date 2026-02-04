@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const preloadPath = path.resolve(__dirname, '../app/scripts/State/Preload.ts');
+const preloadPath = path.resolve(__dirname, '../src/state/preload.ts');
 const projectRoot = path.resolve(__dirname, '..');
 
 if (!fs.existsSync(preloadPath)) {
@@ -19,7 +19,7 @@ if (assets.length === 0) {
 }
 
 const missing = assets.filter((assetPath) => {
-  const fsPath = path.resolve(projectRoot, 'app', assetPath);
+  const fsPath = path.resolve(projectRoot, 'public', assetPath);
   return !fs.existsSync(fsPath);
 });
 

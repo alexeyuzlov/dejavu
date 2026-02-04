@@ -9,57 +9,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node 18
+      - name: Use Node 20.18.3
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20.18.3'
           cache: 'npm'
 
       - name: Install
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
-
-  checks:
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node 18
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install
-        run: npm ci
-
-      - name: Asset check
-        run: npm run assets:check
-
-      - name: Type check
-        run: npm run vite:tsc
+      - name: Check
+        run: npm run check
 
   smoke:
     runs-on: ubuntu-latest
-    needs: checks
+    needs: check
     steps:
       - name: Checkout
         uses: actions/checkout@v4

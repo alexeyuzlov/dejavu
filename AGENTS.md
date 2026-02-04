@@ -6,6 +6,9 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 - Build outputs to `dist/` (see build scripts in `package.json`).
 - Dev and preview flows are defined in npm scripts.
+- Source code lives in `src/`.
+- Vite serves static assets from `public/`.
+- Type checking runs via `npm run lint:types` (no emit).
 - Shared formatting is defined in `.editorconfig`.
 - Prettier runs via `npm run format`.
 
@@ -24,16 +27,20 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 - Config and test live in `playwright.config.ts` and `tests/smoke.spec.ts`.
 - Docker fallback script exists; see npm scripts.
+- Smoke tests start the Vite server via `scripts/run-smoke.js` to manage
+  lifecycle and avoid background process hangs.
+- `npm run test:smoke` runs inside Docker by default; use
+  `npm run test:smoke:local` for a local run.
 - Local browser install may fail due to TLS (`UNABLE_TO_GET_ISSUER_CERT_LOCALLY`).
 - Prefer running smoke tests via Docker to avoid local TLS/browser install issues.
 
 ### CI
 
-- GitHub Actions workflow lives in `.github/workflows/ci.yml`.
+- GitHub Actions workflow lives in `.github/workflows/ci.yml` and runs `npm run check`.
 
 ### Assets & Levels
 
-- Runtime levels are in `app/assets/levels/`.
+- Runtime levels are in `public/assets/levels/`.
 - Tiled exports are in `tools/tiled/` (workflow described in README).
 
 ### Node Versions

@@ -4,11 +4,11 @@
     "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
-    "rootDir": "app/scripts",
+    "rootDir": "src",
     "skipLibCheck": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noEmit": true
   },
-  "include": ["app/scripts/**/*.ts", "node_modules/phaser/typescript/phaser.d.ts"]
+  "include": ["src/**/*.ts", "node_modules/phaser/typescript/phaser.d.ts"]
 }

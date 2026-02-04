@@ -16,11 +16,13 @@ const nodeGlobals = {
   __dirname: 'readonly',
   __filename: 'readonly',
   console: 'readonly',
+  setTimeout: 'readonly',
+  clearTimeout: 'readonly',
 };
 
 module.exports = [
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['dist/**', 'node_modules/**', 'public/**'],
   },
   js.configs.recommended,
   {
