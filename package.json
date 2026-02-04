@@ -19,7 +19,7 @@
     "prepare": "husky install",
     "precheck": "npm run node:check",
     "check": "npm run assets:check && npm run lint && npm run lint:types && npm run build",
-    "test:smoke": "docker run --rm --shm-size=1gb -e CI=1 -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm ci --ignore-scripts --no-fund --no-audit && npm run build && node scripts/run-smoke.js preview\"",
+    "test:smoke": "docker run --rm --shm-size=1gb -e CI=1 -e NPM_CONFIG_CACHE=/root/.npm -v \"$PWD\":/work -v \"$PWD/.npm\":/root/.npm -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm i -g n && n 20.18.3 && node -v && npm ci --ignore-scripts --no-fund --no-audit && npm run build && node scripts/run-smoke.js preview\"",
     "test:ui": "npx playwright test --ui"
   },
   "devDependencies": {
