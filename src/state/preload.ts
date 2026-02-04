@@ -4,6 +4,21 @@ import { settings } from '../global-config';
 
 export class Preload extends Phaser.State {
   preload() {
+    const errorEl = document.getElementById('loading-error');
+    const show = (el: HTMLElement | null) => {
+      if (el) el.style.display = 'block';
+    };
+    const showError = (message: string) => {
+      if (!errorEl) return;
+      errorEl.textContent = message;
+      show(errorEl);
+    };
+
+    this.load.onFileError.add((file: any) => {
+      const key = file && file.key ? ` (${file.key})` : '';
+      showError(`Failed to load assets${key}. Check console.`);
+    });
+
     var preloadBar = new Prefab.PreloadBar(
       this.game,
       this.game.world.width - 10,
@@ -79,6 +94,27 @@ export class Preload extends Phaser.State {
   }
 
   create() {
+    const loadingEl = document.getElementById('loading');
+    const errorEl = document.getElementById('loading-error');
+    const gameEl = document.getElementById('game');
+    const descriptionEl = document.getElementById('description');
+    const show = (el: HTMLElement | null) => {
+      if (el) el.style.display = 'block';
+    };
+    const hide = (el: HTMLElement | null) => {
+      if (el) el.style.display = 'none';
+    };
+
+    if (errorEl && errorEl.textContent) {
+      show(loadingEl);
+      hide(gameEl);
+      hide(descriptionEl);
+      return;
+    }
+
+    hide(loadingEl);
+    show(gameEl);
+    show(descriptionEl);
     this.game.state.start(settings.storage.getCurrentState());
   }
 }

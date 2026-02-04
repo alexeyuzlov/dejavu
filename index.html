@@ -17,6 +17,19 @@
         height: 100%;
       }
 
+      #loading {
+        color: #999;
+        width: 640px;
+        margin: 120px auto 0;
+        text-align: center;
+      }
+
+      #loading-error {
+        color: #f66;
+        display: none;
+        margin-top: 8px;
+      }
+
       .left {
         float: left;
       }
@@ -30,12 +43,14 @@
         height: 480px;
         margin: 120px auto 0;
         border: 1px solid #000;
+        display: none;
       }
 
       #description {
         color: #999;
         width: 640px;
         margin: 10px auto 0;
+        display: none;
       }
 
       a {
@@ -49,6 +64,10 @@
     </style>
   </head>
   <body>
+    <div id="loading">
+      <div>Loading…</div>
+      <div id="loading-error"></div>
+    </div>
     <div id="game"></div>
     <div id="description">
       <p class="left">Left / Right - move left / right; Z - jump; X - attack; P - pause</p>
