@@ -20,7 +20,7 @@ module Sample.Prefab {
             this.defensePoints = 0;
         }
 
-        makeDamage(damagePoint) {
+        makeDamage(damagePoint:any) {
             if (!this.immortalState) {
                 if (damagePoint < this.defensePoints) {
                     damagePoint = 1
@@ -50,7 +50,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.overlap(this.level.player, this, (player, enemy)=> {
+            this.game.physics.arcade.overlap(this.level.player, this, (player:any, enemy:any)=> {
                 if (player.attackState) {
                     enemy.makeDamage(player.damagePoints);
                 } else if (!this.level.player.immortalState) {

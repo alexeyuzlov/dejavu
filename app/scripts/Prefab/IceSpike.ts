@@ -12,7 +12,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.overlap(this.level.player, this, (player, ice) => {
+            this.game.physics.arcade.overlap(this.level.player, this, (player:any, ice:any) => {
                 if (!this.level.player.immortalState) {
                     this.level.player.makeDamage(ice.damagePoints);
                     this.level.hud.updateHealthState();

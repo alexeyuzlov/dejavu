@@ -39,7 +39,7 @@ module Sample.Prefab {
 
             this.game.physics.arcade.collide(this, this.level.layer);
 
-            this.game.physics.arcade.overlap(this, this.bullets, (shooterReject, bulletReject)=> {
+            this.game.physics.arcade.overlap(this, this.bullets, (shooterReject:any, bulletReject:any)=> {
                 if (bulletReject.rejectState) {
                     bulletReject.kill();
                     this.makeDamage(bulletReject.damageRejectPoints);

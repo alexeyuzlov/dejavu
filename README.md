@@ -26,23 +26,33 @@ This build outputs to `dist/`.
     ```bash
     npm run vite:dev
     ```
-3. **Preview the `dist/` output**:
+3. **Run a dev server (serve `app/`)**:
+    ```bash
+    npm run vite:serve
+    ```
+   Open another terminal for `npm run vite:dev` so `dist/js/main.js` keeps updating.
+4. **Preview the `dist/` output**:
     ```bash
     npm run vite:preview
     ```
-4. **Preview and auto-open the browser**:
+5. **Preview and auto-open the browser**:
     ```bash
     npm run vite:preview:open
     ```
-5. **Clean output**:
+6. **Clean output**:
     ```bash
     npm run clean
+    ```
+7. **Check required assets**:
+    ```bash
+    npm run assets:check
     ```
 
 Notes:
 - If you change assets or `app/index.html`, re-run `npm run vite:build`.
 - The build step copies `node_modules/phaser/build/phaser.min.js` into `dist/vendor/`.
 - Vite requires Node 18+.
+- Node version is pinned in `.nvmrc`.
 
 ## Game Features
 - Classic platformer mechanics.

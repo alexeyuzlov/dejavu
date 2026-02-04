@@ -15,7 +15,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.collide(this, this.level.player, (bullet, player)=> {
+            this.game.physics.arcade.collide(this, this.level.player, (bullet:any, player:any)=> {
                 bullet.kill();
                 if (!this.level.player.immortalState) {
                     this.level.player.makeDamage(bullet.damagePoints);

@@ -9,7 +9,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.collide(this.level.player, this.level.exits, (player, exit) => {
+            this.game.physics.arcade.collide(this.level.player, this.level.exits, (player:any, exit:any) => {
                 this.level.startNextLevel();
             });
         }

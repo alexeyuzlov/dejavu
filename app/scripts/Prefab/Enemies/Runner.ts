@@ -50,7 +50,7 @@ module Sample.Prefab {
 
             this.game.physics.arcade.collide(this, this.level.layer);
 
-            this.game.physics.arcade.collide(this, this.level.transparents, (runner, transparent) => {
+            this.game.physics.arcade.collide(this, this.level.transparents, (runner:any, transparent:any) => {
                 runner.toggleDirection();
             });
 

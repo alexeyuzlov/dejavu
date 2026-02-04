@@ -3,10 +3,10 @@ module Sample.Prefab {
     export class AbstractPrefab extends Phaser.Sprite {
         level: State.AbstractZone;
 
-        constructor(game:Phaser.Game, x:number, y:number, texture) {
+        constructor(game:Phaser.Game, x:number, y:number, texture:any) {
             super(game, x, y, texture);
 
-            this.level = this.game.state.states[this.game.state.current];
+            this.level = (this.game.state.states as any)[this.game.state.current];
 
             game.add.existing(this);
         }

@@ -4,7 +4,7 @@ module Sample.State {
         nextLevel:string;
 
         content: string[];
-        text;
+        text: Phaser.Text;
         index = 0;
         line = '';
         lineEvent: Phaser.TimerEvent;

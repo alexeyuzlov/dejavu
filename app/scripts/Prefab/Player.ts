@@ -70,14 +70,14 @@ module Sample.Prefab {
             this.write(healthPoints.toString() + 'HP', settings.font.whiteWithBlue);
         }
 
-        immortal(duration) {
+        immortal(duration:any) {
             this.immortalDuration = duration;
             this.immortalStateAt = this.game.time.now;
             this.immortalState = true;
             this.alpha = 0.5;
         }
 
-        write(text, style) {
+        write(text:any, style:any) {
             var textSprite = this.game.add.text(this.x, this.y, text, style);
             var tween = this.game.add.tween(textSprite).to({alpha: 0}, Phaser.Timer.SECOND, Phaser.Easing.Linear.None, true, 0, 0, false);
 
@@ -86,7 +86,7 @@ module Sample.Prefab {
             });
         }
 
-        makeDamage(damagePoint) {
+        makeDamage(damagePoint:any) {
             if (damagePoint < this.defensePoints) {
                 damagePoint = 1
             } else {

@@ -9,7 +9,7 @@ module Sample.State {
             'Продолжение следует...',
             ' '
         ];
-        text;
+        text: Phaser.Text;
         index = 0;
         line = '';
 

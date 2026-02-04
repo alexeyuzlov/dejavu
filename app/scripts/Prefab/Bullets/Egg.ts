@@ -31,7 +31,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.collide(this, this.level.player, (egg, player)=> {
+            this.game.physics.arcade.collide(this, this.level.player, (egg:any, player:any)=> {
                 egg.kill();
 
                 if (!this.level.player.immortalState && !this.level.player.attackState) {
@@ -40,7 +40,7 @@ module Sample.Prefab {
                 }
             });
 
-            this.game.physics.arcade.collide(this, this.level.layer, (egg, layer)=> {
+            this.game.physics.arcade.collide(this, this.level.layer, (egg:any, layer:any)=> {
                 if (!this.eggCrashState) {
                     egg.setEggCrash();
                 }

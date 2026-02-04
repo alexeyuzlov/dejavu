@@ -17,7 +17,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.overlap(this, this.level.player, (bulletReject, player)=> {
+            this.game.physics.arcade.overlap(this, this.level.player, (bulletReject:any, player:any)=> {
                 if (bulletReject.rejectState) return;
 
                 if (this.level.player.attackState) {

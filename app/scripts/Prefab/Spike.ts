@@ -12,7 +12,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.collide(this.level.player, this, (player, spike) => {
+            this.game.physics.arcade.collide(this.level.player, this, (player:any, spike:any) => {
                 if (!this.level.player.immortalState) {
                     this.level.player.makeDamage(spike.damagePoints);
                     this.level.hud.updateHealthState();

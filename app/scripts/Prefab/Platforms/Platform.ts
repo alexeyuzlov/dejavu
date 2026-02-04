@@ -4,7 +4,7 @@ module Sample.Prefab {
         direction:Direction;
         velocity:number;
 
-        constructor(game:Phaser.Game, x:number, y:number, texture) {
+        constructor(game:Phaser.Game, x:number, y:number, texture:any) {
             super(game, x, y, texture);
 
             game.physics.arcade.enable(this);
@@ -37,11 +37,11 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.collide(this.level.player, this, null, (player, platform) => {
+            this.game.physics.arcade.collide(this.level.player, this, null, (player:any, platform:any) => {
                 return player.y - platform.body.height <= platform.y;
             });
 
-            this.game.physics.arcade.collide(this, this.level.transparents, (platform, transparent) => {
+            this.game.physics.arcade.collide(this, this.level.transparents, (platform:any, transparent:any) => {
                     platform.toggleDirection();
                 }
             );

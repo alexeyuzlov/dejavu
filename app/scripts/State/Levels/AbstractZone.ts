@@ -148,6 +148,7 @@ module Sample.State {
                     return 'gameOver';
                     break;
             }
+            return this.game.state.current;
         }
     }
 }

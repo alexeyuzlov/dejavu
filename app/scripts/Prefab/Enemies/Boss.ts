@@ -93,7 +93,7 @@ module Sample.Prefab {
         update() {
             if (!this.alive) return;
 
-            this.game.physics.arcade.overlap(this, this.bullets, (shooterReject, bulletReject)=> {
+            this.game.physics.arcade.overlap(this, this.bullets, (shooterReject:any, bulletReject:any)=> {
                 if (bulletReject.rejectState) {
                     bulletReject.kill();
                     this.animations.play('blue');
@@ -101,7 +101,7 @@ module Sample.Prefab {
                 }
             });
 
-            this.game.physics.arcade.overlap(this.level.player, this, (player, enemy)=> {
+            this.game.physics.arcade.overlap(this.level.player, this, (player:any, enemy:any)=> {
                 if (player.attackState) {
                     if (this.isProtect) {
                         this.makeDamage(1);
@@ -191,7 +191,7 @@ module Sample.Prefab {
                 .start();
         }
 
-        createLightningTexture(x, y, segments, boltWidth, branch, distance) {
+        createLightningTexture(x:any, y:any, segments:any, boltWidth:any, branch:any, distance:any) {
             // Get the canvas drawing context for the lightningBitmap
             var ctx = this.lightningBitmap.context;
             var width = this.lightningBitmap.width;
