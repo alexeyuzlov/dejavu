@@ -16,15 +16,20 @@
     "prod:open": "npm run vite:build && npm run vite:preview:open",
     "clean": "rm -rf dist",
     "assets:check": "node scripts/check-assets.js",
-    "lint": "npm run vite:tsc",
-    "check": "npm run assets:check && npm run vite:tsc && npm run vite:build",
+    "lint": "eslint .",
+    "lint:types": "npm run vite:tsc",
+    "check": "npm run assets:check && npm run lint && npm run vite:tsc && npm run vite:build",
     "test:smoke": "npm run vite:build && npm run vite:preview -- --port 4173 --strictPort & npx playwright test",
     "test:smoke:dev": "npm run vite:tsc && npm run vite:serve -- --port 4173 --strictPort & npx playwright test",
     "test:ui": "npx playwright test --ui",
     "test:smoke:docker": "docker run --rm -t -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.58.1-jammy bash -lc \"npm ci && npm run test:smoke\""
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@playwright/test": "1.58.1",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "eslint": "^9.39.2",
     "playwright": "1.58.1",
     "typescript": "5.9.3",
     "vite": "6.4.1"

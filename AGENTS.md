@@ -8,6 +8,8 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 ### Dependencies
 - Use exact versions in `package.json` (no `~` or `^`).
+- Update this section before every `npm install`.
+- ESLint is configured in `eslint.config.js` and runs via `npm run lint`.
 
 ### Phaser
 - Phaser is sourced from npm; typings are referenced from the package.
