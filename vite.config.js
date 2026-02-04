@@ -22,18 +22,6 @@ const serveLegacyAssets = () => ({
         return;
       }
 
-      if (req.url === '/js/main.js' || req.url === '/js/main.js.map') {
-        const filePath = path.resolve(__dirname, 'dist', req.url.slice(1));
-        if (fs.existsSync(filePath)) {
-          res.setHeader(
-            'Content-Type',
-            req.url.endsWith('.map') ? 'application/json' : 'application/javascript'
-          );
-          fs.createReadStream(filePath).pipe(res);
-          return;
-        }
-      }
-
       next();
     });
   },

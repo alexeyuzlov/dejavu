@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "none",
-    "outFile": "dist/js/main.js",
+    "module": "esnext",
+    "moduleResolution": "node",
     "sourceMap": true,
     "rootDir": "app/scripts",
     "skipLibCheck": true,
     "noImplicitAny": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "noEmit": true
   },
-  "files": ["app/scripts/Game.ts"]
+  "include": [
+    "app/scripts/**/*.ts",
+    "node_modules/phaser/typescript/phaser.d.ts"
+  ]
 }

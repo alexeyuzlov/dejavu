@@ -1,11 +1,9 @@
-module Sample.Prefab {
+import { AbstractPrefab } from "./AbstractPrefab";
 
-    export class PreloadBar extends AbstractPrefab {
+export class PreloadBar extends AbstractPrefab {
+  constructor(game: Phaser.Game, x: number, y: number) {
+    super(game, x, y, "preload-bar");
 
-        constructor(game:Phaser.Game, x:number, y:number) {
-            super(game, x, y, 'preload-bar');
-
-            this.anchor.setTo(1, 1);
-        }
-    }
+    this.anchor.setTo(1, 1);
+  }
 }

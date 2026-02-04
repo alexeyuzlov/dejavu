@@ -1,6 +1,7 @@
-module Sample.Prefab {
+import { BulletReject } from "../Bullets/BulletReject";
+import { AbstractEnemy } from "./AbstractEnemy";
 
-    export class Boss extends AbstractEnemy {
+export class Boss extends AbstractEnemy {
         bossTweens: Phaser.Group;
         activeTweenID: number;
 
@@ -34,7 +35,7 @@ module Sample.Prefab {
 
             this.bullets = this.game.add.group();
             for(var i = 0; i < this.countBullets; i++) {
-                var bullet = new Prefab.BulletReject(game, 0, 0);
+                var bullet = new BulletReject(game, 0, 0);
                 this.bullets.add(bullet);
             }
 
@@ -266,4 +267,3 @@ module Sample.Prefab {
             this.lightningBitmap.dirty = true;
         }
     }
-}

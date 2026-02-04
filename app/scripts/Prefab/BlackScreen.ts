@@ -1,29 +1,30 @@
-module Sample.Prefab {
-    export class BlackScreen extends AbstractPrefab {
-        text:Phaser.Text;
+import { settings } from "../GlobalConfig";
+import { AbstractPrefab } from "./AbstractPrefab";
 
-        constructor(game:Phaser.Game) {
-            var blackTexture = game.add.bitmapData(game.width, game.height);
-            blackTexture.ctx.beginPath();
-            blackTexture.ctx.rect(0, 0, game.width, game.height);
-            blackTexture.ctx.fillStyle = '#000000';
-            blackTexture.ctx.fill();
+export class BlackScreen extends AbstractPrefab {
+  text: Phaser.Text;
 
-            super(game, 0, 0, blackTexture);
+  constructor(game: Phaser.Game) {
+    var blackTexture = game.add.bitmapData(game.width, game.height);
+    blackTexture.ctx.beginPath();
+    blackTexture.ctx.rect(0, 0, game.width, game.height);
+    blackTexture.ctx.fillStyle = "#000000";
+    blackTexture.ctx.fill();
 
-            this.alpha = 1;
-            this.fixedToCamera = true;
+    super(game, 0, 0, blackTexture);
 
-            this.text = game.add.text(10, game.height - 30, "", settings.font.whiteBig);
-            this.addChild(this.text);
-        }
+    this.alpha = 1;
+    this.fixedToCamera = true;
 
-        setText(text:string) {
-            this.text.text = text;
-        }
+    this.text = game.add.text(10, game.height - 30, "", settings.font.whiteBig);
+    this.addChild(this.text);
+  }
 
-        update() {
-            this.bringToTop();
-        }
-    }
+  setText(text: string) {
+    this.text.text = text;
+  }
+
+  update() {
+    this.bringToTop();
+  }
 }
