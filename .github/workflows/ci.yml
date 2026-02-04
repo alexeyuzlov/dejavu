@@ -31,7 +31,7 @@ jobs:
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Check Node version
-        run: npm run node:check
+        run: node scripts/check-node.js
 
       - name: Install
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
@@ -60,7 +60,7 @@ jobs:
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Check Node version
-        run: npm run node:check
+        run: node scripts/check-node.js
 
       - name: Install
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
@@ -89,7 +89,7 @@ jobs:
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Check Node version
-        run: npm run node:check
+        run: node scripts/check-node.js
 
       - name: Install
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
@@ -142,7 +142,7 @@ jobs:
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Check Node version
-        run: npm run node:check
+        run: node scripts/check-node.js
 
       - name: Restore dist output
         uses: actions/cache@v4

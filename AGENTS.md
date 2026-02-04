@@ -46,5 +46,5 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 ### Node Versions
 
-- See `.nvmrc` and `.tool-versions`. `npm run node:check` validates the
-  version and runs automatically before core local scripts (dev/build/lint).
+- See `.nvmrc` and `.tool-versions`. CI validates with
+  `node scripts/check-node.js`; run it manually before local scripts as needed.
