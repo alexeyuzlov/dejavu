@@ -16,3 +16,7 @@ export const addRepeatEvent = (
   callback: () => void,
   context?: any,
 ) => game.time.events.repeat(delayMs, repeatCount, callback, context);
+
+export const now = (game: Phaser.Game) => game.time.now;
+
+export const seconds = (value: number) => Phaser.Timer.SECOND * value;

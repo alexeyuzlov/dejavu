@@ -1,3 +1,4 @@
+import { applyBodyConfig } from '../../physics';
 import { AbstractEnemy } from './abstract-enemy';
 
 export class Flier extends AbstractEnemy {
@@ -29,7 +30,7 @@ export class Flier extends AbstractEnemy {
     super.update();
 
     if (!this.inCamera || !this.alive) {
-      this.body.velocity.setTo(0, 0);
+      applyBodyConfig(this.body, { velocityX: 0, velocityY: 0 });
       return;
     }
 
@@ -43,10 +44,12 @@ export class Flier extends AbstractEnemy {
         this.level.player.y,
       );
 
-      this.body.velocity.x = Math.cos(rotation) * this.speed;
-      this.body.velocity.y = Math.sin(rotation) * this.speed;
+      applyBodyConfig(this.body, {
+        velocityX: Math.cos(rotation) * this.speed,
+        velocityY: Math.sin(rotation) * this.speed,
+      });
     } else {
-      this.body.velocity.setTo(0, 0);
+      applyBodyConfig(this.body, { velocityX: 0, velocityY: 0 });
     }
   }
 }

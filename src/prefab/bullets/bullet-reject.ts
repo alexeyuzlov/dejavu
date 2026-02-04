@@ -1,4 +1,4 @@
-import { overlapArcade, enableArcade } from '../../physics';
+import { applyBodyConfig, overlapArcade, enableArcade } from '../../physics';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class BulletReject extends AbstractPrefab {
@@ -24,7 +24,7 @@ export class BulletReject extends AbstractPrefab {
 
       if (this.level.player.attackState) {
         bulletReject.scale.x = bulletReject.scale.x == 1 ? -1 : 1;
-        bulletReject.body.velocity.x = -bulletReject.body.velocity.x;
+        applyBodyConfig(bulletReject.body, { velocityX: -bulletReject.body.velocity.x });
         bulletReject.rejectState = true;
       } else {
         bulletReject.kill();

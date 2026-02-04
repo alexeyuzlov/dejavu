@@ -1,5 +1,7 @@
 import { onKilled, onResume } from '../../events';
-import { overlapArcade } from '../../physics';
+import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
+import { applyBodyConfig, overlapArcade } from '../../physics';
+import { timeNow, secondsToMs } from '../../time';
 import { addTween } from '../../tweens';
 import { BulletReject } from '../bullets/bullet-reject';
 import { AbstractEnemy } from './abstract-enemy';
@@ -30,12 +32,12 @@ export class Boss extends AbstractEnemy {
     this.activeTweenID = 0;
     this.bossTweens = bossTweens;
 
-    this.lastEventAt = this.game.time.now;
-    this.lastBulletShotAt = this.game.time.now;
+    this.lastEventAt = timeNow(this.game);
+    this.lastBulletShotAt = timeNow(this.game);
     this.countBullets = 10;
-    this.shotDelay = Phaser.Timer.SECOND * 3;
+    this.shotDelay = secondsToMs(3);
 
-    this.bullets = this.game.add.group();
+    this.bullets = createGroup(this.game);
     for (var i = 0; i < this.countBullets; i++) {
       var bullet = new BulletReject(game, 0, 0);
       this.bullets.add(bullet);
@@ -77,7 +79,7 @@ export class Boss extends AbstractEnemy {
       this.boom();
 
       addTween(this.game, this.level.blackScreen)
-        .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
+        .to({ alpha: 1 }, secondsToMs(3), Phaser.Easing.Linear.None, true)
         .onComplete.add(() => {
           this.level.startNextLevel();
         });
@@ -85,7 +87,7 @@ export class Boss extends AbstractEnemy {
   }
 
   generateAction() {
-    this.lastEventAt = this.game.time.now;
+    this.lastEventAt = timeNow(this.game);
 
     do {
       var rand = Math.floor(Math.random() * this.bossTweens.children.length);
@@ -142,28 +144,27 @@ export class Boss extends AbstractEnemy {
       this.generateAction();
     }
 
-    if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;
-    this.lastBulletShotAt = this.game.time.now;
+    if (timeNow(this.game) - this.lastBulletShotAt < this.shotDelay) return;
+    this.lastBulletShotAt = timeNow(this.game);
 
-    var bullet = this.bullets.getFirstDead();
+    var bullet = getFirstDead<BulletReject>(this.bullets);
 
     if (bullet === null || bullet === undefined) return;
 
-    bullet.revive();
-    bullet.reset(this.x, this.y);
+    reviveAndReset(bullet, this.x, this.y);
     bullet.rejectState = false;
 
     if (this.x > this.level.player.x) {
-      bullet.body.velocity.x = -bullet.speed;
+      applyBodyConfig(bullet.body, { velocityX: -bullet.speed });
       bullet.scale.x = -1;
       this.scale.x = -1;
     } else {
-      bullet.body.velocity.x = bullet.speed;
+      applyBodyConfig(bullet.body, { velocityX: bullet.speed });
       bullet.scale.x = 1;
       this.scale.x = 1;
     }
 
-    if (this.immortalState && Date.now() - this.immortalStateAt > this.immortalStateDuration) {
+    if (this.immortalState && timeNow(this.game) - this.immortalStateAt > this.immortalStateDuration) {
       this.immortalState = false;
     }
   }

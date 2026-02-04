@@ -1,4 +1,4 @@
-import { enableArcade } from '../../physics';
+import { applyBodyConfig, enableArcade } from '../../physics';
 import { Direction } from '../../global-config';
 import { Platform } from './platform';
 
@@ -7,9 +7,9 @@ export class PlatformHorizontal extends Platform {
     super(game, x, y, 'platform-h');
 
     enableArcade(game, this);
-    this.body.immovable = true;
+    applyBodyConfig(this.body, { immovable: true });
 
     this.direction = Direction.Right;
-    this.body.velocity.x = this.velocity;
+    applyBodyConfig(this.body, { velocityX: this.velocity });
   }
 }

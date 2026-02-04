@@ -1,4 +1,4 @@
-import { enableArcade } from '../physics';
+import { applyBodyConfig, enableArcade } from '../physics';
 import { AbstractPrefab } from './abstract-prefab';
 
 export class Transparent extends AbstractPrefab {
@@ -7,6 +7,6 @@ export class Transparent extends AbstractPrefab {
 
     enableArcade(game, this);
     //this.body.immovable = true;
-    this.body.moves = false;
+    applyBodyConfig(this.body, { moves: false });
   }
 }

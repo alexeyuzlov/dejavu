@@ -1,4 +1,4 @@
-import { collideArcade, enableArcade } from '../../physics';
+import { applyBodyConfig, collideArcade, enableArcade } from '../../physics';
 import { Direction } from '../../global-config';
 import { AbstractPrefab } from '../abstract-prefab';
 
@@ -10,7 +10,7 @@ export class Platform extends AbstractPrefab {
     super(game, x, y, texture);
 
     enableArcade(game, this);
-    this.body.immovable = true;
+    applyBodyConfig(this.body, { immovable: true });
     this.velocity = 100;
   }
 
@@ -18,19 +18,19 @@ export class Platform extends AbstractPrefab {
     switch (this.direction) {
       case Direction.Up:
         this.direction = Direction.Down;
-        this.body.velocity.y = this.velocity;
+        applyBodyConfig(this.body, { velocityY: this.velocity });
         break;
       case Direction.Down:
         this.direction = Direction.Up;
-        this.body.velocity.y = -this.velocity;
+        applyBodyConfig(this.body, { velocityY: -this.velocity });
         break;
       case Direction.Left:
         this.direction = Direction.Right;
-        this.body.velocity.x = this.velocity;
+        applyBodyConfig(this.body, { velocityX: this.velocity });
         break;
       case Direction.Right:
         this.direction = Direction.Left;
-        this.body.velocity.x = -this.velocity;
+        applyBodyConfig(this.body, { velocityX: -this.velocity });
         break;
       default:
         // Don't doing something

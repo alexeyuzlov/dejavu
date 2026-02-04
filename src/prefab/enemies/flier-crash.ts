@@ -1,3 +1,6 @@
+import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
+import { applyBodyConfig } from '../../physics';
+import { timeNow } from '../../time';
 import { Egg } from '../bullets/egg';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -19,7 +22,7 @@ export class FlierCrash extends AbstractEnemy {
     this.anchor.set(0.5, 0.5);
     this.health = 52;
 
-    this.eggs = this.game.add.group();
+    this.eggs = createGroup(this.game);
     this.countEggs = 10;
     for (var i = 0; i < this.countEggs; i++) {
       var egg = new Egg(game, 0, 0);
@@ -32,7 +35,7 @@ export class FlierCrash extends AbstractEnemy {
     this.velocity = 100;
     this.isActive = false;
     this.defensePoints = 6;
-    this.lastEggShotAt = this.game.time.now;
+    this.lastEggShotAt = timeNow(this.game);
     this.shotDelay = 1500;
 
     this.animations.add(
@@ -48,7 +51,7 @@ export class FlierCrash extends AbstractEnemy {
     super.update();
 
     if (!this.inCamera || !this.alive) {
-      this.body.velocity.setTo(0, 0);
+      applyBodyConfig(this.body, { velocityX: 0, velocityY: 0 });
       return;
     }
 
@@ -68,28 +71,29 @@ export class FlierCrash extends AbstractEnemy {
           this.level.player.y - this.level.player.body.height * 4,
         );
 
-        this.body.velocity.x = Math.cos(rotation) * this.velocity;
-        this.body.velocity.y = Math.sin(rotation) * this.velocity;
+        applyBodyConfig(this.body, {
+          velocityX: Math.cos(rotation) * this.velocity,
+          velocityY: Math.sin(rotation) * this.velocity,
+        });
       } else {
-        this.body.velocity.y = -30;
+        applyBodyConfig(this.body, { velocityY: -30 });
 
         if (this.level.player.x > this.x) {
-          this.body.velocity.x = this.velocity;
+          applyBodyConfig(this.body, { velocityX: this.velocity });
         } else {
-          this.body.velocity.x = -this.velocity;
+          applyBodyConfig(this.body, { velocityX: -this.velocity });
         }
       }
     }
 
-    if (this.game.time.now - this.lastEggShotAt < this.shotDelay) return;
-    this.lastEggShotAt = this.game.time.now;
+    if (timeNow(this.game) - this.lastEggShotAt < this.shotDelay) return;
+    this.lastEggShotAt = timeNow(this.game);
 
-    var egg = this.eggs.getFirstDead();
+    var egg = getFirstDead<Egg>(this.eggs);
     if (egg === null || egg === undefined) return;
 
-    egg.revive();
-    egg.reset(this.x, this.y);
-    egg.body.velocity.y = egg.speed;
+    reviveAndReset(egg, this.x, this.y);
+    applyBodyConfig(egg.body, { velocityY: egg.speed });
     egg.animations.play('egg');
   }
 }

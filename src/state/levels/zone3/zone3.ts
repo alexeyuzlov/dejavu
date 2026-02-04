@@ -1,4 +1,5 @@
 import { Assets } from '../../../assets';
+import { applyBodyConfig } from '../../../physics';
 import { AbstractZone } from '../abstract-zone';
 
 export class Zone3 extends AbstractZone {
@@ -22,7 +23,7 @@ export class Zone3 extends AbstractZone {
 
     super.create();
 
-    this.player.body.drag.x = 10;
+    applyBodyConfig(this.player.body, { dragX: 10 });
     this.createSnowFlakes();
   }
 

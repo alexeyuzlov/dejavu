@@ -1,5 +1,7 @@
 import { onResume } from '../../events';
-import { collideArcade } from '../../physics';
+import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
+import { applyBodyConfig, collideArcade } from '../../physics';
+import { timeNow, secondsToMs } from '../../time';
 import { Bullet } from '../bullets/bullet';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -15,14 +17,14 @@ export class Shooter extends AbstractEnemy {
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, 'shooter');
 
-    this.body.gravity.y = 300;
-    this.lastBulletShotAt = this.game.time.now;
+    applyBodyConfig(this.body, { gravityY: 300 });
+    this.lastBulletShotAt = timeNow(this.game);
     this.countBullets = 10;
-    this.shotDelay = Phaser.Timer.SECOND * 3;
+    this.shotDelay = secondsToMs(3);
     this.damagePoints = 10;
     this.defensePoints = 5;
 
-    this.bullets = this.game.add.group();
+    this.bullets = createGroup(this.game);
     for (var i = 0; i < this.countBullets; i++) {
       var bullet = new Bullet(game, 0, 0);
       this.bullets.add(bullet);
@@ -45,34 +47,33 @@ export class Shooter extends AbstractEnemy {
     collideArcade(this.game, this, this.level.layer);
 
     if (!this.inCamera || !this.alive) {
-      this.body.velocity.setTo(0, 0);
+      applyBodyConfig(this.body, { velocityX: 0, velocityY: 0 });
       return;
     }
 
-    if (this.game.time.now - this.lastBulletShotAt < Phaser.Timer.SECOND / 4) {
+    if (timeNow(this.game) - this.lastBulletShotAt < secondsToMs(1 / 4)) {
       this.animations.play('shot');
     } else {
       this.animations.play('stay');
     }
 
-    if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;
-    this.lastBulletShotAt = this.game.time.now;
+    if (timeNow(this.game) - this.lastBulletShotAt < this.shotDelay) return;
+    this.lastBulletShotAt = timeNow(this.game);
 
-    var bullet = this.bullets.getFirstDead();
+    var bullet = getFirstDead<Bullet>(this.bullets);
 
     if (bullet === null || bullet === undefined) return;
 
-    bullet.revive();
-    bullet.reset(this.x, this.y);
+    reviveAndReset(bullet, this.x, this.y);
 
     if (this.x > this.level.player.x) {
       this.scale.x = -1;
       bullet.scale.x = -1;
-      bullet.body.velocity.x = -bullet.speed;
+      applyBodyConfig(bullet.body, { velocityX: -bullet.speed });
     } else {
       this.scale.x = 1;
       bullet.scale.x = 1;
-      bullet.body.velocity.x = bullet.speed;
+      applyBodyConfig(bullet.body, { velocityX: bullet.speed });
     }
   }
 }

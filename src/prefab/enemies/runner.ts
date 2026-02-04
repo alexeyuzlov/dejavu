@@ -1,4 +1,4 @@
-import { collideArcade } from '../../physics';
+import { applyBodyConfig, collideArcade } from '../../physics';
 import { Direction } from '../../global-config';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -16,13 +16,12 @@ export class Runner extends AbstractEnemy {
     this.velocity = 100;
 
     this.direction = Direction.Right;
-    this.body.velocity.x = this.velocity;
+    applyBodyConfig(this.body, { velocityX: this.velocity });
 
     this.damagePoints = 9;
     this.defensePoints = 3;
 
-    this.body.gravity.y = this.gravity;
-    this.body.collideWorldBounds = true;
+    applyBodyConfig(this.body, { gravityY: this.gravity, collideWorldBounds: true });
     this.health = 90;
 
     this.anchor.set(0.5, 1);
@@ -40,12 +39,12 @@ export class Runner extends AbstractEnemy {
     switch (this.direction) {
       case Direction.Left:
         this.direction = Direction.Right;
-        this.body.velocity.x = this.velocity;
+        applyBodyConfig(this.body, { velocityX: this.velocity });
         this.scale.x = 1;
         break;
       case Direction.Right:
         this.direction = Direction.Left;
-        this.body.velocity.x = -this.velocity;
+        applyBodyConfig(this.body, { velocityX: -this.velocity });
         this.scale.x = -1;
         break;
       default:

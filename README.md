@@ -4,6 +4,11 @@
 
 Dejavu is a 2D platformer game built with the Phaser framework. Traverse through challenging levels, face enemies, and prepare for an epic boss fight at the end. Immerse yourself in this fast-paced, retro-style adventure.
 
+## Links
+
+- GitHub Pages: https://alexeyuzlov.github.io/dejavu/
+- Repository: https://github.com/alexeyuzlov/dejavu
+
 ## Build Instructions
 
 To set up and build the project, follow these steps:

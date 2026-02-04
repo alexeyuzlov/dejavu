@@ -1,5 +1,6 @@
 import { overlapArcade, enableArcade } from '../../physics';
 import { addTween } from '../../tweens';
+import { timeNow, secondsToMs } from '../../time';
 import { AbstractPrefab } from '../abstract-prefab';
 
 export class AbstractEnemy extends AbstractPrefab {
@@ -17,8 +18,8 @@ export class AbstractEnemy extends AbstractPrefab {
     this.anchor.set(0, 0.5);
 
     this.immortalState = false;
-    this.immortalStateAt = game.time.now;
-    this.immortalStateDuration = Phaser.Timer.SECOND / 3;
+    this.immortalStateAt = timeNow(game);
+    this.immortalStateDuration = secondsToMs(1 / 3);
     this.defensePoints = 0;
   }
 
@@ -42,7 +43,7 @@ export class AbstractEnemy extends AbstractPrefab {
       var text = this.game.add.text(this.x, this.y, damagePoint.toString(), textStyle);
       var tween = addTween(this.game, text).to(
         { alpha: 0 },
-        1000,
+        secondsToMs(1),
         Phaser.Easing.Linear.None,
         true,
         0,
@@ -54,7 +55,7 @@ export class AbstractEnemy extends AbstractPrefab {
         text.destroy();
       });
 
-      this.immortalStateAt = Date.now();
+      this.immortalStateAt = timeNow(this.game);
       this.immortalState = true;
     }
   }
@@ -69,7 +70,7 @@ export class AbstractEnemy extends AbstractPrefab {
       }
     });
 
-    if (this.immortalState && Date.now() - this.immortalStateAt > this.immortalStateDuration) {
+    if (this.immortalState && timeNow(this.game) - this.immortalStateAt > this.immortalStateDuration) {
       this.immortalState = false;
     }
   }

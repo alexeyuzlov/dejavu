@@ -1,4 +1,4 @@
-import { collideArcade, enableArcade } from '../physics';
+import { applyBodyConfig, collideArcade, enableArcade } from '../physics';
 import { AbstractPrefab } from './abstract-prefab';
 
 export class Exit extends AbstractPrefab {
@@ -6,7 +6,7 @@ export class Exit extends AbstractPrefab {
     super(game, x, y, 'exit');
     enableArcade(game, this);
 
-    this.body.immovable = true;
+    applyBodyConfig(this.body, { immovable: true });
   }
 
   update() {

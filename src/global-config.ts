@@ -99,14 +99,7 @@ class SettingsClass {
     },
   };
 
-  constructor() {
-    this.keys = {
-      moveLeft: Phaser.Keyboard.LEFT,
-      moveRight: Phaser.Keyboard.RIGHT,
-      jump: Phaser.Keyboard.Z,
-      attack: Phaser.Keyboard.X,
-    };
-  }
+  constructor() {}
 }
 
 export var settings: any = new SettingsClass();

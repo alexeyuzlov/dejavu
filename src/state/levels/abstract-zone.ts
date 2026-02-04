@@ -1,6 +1,8 @@
 import * as Prefab from '../../prefab';
 import { Levels, StateKeys, Stories, settings } from '../../global-config';
 import { bindKeyDown } from '../../input';
+import { createGroup } from '../../groups';
+import { secondsToMs } from '../../time';
 import { followLockonCamera } from '../phaser-helpers';
 import { createLevelMap, createObjectsFromMap } from '../../tilemap';
 import { addTween } from '../../tweens';
@@ -73,18 +75,18 @@ export class AbstractZone extends Phaser.State {
     this.blackScreen = new Prefab.BlackScreen(this.game);
     this.blackScreen.setText(this.game.state.current);
     addTween(this.game, this.blackScreen)
-      .to({ alpha: 0 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
+      .to({ alpha: 0 }, secondsToMs(3), Phaser.Easing.Linear.None, true)
       .onComplete.add(() => {
         this.hud.alpha = 1;
       });
 
-    bindKeyDown(this.game, Phaser.Keyboard.P, () => {
+    bindKeyDown(this.game, 'pause', () => {
       this.game.paused = !this.game.paused;
     });
   }
 
   getPrefabsFromMap(name: string, className?: object): Phaser.Group {
-    var group = this.game.add.group();
+    var group = createGroup(this.game);
 
     return createObjectsFromMap(this.map, 'objects', name, group, className);
   }
@@ -100,7 +102,7 @@ export class AbstractZone extends Phaser.State {
      if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
          this.blackScreen.setText("");
         addTween(this.game, this.blackScreen)
-            .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
+           .to({ alpha: 1 }, secondsToMs(3), Phaser.Easing.Linear.None, true)
             .onComplete.add(()=> {
                 this.startNextLevel();
             });
@@ -112,7 +114,7 @@ export class AbstractZone extends Phaser.State {
   gameOver() {
     this.blackScreen.setText('Game Over. Reload Level.');
     addTween(this.game, this.blackScreen)
-      .to({ alpha: 1 }, Phaser.Timer.SECOND * 1, Phaser.Easing.Linear.None, true)
+      .to({ alpha: 1 }, secondsToMs(1), Phaser.Easing.Linear.None, true)
       .onComplete.add(() => {
         this.game.state.start(StateKeys.GameOver);
       });
@@ -121,7 +123,7 @@ export class AbstractZone extends Phaser.State {
   startNextLevel() {
     this.blackScreen.setText(this.getNextLevel());
     addTween(this.game, this.blackScreen)
-      .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
+      .to({ alpha: 1 }, secondsToMs(3), Phaser.Easing.Linear.None, true)
       .onComplete.add(() => {
         this.game.state.start(this.getNextLevel());
       });

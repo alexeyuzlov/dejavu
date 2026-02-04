@@ -1,5 +1,6 @@
 import { bindKeyDown } from '../../input';
 import { addDelayedEvent, addRepeatEvent } from '../phaser-helpers';
+import { secondsToMs } from '../../time';
 import { settings } from '../../global-config';
 
 export class AbstractStory extends Phaser.State {
@@ -20,7 +21,7 @@ export class AbstractStory extends Phaser.State {
     this.text = this.game.add.text(10, 10, '', settings.font.whiteBig);
     this.text.wordWrap = true;
     this.text.wordWrapWidth = this.game.width;
-    bindKeyDown(this.game, Phaser.Keyboard.SPACEBAR, this.skipStory, this);
+    bindKeyDown(this.game, 'advance', this.skipStory, this);
     this.nextLine();
   }
 
@@ -53,12 +54,7 @@ export class AbstractStory extends Phaser.State {
       if (this.lineEvent) {
         this.lineEvent = null;
       }
-      this.nextEvent = addDelayedEvent(
-        this.game,
-        Phaser.Timer.SECOND * 2,
-        this.nextLine,
-        this,
-      );
+      this.nextEvent = addDelayedEvent(this.game, secondsToMs(2), this.nextLine, this);
     }
   }
 

@@ -1,3 +1,5 @@
+import { addDelayedEvent, addRepeatEvent } from './phaser-helpers';
+import { secondsToMs } from '../time';
 import { settings } from '../global-config';
 
 export class GameOver extends Phaser.State {
@@ -28,7 +30,7 @@ export class GameOver extends Phaser.State {
 
     if (this.index < this.content.length) {
       this.line = '';
-      this.game.time.events.repeat(80, this.content[this.index].length + 1, this.updateLine, this);
+      addRepeatEvent(this.game, 80, this.content[this.index].length + 1, this.updateLine, this);
     } else {
       // HERE LAST ACTION
     }
@@ -39,7 +41,7 @@ export class GameOver extends Phaser.State {
       this.line = this.content[this.index].substr(0, this.line.length + 1);
       this.text.setText(this.line);
     } else {
-      this.game.time.events.add(Phaser.Timer.SECOND * 2, this.nextLine, this);
+      addDelayedEvent(this.game, secondsToMs(2), this.nextLine, this);
     }
   }
 }

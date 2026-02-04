@@ -1,4 +1,4 @@
-import { collideArcade, enableArcade } from '../physics';
+import { applyBodyConfig, collideArcade, enableArcade } from '../physics';
 import { AbstractPrefab } from './abstract-prefab';
 
 export class Spike extends AbstractPrefab {
@@ -9,7 +9,7 @@ export class Spike extends AbstractPrefab {
 
     enableArcade(game, this);
 
-    this.body.immovable = true;
+    applyBodyConfig(this.body, { immovable: true });
   }
 
   update() {

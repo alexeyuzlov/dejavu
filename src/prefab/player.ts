@@ -1,7 +1,8 @@
 import { isKeyDown } from '../input';
-import { collideArcade, enableArcade } from '../physics';
+import { applyBodyConfig, collideArcade, enableArcade } from '../physics';
 import { addTween } from '../tweens';
 import { onKilled } from '../events';
+import { timeNow, secondsToMs } from '../time';
 import { Direction, settings } from '../global-config';
 import { AbstractPrefab } from './abstract-prefab';
 
@@ -40,22 +41,24 @@ export class Player extends AbstractPrefab {
     this.defensePoints = 5;
     this.direction = Direction.Right;
     this.damagePoints = 50;
-    this.immortalStateAt = this.game.time.now;
-    this.attackStateAt = this.game.time.now;
-    this.immortalDuration = Phaser.Timer.SECOND * 3;
-    this.immortalDefaultDuration = Phaser.Timer.SECOND * 3;
-    this.attackDuration = Phaser.Timer.SECOND / 3;
+    this.immortalStateAt = timeNow(this.game);
+    this.attackStateAt = timeNow(this.game);
+    this.immortalDuration = secondsToMs(3);
+    this.immortalDefaultDuration = secondsToMs(3);
+    this.attackDuration = secondsToMs(1 / 3);
     this.isActiveJumpKey = false;
     this.isAttackKeyPressed = false;
 
-    this.body.gravity.y = this.gravity;
+    applyBodyConfig(this.body, { gravityY: this.gravity });
     this.anchor.set(0.5, 1);
 
-    this.body.drag.x = this.drag;
-    this.body.maxVelocity.x = this.maxSpeed;
-    this.body.maxVelocity.y = this.jumpPower * 2;
+    applyBodyConfig(this.body, {
+      dragX: this.drag,
+      maxVelocityX: this.maxSpeed,
+      maxVelocityY: this.jumpPower * 2,
+    });
 
-    this.body.collideWorldBounds = true;
+    applyBodyConfig(this.body, { collideWorldBounds: true });
     this.alive = true;
 
     this.health = +settings.storage.getHealthPoints();
@@ -87,7 +90,7 @@ export class Player extends AbstractPrefab {
 
   immortal(duration: any) {
     this.immortalDuration = duration;
-    this.immortalStateAt = this.game.time.now;
+    this.immortalStateAt = timeNow(this.game);
     this.immortalState = true;
     this.alpha = 0.5;
   }
@@ -96,7 +99,7 @@ export class Player extends AbstractPrefab {
     var textSprite = this.game.add.text(this.x, this.y, text, style);
     var tween = addTween(this.game, textSprite).to(
       { alpha: 0 },
-      Phaser.Timer.SECOND,
+      secondsToMs(1),
       Phaser.Easing.Linear.None,
       true,
       0,
@@ -123,58 +126,58 @@ export class Player extends AbstractPrefab {
 
   jump() {
     if (
-      isKeyDown(this.game, settings.keys.jump) &&
+      isKeyDown(this.game, 'jump') &&
       (this.body.blocked.down || this.body.touching.down) &&
       !this.isActiveJumpKey
     ) {
       this.isActiveJumpKey = true;
-      this.body.velocity.y = -this.jumpPower;
+      applyBodyConfig(this.body, { velocityY: -this.jumpPower });
     }
 
-    if (!isKeyDown(this.game, settings.keys.jump)) {
+    if (!isKeyDown(this.game, 'jump')) {
       this.isActiveJumpKey = false;
     }
   }
 
   move() {
-    if (isKeyDown(this.game, settings.keys.moveRight)) {
+    if (isKeyDown(this.game, 'moveRight')) {
       this.moveState = true;
-      this.body.acceleration.x = this.acceleration;
+      applyBodyConfig(this.body, { accelerationX: this.acceleration });
       this.direction = Direction.Right;
       this.scale.x = 1;
-    } else if (isKeyDown(this.game, settings.keys.moveLeft)) {
+    } else if (isKeyDown(this.game, 'moveLeft')) {
       this.moveState = true;
-      this.body.acceleration.x = -this.acceleration;
+      applyBodyConfig(this.body, { accelerationX: -this.acceleration });
       this.direction = Direction.Left;
       this.scale.x = -1;
     } else {
       this.moveState = false;
-      this.body.acceleration.x = 0;
+      applyBodyConfig(this.body, { accelerationX: 0 });
     }
   }
 
   attack() {
     if (
-      isKeyDown(this.game, settings.keys.attack) &&
+      isKeyDown(this.game, 'attack') &&
       !this.attackState &&
       !this.isAttackKeyPressed
     ) {
       this.isAttackKeyPressed = true;
       this.attackState = true;
-      this.attackStateAt = this.game.time.now;
+      this.attackStateAt = timeNow(this.game);
     }
 
-    if (!isKeyDown(this.game, settings.keys.attack)) {
+    if (!isKeyDown(this.game, 'attack')) {
       this.isAttackKeyPressed = false;
     }
 
-    if (this.game.time.now - this.attackStateAt > this.attackDuration) {
+    if (timeNow(this.game) - this.attackStateAt > this.attackDuration) {
       this.attackState = false;
     }
   }
 
   state() {
-    if (this.immortalState && this.game.time.now - this.immortalStateAt > this.immortalDuration) {
+    if (this.immortalState && timeNow(this.game) - this.immortalStateAt > this.immortalDuration) {
       this.alpha = 1;
       this.immortalState = false;
     }

@@ -1,4 +1,4 @@
-import { overlapArcade, enableArcade } from '../physics';
+import { applyBodyConfig, overlapArcade, enableArcade } from '../physics';
 import { AbstractPrefab } from './abstract-prefab';
 
 export class IceSpike extends AbstractPrefab {
@@ -26,8 +26,7 @@ export class IceSpike extends AbstractPrefab {
       Math.abs(this.level.player.x - this.body.x) < this.distanceToTarget &&
       this.level.player.y > this.body.y
     ) {
-      this.body.gravity.y = 100;
-      this.body.acceleration.y = 1000;
+      applyBodyConfig(this.body, { gravityY: 100, accelerationY: 1000 });
     }
 
     if (this.y > this.game.world.height) {
