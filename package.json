@@ -5,7 +5,7 @@
     "vite:tsc": "tsc -p tsconfig.vite.json",
     "vite:tsc:watch": "tsc -p tsconfig.vite.json --watch",
     "vite:dev": "npm run vite:tsc:watch",
-    "vite:build": "npm run vite:tsc && vite build",
+    "vite:build": "npm run clean && npm run vite:tsc && vite build",
     "vite:preview": "vite preview",
     "vite:preview:open": "vite preview --open",
     "clean": "rm -rf dist"

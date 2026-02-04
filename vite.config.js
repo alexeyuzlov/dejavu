@@ -4,7 +4,7 @@ const { defineConfig } = require('vite');
 
 module.exports = defineConfig({
   root: 'app',
-  publicDir: 'assets',
+  publicDir: false,
   plugins: [
     {
       name: 'copy-legacy-vendor',
@@ -13,6 +13,11 @@ module.exports = defineConfig({
       },
       closeBundle() {
         const outDir = path.resolve(__dirname, this._outDir || 'dist');
+        const copyDir = (src, dest) => {
+          if (!fs.existsSync(src)) return;
+          fs.mkdirSync(dest, { recursive: true });
+          fs.cpSync(src, dest, { recursive: true });
+        };
         const copies = [
           {
             src: path.resolve(__dirname, 'node_modules/phaser/build/phaser.min.js'),
@@ -25,6 +30,8 @@ module.exports = defineConfig({
           fs.mkdirSync(path.dirname(dest), { recursive: true });
           fs.copyFileSync(src, dest);
         });
+
+        copyDir(path.resolve(__dirname, 'app/assets'), path.join(outDir, 'assets'));
       },
     },
   ],
