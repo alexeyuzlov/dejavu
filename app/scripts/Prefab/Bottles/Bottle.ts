@@ -3,7 +3,7 @@ module Sample.Prefab {
     export class Bottle extends AbstractPrefab {
         level: State.AbstractZone;
 
-        constructor(game:Phaser.Game, x:number, y:number, texture:any) {
+        constructor(game:Phaser.Game, x:number, y:number, texture:string) {
             super(game, x, y, texture);
             game.physics.arcade.enable(this);
         }

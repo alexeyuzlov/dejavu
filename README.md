@@ -56,6 +56,11 @@ Notes:
 ## CI
 GitHub Actions runs `npm run assets:check` and `npm run vite:tsc` on push and pull requests.
 
+## Tiled Sources
+The `tools/tiled/` folder contains level source exports from Tiled Map Editor.
+Edit levels in Tiled, export JSON into `tools/tiled/`, then copy the final JSON
+into `app/assets/levels/` for runtime use.
+
 ## Game Features
 - Classic platformer mechanics.
 - Multi-level progression with increasing difficulty.

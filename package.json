@@ -15,7 +15,8 @@
     "prod": "npm run vite:build && npm run vite:preview",
     "prod:open": "npm run vite:build && npm run vite:preview:open",
     "clean": "rm -rf dist",
-    "assets:check": "node scripts/check-assets.js"
+    "assets:check": "node scripts/check-assets.js",
+    "check": "npm run assets:check && npm run vite:tsc && npm run vite:build"
   },
   "devDependencies": {
     "typescript": "5.9.3",
