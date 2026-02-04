@@ -27,7 +27,6 @@ export class Zone1 extends AbstractZone {
   }
 
   update() {
-    super.update();
     this.bg.tilePositionX -= 2;
   }
 

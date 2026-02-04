@@ -32,7 +32,6 @@ export class Zone2 extends AbstractZone {
   }
 
   update() {
-    super.update();
     this.shadowUpdate();
 
     this.children.bringToTop(this.hud);
