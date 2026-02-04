@@ -40,6 +40,10 @@ Update this file when build/test workflows, dependencies, or project structure c
   `node_modules` and `dist`, plus `dist` size reporting) and
   `.github/workflows/deploy-pages.yml` (deploy runs only after CI success on
   `master`, or via manual dispatch).
+- Nightly heavy checks run via `.github/workflows/nightly.yml`.
+- Dependabot PRs can auto-merge after checks pass.
+- Deploys add a timestamp tag after Pages publishes.
+- Branch protection requires CI checks on `master`.
 
 ### Assets & Levels
 

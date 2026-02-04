@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -62,3 +62,28 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  tag:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Set tag name
+        id: tag_name
+        run: echo "name=deploy-$(date -u +%Y%m%d%H%M)" >> "$GITHUB_OUTPUT"
+
+      - name: Create deploy tag
+        uses: actions/github-script@v7
+        env:
+          TAG_NAME: ${{ steps.tag_name.outputs.name }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        with:
+          script: |
+            const tag = process.env.TAG_NAME;
+            const sha = process.env.TARGET_SHA;
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${tag}`,
+              sha,
+            });

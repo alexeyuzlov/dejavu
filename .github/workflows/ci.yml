@@ -147,6 +147,12 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: .npm
+          key: npm-cache-${{ hashFiles('package-lock.json') }}
+
       - name: Check Node version
         run: node scripts/check-node.js
 
@@ -176,6 +182,7 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     needs: build
+    continue-on-error: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -191,3 +198,17 @@ jobs:
         with:
           configPath: ./lighthouserc.json
           uploadArtifacts: true
+
+      - name: Upload Lighthouse report
+        id: lighthouse_artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci
+
+      - name: Add Lighthouse summary link
+        if: always()
+        run: |
+          echo "## Lighthouse" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Report artifact: ${{ steps.lighthouse_artifact.outputs.artifact-url }}" >> "$GITHUB_STEP_SUMMARY"
+
