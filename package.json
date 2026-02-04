@@ -6,19 +6,15 @@
     "vite:tsc:watch": "tsc -p tsconfig.vite.json --watch",
     "vite:dev": "npm run vite:tsc:watch",
     "vite:build": "npm run vite:tsc && vite build",
-    "vite:preview": "vite preview --outDir build-vite",
-    "vite:preview:open": "vite preview --outDir build-vite --open"
+    "vite:preview": "vite preview",
+    "vite:preview:open": "vite preview --open",
+    "clean": "rm -rf dist"
   },
   "devDependencies": {
-    "bower": "1.8.8",
-    "connect-livereload": "0.6.1",
-    "grunt": "1.4.1",
-    "grunt-contrib-connect": "2.0.0",
-    "grunt-contrib-copy": "1.0.0",
-    "grunt-contrib-watch": "1.1.0",
-    "grunt-open": "0.2.4",
-    "grunt-typescript": "0.8.0",
     "typescript": "5.9.3",
     "vite": "6.4.1"
+  },
+  "dependencies": {
+    "phaser": "2.1.0"
   }
 }

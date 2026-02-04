@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "none",
-    "outFile": "build-vite/js/main.js",
+    "outFile": "dist/js/main.js",
     "sourceMap": true,
     "rootDir": "app/scripts",
     "skipLibCheck": true

@@ -10,27 +10,23 @@ To set up and build the project, follow these steps:
     ```bash
     npm install
     ```
-2. **Install Bower components**:
-    ```bash
-    npx bower install
-    ```
-3. **Build the project**:
-    ```bash
-    npx grunt
-    ```
-
-## Parallel Vite Build (Experimental)
-This optional path builds to a separate folder to compare with the Grunt output.
-
-1. **Build to `build-vite/`**:
+2. **Build the project**:
     ```bash
     npm run vite:build
     ```
-2. **Watch TypeScript (rebuild `build-vite/js/main.js`)**:
+
+## Vite Build
+This build outputs to `dist/`.
+
+1. **Build to `dist/`**:
+    ```bash
+    npm run vite:build
+    ```
+2. **Watch TypeScript (rebuild `dist/js/main.js`)**:
     ```bash
     npm run vite:dev
     ```
-3. **Preview the `build-vite/` output**:
+3. **Preview the `dist/` output**:
     ```bash
     npm run vite:preview
     ```
@@ -38,9 +34,15 @@ This optional path builds to a separate folder to compare with the Grunt output.
     ```bash
     npm run vite:preview:open
     ```
+5. **Clean output**:
+    ```bash
+    npm run clean
+    ```
 
 Notes:
 - If you change assets or `app/index.html`, re-run `npm run vite:build`.
+- The build step copies `node_modules/phaser/build/phaser.min.js` into `dist/vendor/`.
+- Vite requires Node 18+.
 
 ## Game Features
 - Classic platformer mechanics.
@@ -63,7 +65,6 @@ This game was made possible with the following tools and resources:
 - [TypeScript](http://www.typescriptlang.org): For writing robust and maintainable code.
 - [Tiled Map Editor](http://www.mapeditor.org): For creating intricate level designs.
 - [ShoeBox](http://renderhjs.net/shoebox): For sprite sheet generation and asset management.
-- [stats.js](https://github.com/mrdoob/stats.js): For performance monitoring.
 
 ## Contributing
 Contributions are welcome! If you want to suggest features, report bugs, or improve the game, feel free to create an issue or submit a pull request on the repository.

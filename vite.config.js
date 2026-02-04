@@ -12,15 +12,11 @@ module.exports = defineConfig({
         this._outDir = resolved.build.outDir;
       },
       closeBundle() {
-        const outDir = path.resolve(__dirname, this._outDir || 'build-vite');
+        const outDir = path.resolve(__dirname, this._outDir || 'dist');
         const copies = [
           {
-            src: path.resolve(__dirname, 'app/vendor/phaser-official/build/phaser.min.js'),
+            src: path.resolve(__dirname, 'node_modules/phaser/build/phaser.min.js'),
             dest: path.join(outDir, 'vendor/phaser.min.js'),
-          },
-          {
-            src: path.resolve(__dirname, 'app/vendor/stats.js/build/stats.min.js'),
-            dest: path.join(outDir, 'vendor/stats.min.js'),
           },
         ];
 
@@ -33,7 +29,7 @@ module.exports = defineConfig({
     },
   ],
   build: {
-    outDir: path.resolve(__dirname, 'build-vite'),
+    outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: false,
     rollupOptions: {
       input: path.resolve(__dirname, 'app/index.html'),
