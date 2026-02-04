@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "none",
+    "outFile": "build-vite/js/main.js",
+    "sourceMap": true,
+    "rootDir": "app/scripts",
+    "skipLibCheck": true
+  },
+  "files": ["app/scripts/Game.ts"]
+}

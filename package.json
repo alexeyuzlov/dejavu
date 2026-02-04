@@ -1,6 +1,14 @@
 {
   "name": "sample",
   "version": "0.2.0",
+  "scripts": {
+    "vite:tsc": "tsc -p tsconfig.vite.json",
+    "vite:tsc:watch": "tsc -p tsconfig.vite.json --watch",
+    "vite:dev": "npm run vite:tsc:watch",
+    "vite:build": "npm run vite:tsc && vite build",
+    "vite:preview": "vite preview --outDir build-vite",
+    "vite:preview:open": "vite preview --outDir build-vite --open"
+  },
   "devDependencies": {
     "bower": "1.8.8",
     "connect-livereload": "0.6.1",
@@ -9,6 +17,8 @@
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-watch": "1.1.0",
     "grunt-open": "0.2.4",
-    "grunt-typescript": "0.8.0"
+    "grunt-typescript": "0.8.0",
+    "typescript": "5.9.3",
+    "vite": "6.4.1"
   }
 }

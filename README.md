@@ -19,6 +19,29 @@ To set up and build the project, follow these steps:
     npx grunt
     ```
 
+## Parallel Vite Build (Experimental)
+This optional path builds to a separate folder to compare with the Grunt output.
+
+1. **Build to `build-vite/`**:
+    ```bash
+    npm run vite:build
+    ```
+2. **Watch TypeScript (rebuild `build-vite/js/main.js`)**:
+    ```bash
+    npm run vite:dev
+    ```
+3. **Preview the `build-vite/` output**:
+    ```bash
+    npm run vite:preview
+    ```
+4. **Preview and auto-open the browser**:
+    ```bash
+    npm run vite:preview:open
+    ```
+
+Notes:
+- If you change assets or `app/index.html`, re-run `npm run vite:build`.
+
 ## Game Features
 - Classic platformer mechanics.
 - Multi-level progression with increasing difficulty.
