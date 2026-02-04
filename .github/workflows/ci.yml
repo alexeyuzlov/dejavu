@@ -135,6 +135,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Use Node 20.18.3
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.3'
+          cache: 'npm'
+
       - name: Restore node_modules cache
         uses: actions/cache@v4
         with:
