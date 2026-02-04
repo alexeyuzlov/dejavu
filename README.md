@@ -1,5 +1,8 @@
 # Dejavu
 
+[![CI](https://github.com/alexeyuzlov/dejavu/actions/workflows/ci.yml/badge.svg)](https://github.com/alexeyuzlov/dejavu/actions/workflows/ci.yml)
+[![Deploy Pages](https://github.com/alexeyuzlov/dejavu/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/alexeyuzlov/dejavu/actions/workflows/deploy-pages.yml)
+
 ## Overview
 
 Dejavu is a 2D platformer game built with the Phaser framework. Traverse through challenging levels, face enemies, and prepare for an epic boss fight at the end. Immerse yourself in this fast-paced, retro-style adventure.

@@ -2,13 +2,16 @@ name: CI
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  check:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,18 +23,132 @@ jobs:
           node-version: '20.18.3'
           cache: 'npm'
 
+      - name: Restore node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Check Node version
+        run: npm run node:check
+
       - name: Install
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Check
-        run: npm run check
+      - name: Lint
+        run: npm run lint
 
-  smoke:
+  typecheck:
     runs-on: ubuntu-latest
-    needs: check
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Use Node 20.18.3
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.3'
+          cache: 'npm'
+
+      - name: Restore node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Check Node version
+        run: npm run node:check
+
+      - name: Install
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Type check
+        run: npm run lint:types
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node 20.18.3
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.3'
+          cache: 'npm'
+
+      - name: Restore node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Check Node version
+        run: npm run node:check
+
+      - name: Install
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
+
+      - name: Asset check
+        run: npm run assets:check
+
+      - name: Build
+        run: npm run build
+
+      - name: Restore previous dist size
+        id: dist_size_cache
+        uses: actions/cache@v4
+        with:
+          path: dist-size.txt
+          key: dist-size-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            dist-size-${{ github.ref_name }}-
+
+      - name: Report dist size
+        run: node scripts/report-dist-size.js
+
+      - name: Cache dist output
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: dist-${{ github.sha }}
+
+      - name: Upload dist artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Check Node version
+        run: npm run node:check
+
+      - name: Restore dist output
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: dist-${{ github.sha }}
 
       - name: Smoke test
         run: npm run test:smoke
@@ -49,3 +166,22 @@ jobs:
         with:
           name: test-results
           path: test-results
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore dist output
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: dist-${{ github.sha }}
+
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true

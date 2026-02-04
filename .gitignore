@@ -6,6 +6,7 @@
 
 # Test artifacts
 /test-results
+/playwright-report
 
 # IDE/editor settings
 /.idea

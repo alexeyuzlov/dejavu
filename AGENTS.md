@@ -34,8 +34,10 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 ### CI
 
-- GitHub Actions workflows live in `.github/workflows/ci.yml` (PR checks/tests)
-  and `.github/workflows/deploy-pages.yml` (checks + Pages deploy on `master`).
+- GitHub Actions workflows live in `.github/workflows/ci.yml` (parallel `lint`,
+  `typecheck`, `build`, `smoke`, and `lighthouse` jobs with cached
+  `node_modules` and `dist`, plus `dist` size reporting) and
+  `.github/workflows/deploy-pages.yml` (checks + Pages deploy on `master`).
 
 ### Assets & Levels
 
@@ -44,4 +46,5 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 ### Node Versions
 
-- See `.nvmrc` and `.tool-versions`.
+- See `.nvmrc` and `.tool-versions`. `npm run node:check` validates the
+  version and runs automatically before core local scripts (dev/build/lint).
