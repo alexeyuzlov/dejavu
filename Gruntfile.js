@@ -1,4 +1,5 @@
 module.exports = function (grunt) {
+    var devPort = Number(grunt.option('port') || process.env.PORT || 8080);
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-open');
@@ -37,13 +38,13 @@ module.exports = function (grunt) {
         },
         open: {
             app: {
-                path: 'http://localhost:8080'
+                path: 'http://localhost:' + devPort
             }
         },
         connect: {
             app: {
                 options: {
-                    port: 8080,
+                    port: devPort,
                     base: 'build',
                     livereload: true
                 }
