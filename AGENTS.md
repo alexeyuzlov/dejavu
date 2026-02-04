@@ -37,7 +37,7 @@ Update this file when build/test workflows, dependencies, or project structure c
 
 - GitHub Actions workflows live in `.github/workflows/ci.yml` (parallel `lint`,
   `typecheck`, `build`, `smoke`, and `lighthouse` jobs with cached
-  `node_modules` and `dist`, plus `dist` size reporting and OSV scanning) and
+  `node_modules` and `dist`, plus `dist` size reporting) and
   `.github/workflows/deploy-pages.yml` (deploy runs only after CI success on
   `master`, or via manual dispatch).
 - Nightly heavy checks run via `.github/workflows/nightly.yml`.
