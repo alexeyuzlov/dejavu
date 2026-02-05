@@ -1,3 +1,5 @@
 /node_modules
 /.idea
 /build
+/playwright-report
+/test-results

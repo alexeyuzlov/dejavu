@@ -42,6 +42,13 @@ module.exports = function (grunt) {
                     base: 'build',
                     livereload: true
                 }
+            },
+            playwright: {
+                options: {
+                    port: 8080,
+                    base: 'build',
+                    keepalive: true
+                }
             }
         },
         watch: {
