@@ -1,6 +1,5 @@
 import * as Prefab from '../../prefab';
 import { Levels, StateKeys, Stories, settings } from '../../global-config';
-import { followLockonCamera } from '../phaser-helpers';
 import { PlayerInput } from '../../prefab/player';
 
 type PrefabConstructor = new (
@@ -84,7 +83,7 @@ export class AbstractZone extends Phaser.Scene {
     this.platformsVertical = this.getPrefabsFromMap('platform-v', Prefab.PlatformVertical);
 
     // POST-SETTINGS
-    followLockonCamera(this, this.player);
+    this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
     this.blackScreen = new Prefab.BlackScreen(this);
     this.blackScreen.setText(this.scene.key);

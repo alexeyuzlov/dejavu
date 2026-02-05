@@ -1,4 +1,3 @@
-import { addDelayedEvent, addRepeatEvent } from '../phaser-helpers';
 import { settings } from '../../global-config';
 
 export class AbstractStory extends Phaser.Scene {
@@ -37,13 +36,12 @@ export class AbstractStory extends Phaser.Scene {
         this.time.removeEvent(this.nextEvent);
         this.nextEvent = null;
       }
-      this.lineEvent = addRepeatEvent(
-        this,
-        80,
-        this.content[this.index].length + 1,
-        this.updateLine,
-        this,
-      );
+      this.lineEvent = this.time.addEvent({
+        delay: 80,
+        repeat: Math.max(0, this.content[this.index].length),
+        callback: this.updateLine,
+        callbackScope: this,
+      });
     } else {
       this.scene.start(this.nextLevel);
     }
@@ -57,7 +55,11 @@ export class AbstractStory extends Phaser.Scene {
       if (this.lineEvent) {
         this.lineEvent = null;
       }
-      this.nextEvent = addDelayedEvent(this, 2 * 1000, this.nextLine, this);
+      this.nextEvent = this.time.addEvent({
+        delay: 2 * 1000,
+        callback: this.nextLine,
+        callbackScope: this,
+      });
     }
   }
 

@@ -1,4 +1,3 @@
-import { addDelayedEvent, addRepeatEvent } from './phaser-helpers';
 import { StateKeys, settings } from '../global-config';
 
 export class GameOver extends Phaser.Scene {
@@ -32,7 +31,12 @@ export class GameOver extends Phaser.Scene {
 
     if (this.index < this.content.length) {
       this.line = '';
-      addRepeatEvent(this, 80, this.content[this.index].length + 1, this.updateLine, this);
+      this.time.addEvent({
+        delay: 80,
+        repeat: Math.max(0, this.content[this.index].length),
+        callback: this.updateLine,
+        callbackScope: this,
+      });
     } else {
       // HERE LAST ACTION
     }
@@ -43,7 +47,11 @@ export class GameOver extends Phaser.Scene {
       this.line = this.content[this.index].substr(0, this.line.length + 1);
       this.text.setText(this.line);
     } else {
-      addDelayedEvent(this, 2 * 1000, this.nextLine, this);
+      this.time.addEvent({
+        delay: 2 * 1000,
+        callback: this.nextLine,
+        callbackScope: this,
+      });
     }
   }
 }
