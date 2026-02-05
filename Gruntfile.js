@@ -29,8 +29,7 @@ module.exports = function (grunt) {
             bower: {
                 files: [
                     {
-                        'build/vendor/phaser.min.js': 'app/vendor/phaser-official/build/phaser.min.js',
-                        'build/vendor/stats.min.js': 'app/vendor/stats.js/build/stats.min.js'
+                        'build/vendor/phaser.min.js': 'app/vendor/phaser.min.js'
                     }
                 ]
             }
@@ -60,5 +59,6 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('build', ['typescript', 'copy']);
     grunt.registerTask('default', ['typescript', 'copy', 'open', 'connect', 'watch']);
 }
