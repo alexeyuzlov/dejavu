@@ -1,13 +1,18 @@
 {
   "name": "sample",
   "version": "0.2.0",
+  "scripts": {
+    "build": "grunt build",
+    "dev": "grunt"
+  },
   "devDependencies": {
     "connect-livereload": "0.6.1",
     "grunt": "1.4.1",
     "grunt-contrib-connect": "2.0.0",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-watch": "1.1.0",
+    "grunt-exec": "3.0.0",
     "grunt-open": "0.2.4",
-    "grunt-typescript": "0.8.0"
+    "typescript": "5.9.3"
   }
 }
