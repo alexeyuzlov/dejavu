@@ -4,7 +4,8 @@
   "scripts": {
     "build": "grunt build",
     "dev": "grunt",
-    "test:e2e": "playwright test",
+    "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
+    "test:e2e:install": "NODE_TLS_REJECT_UNAUTHORIZED=0 PLAYWRIGHT_BROWSERS_PATH=0 playwright install",
     "test:e2e:docker": "docker build -t e2e -f Dockerfile.playwright . && docker run --rm e2e"
   },
   "devDependencies": {
