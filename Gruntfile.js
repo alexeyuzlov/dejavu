@@ -59,5 +59,6 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('build', ['typescript', 'copy']);
     grunt.registerTask('default', ['typescript', 'copy', 'open', 'connect', 'watch']);
 }
