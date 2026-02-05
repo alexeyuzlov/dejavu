@@ -3,9 +3,12 @@
   "version": "0.2.0",
   "scripts": {
     "build": "grunt build",
-    "dev": "grunt"
+    "dev": "grunt",
+    "test:e2e": "playwright test",
+    "test:e2e:docker": "docker build -t e2e -f Dockerfile.playwright . && docker run --rm e2e"
   },
   "devDependencies": {
+    "@playwright/test": "1.58.1",
     "connect-livereload": "0.6.1",
     "grunt": "1.4.1",
     "grunt-contrib-connect": "2.0.0",
