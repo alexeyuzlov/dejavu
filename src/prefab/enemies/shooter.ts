@@ -1,4 +1,4 @@
-import { applyBodyConfig, collideArcade } from '../../physics';
+import { applyBodyConfig } from '../../physics';
 import { Bullet } from '../bullets/bullet';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -63,8 +63,6 @@ export class Shooter extends AbstractEnemy {
   preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
 
-    collideArcade(this.scene, this, this.level.layer);
-
     if (!this.scene.cameras.main.worldView.contains(this.x, this.y) || !this.active) {
       applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { velocityX: 0, velocityY: 0 });
       return;
@@ -85,10 +83,13 @@ export class Shooter extends AbstractEnemy {
 
     bullet.setActive(true);
     bullet.setVisible(true);
-    bullet.setPosition(this.x, this.y);
+    const spawnPoint = this.getCenter();
+    const facing = this.scaleX >= 0 ? 1 : -1;
+    const offsetX = facing * (this.displayWidth * 0.5 + bullet.displayWidth * 0.5);
+    bullet.setPosition(spawnPoint.x + offsetX, spawnPoint.y);
     if (bullet.body) {
       bullet.body.enable = true;
-      bullet.body.reset(this.x, this.y);
+      bullet.body.reset(spawnPoint.x, spawnPoint.y);
     }
 
     if (this.x > this.level.player.x) {

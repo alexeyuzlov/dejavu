@@ -1,4 +1,4 @@
-import { applyBodyConfig, collideArcade, overlapArcade, killSprite } from '../../physics';
+import { applyBodyConfig, overlapArcade, killSprite } from '../../physics';
 import { BulletReject } from '../bullets/bullet-reject';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -62,8 +62,6 @@ export class ShooterReject extends AbstractEnemy {
   preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
 
-    collideArcade(this.scene, this, this.level.layer);
-
     overlapArcade(this.scene, this, this.bullets, (shooterReject: any, bulletReject: any) => {
       if (bulletReject.rejectState) {
         killSprite(bulletReject);
@@ -91,20 +89,20 @@ export class ShooterReject extends AbstractEnemy {
 
     bullet.setActive(true);
     bullet.setVisible(true);
-    bullet.setPosition(this.x, this.y);
+
+    const facing = this.x > this.level.player.x ? -1 : 1;
+    this.scaleX = facing;
+    bullet.scaleX = facing;
+    bullet.rejectState = false;
+
+    const spawnPoint = this.getCenter();
+    const offsetX = facing * (this.displayWidth * 0.5 + bullet.displayWidth * 0.5);
+    const spawnX = spawnPoint.x + offsetX;
+    bullet.setPosition(spawnX, spawnPoint.y);
     if (bullet.body) {
       bullet.body.enable = true;
-      bullet.body.reset(this.x, this.y);
-    }
-
-    if (this.x > this.level.player.x) {
-      applyBodyConfig(bullet.body as Phaser.Physics.Arcade.Body, { velocityX: -bullet.speed });
-      bullet.scaleX = -1;
-      this.scaleX = -1;
-    } else {
-      applyBodyConfig(bullet.body as Phaser.Physics.Arcade.Body, { velocityX: bullet.speed });
-      bullet.scaleX = 1;
-      this.scaleX = 1;
+      bullet.body.reset(spawnX, spawnPoint.y);
+      applyBodyConfig(bullet.body as Phaser.Physics.Arcade.Body, { velocityX: facing * bullet.speed });
     }
   }
 }

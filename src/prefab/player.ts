@@ -1,4 +1,4 @@
-import { applyBodyConfig, collideArcade, killSprite } from '../physics';
+import { applyBodyConfig, killSprite } from '../physics';
 import { Direction, settings } from '../global-config';
 import { AbstractPrefab } from './abstract-prefab';
 
@@ -245,8 +245,6 @@ export class Player extends AbstractPrefab {
     if (this.scene.physics.world.isPaused) {
       return;
     }
-    collideArcade(this.scene, this, this.level.layer);
-
     this.move();
     this.jump();
     this.attack();

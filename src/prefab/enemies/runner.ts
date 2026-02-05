@@ -65,8 +65,6 @@ export class Runner extends AbstractEnemy {
   preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
 
-    collideArcade(this.scene, this, this.level.layer);
-
     collideArcade(this.scene, this, this.level.transparents, (runner: any, transparent: any) => {
       runner.toggleDirection();
     });

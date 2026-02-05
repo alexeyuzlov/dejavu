@@ -82,6 +82,19 @@ export class AbstractZone extends Phaser.Scene {
     this.platformsHorizontal = this.getPrefabsFromMap('platform-h', Prefab.PlatformHorizontal);
     this.platformsVertical = this.getPrefabsFromMap('platform-v', Prefab.PlatformVertical);
 
+    this.physics.add.collider(this.player, this.layer);
+    this.physics.add.collider(this.runners, this.layer);
+    this.physics.add.collider(this.shooters, this.layer);
+    this.physics.add.collider(this.shootersReject, this.layer);
+    this.physics.add.collider(this.player, this.platformsHorizontal);
+    this.physics.add.collider(this.player, this.platformsVertical);
+    this.physics.add.collider(this.runners, this.platformsHorizontal);
+    this.physics.add.collider(this.runners, this.platformsVertical);
+    this.physics.add.collider(this.shooters, this.platformsHorizontal);
+    this.physics.add.collider(this.shooters, this.platformsVertical);
+    this.physics.add.collider(this.shootersReject, this.platformsHorizontal);
+    this.physics.add.collider(this.shootersReject, this.platformsVertical);
+
     // POST-SETTINGS
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
