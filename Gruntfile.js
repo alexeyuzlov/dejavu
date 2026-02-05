@@ -1,18 +1,14 @@
 module.exports = function (grunt) {
-    grunt.loadNpmTasks('grunt-typescript');
+    grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.initConfig({
-        typescript: {
-            app: {
-                src: ['app/scripts/Game.ts'],
-                dest: 'build/js/main.js',
-                options: {
-                    sourceMap: true
-                }
+        exec: {
+            tsc: {
+                cmd: 'npx tsc -p tsconfig.json'
             }
         },
         copy: {
@@ -51,7 +47,7 @@ module.exports = function (grunt) {
         watch: {
             app: {
                 files: 'app/**/*',
-                tasks: ['typescript', 'copy'],
+                tasks: ['exec:tsc', 'copy'],
                 options: {
                     livereload: true
                 }
@@ -59,6 +55,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('build', ['typescript', 'copy']);
-    grunt.registerTask('default', ['typescript', 'copy', 'open', 'connect', 'watch']);
+    grunt.registerTask('build', ['exec:tsc', 'copy']);
+    grunt.registerTask('default', ['exec:tsc', 'copy', 'open', 'connect', 'watch']);
 }

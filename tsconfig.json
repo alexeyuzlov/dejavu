@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "none",
+    "outFile": "build/js/main.js",
+    "sourceMap": true,
+    "skipLibCheck": true
+  },
+  "files": ["app/scripts/Game.ts"]
+}
