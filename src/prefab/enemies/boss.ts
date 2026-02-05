@@ -1,4 +1,3 @@
-import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig, overlapArcade, killSprite } from '../../physics';
 import { BulletReject } from '../bullets/bullet-reject';
 import { AbstractEnemy } from './abstract-enemy';
@@ -36,7 +35,7 @@ export class Boss extends AbstractEnemy {
     this.countBullets = 10;
     this.shotDelay = 3 * 1000;
 
-    this.bullets = createGroup(this.scene);
+    this.bullets = this.scene.add.group();
     for (var i = 0; i < this.countBullets; i++) {
       var bullet = new BulletReject(scene, 0, 0);
       this.bullets.add(bullet);
@@ -175,11 +174,17 @@ export class Boss extends AbstractEnemy {
     if (this.scene.time.now - this.lastBulletShotAt < this.shotDelay) return;
     this.lastBulletShotAt = this.scene.time.now;
 
-    var bullet = getFirstDead<BulletReject>(this.bullets);
+    var bullet = this.bullets.getFirstDead(false) as BulletReject | null;
 
     if (bullet === null || bullet === undefined) return;
 
-    reviveAndReset(bullet, this.x, this.y);
+    bullet.setActive(true);
+    bullet.setVisible(true);
+    bullet.setPosition(this.x, this.y);
+    if (bullet.body) {
+      bullet.body.enable = true;
+      bullet.body.reset(this.x, this.y);
+    }
     bullet.rejectState = false;
 
     if (this.x > this.level.player.x) {

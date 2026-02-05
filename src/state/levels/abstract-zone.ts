@@ -1,6 +1,5 @@
 import * as Prefab from '../../prefab';
 import { Levels, StateKeys, Stories, settings } from '../../global-config';
-import { createGroup } from '../../groups';
 import { followLockonCamera } from '../phaser-helpers';
 import { PlayerInput } from '../../prefab/player';
 
@@ -133,7 +132,7 @@ export class AbstractZone extends Phaser.Scene {
   }
 
   getPrefabsFromMap(name: string, className?: PrefabConstructor): Phaser.GameObjects.Group {
-    const group = createGroup(this);
+    const group = this.add.group();
     const tilesetIndex = this.map.getTilesetIndex(name);
     if (tilesetIndex === null || tilesetIndex === -1) return group;
 

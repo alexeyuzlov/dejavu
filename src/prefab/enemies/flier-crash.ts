@@ -1,4 +1,3 @@
-import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig } from '../../physics';
 import { Egg } from '../bullets/egg';
 import { AbstractEnemy } from './abstract-enemy';
@@ -21,7 +20,7 @@ export class FlierCrash extends AbstractEnemy {
     this.setOrigin(0.5, 0.5);
     this.health = 52;
 
-    this.eggs = createGroup(this.scene);
+    this.eggs = this.scene.add.group();
     this.countEggs = 10;
     for (var i = 0; i < this.countEggs; i++) {
       var egg = new Egg(scene, 0, 0);
@@ -97,10 +96,16 @@ export class FlierCrash extends AbstractEnemy {
     if (this.scene.time.now - this.lastEggShotAt < this.shotDelay) return;
     this.lastEggShotAt = this.scene.time.now;
 
-    var egg = getFirstDead<Egg>(this.eggs);
+    var egg = this.eggs.getFirstDead(false) as Egg | null;
     if (egg === null || egg === undefined) return;
 
-    reviveAndReset(egg, this.x, this.y);
+    egg.setActive(true);
+    egg.setVisible(true);
+    egg.setPosition(this.x, this.y);
+    if (egg.body) {
+      egg.body.enable = true;
+      egg.body.reset(this.x, this.y);
+    }
     applyBodyConfig(egg.body as Phaser.Physics.Arcade.Body, { velocityY: egg.speed });
     egg.anims.play('egg');
   }

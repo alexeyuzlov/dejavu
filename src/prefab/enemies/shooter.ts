@@ -1,4 +1,3 @@
-import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig, collideArcade } from '../../physics';
 import { Bullet } from '../bullets/bullet';
 import { AbstractEnemy } from './abstract-enemy';
@@ -22,7 +21,7 @@ export class Shooter extends AbstractEnemy {
     this.damagePoints = 10;
     this.defensePoints = 5;
 
-    this.bullets = createGroup(this.scene);
+    this.bullets = this.scene.add.group();
     for (var i = 0; i < this.countBullets; i++) {
       var bullet = new Bullet(scene, 0, 0);
       this.bullets.add(bullet);
@@ -80,11 +79,17 @@ export class Shooter extends AbstractEnemy {
     if (this.scene.time.now - this.lastBulletShotAt < this.shotDelay) return;
     this.lastBulletShotAt = this.scene.time.now;
 
-    var bullet = getFirstDead<Bullet>(this.bullets);
+    var bullet = this.bullets.getFirstDead(false) as Bullet | null;
 
     if (bullet === null || bullet === undefined) return;
 
-    reviveAndReset(bullet, this.x, this.y);
+    bullet.setActive(true);
+    bullet.setVisible(true);
+    bullet.setPosition(this.x, this.y);
+    if (bullet.body) {
+      bullet.body.enable = true;
+      bullet.body.reset(this.x, this.y);
+    }
 
     if (this.x > this.level.player.x) {
       this.scaleX = -1;
