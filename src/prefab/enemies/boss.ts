@@ -1,4 +1,3 @@
-import { onKilled, onResume } from '../../events';
 import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig, overlapArcade, killSprite } from '../../physics';
 import { BulletReject } from '../bullets/bullet-reject';
@@ -43,7 +42,14 @@ export class Boss extends AbstractEnemy {
       this.bullets.add(bullet);
     }
 
-    onResume(this.scene, (pauseDuration: number) => {
+    let pausedAt = 0;
+    this.scene.events.on(Phaser.Scenes.Events.PAUSE, () => {
+      pausedAt = this.scene.time.now;
+    });
+    this.scene.events.on(Phaser.Scenes.Events.RESUME, () => {
+      if (!pausedAt) return;
+      const pauseDuration = this.scene.time.now - pausedAt;
+      pausedAt = 0;
       this.lastBulletShotAt += pauseDuration;
     });
 
@@ -98,7 +104,7 @@ export class Boss extends AbstractEnemy {
     this.flash.setAlpha(0);
     this.flash.setDepth(1000);
 
-    onKilled(this, () => {
+    this.on('killed', () => {
       this.boom();
 
       this.scene.tweens.add({

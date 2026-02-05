@@ -106,8 +106,10 @@ export class AbstractZone extends Phaser.Scene {
       this.time.timeScale = isPaused ? 1 : 0;
       if (isPaused) {
         this.anims.resumeAll();
+        this.events.emit(Phaser.Scenes.Events.RESUME);
       } else {
         this.anims.pauseAll();
+        this.events.emit(Phaser.Scenes.Events.PAUSE);
       }
     });
   }

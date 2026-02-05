@@ -1,5 +1,4 @@
 import { applyBodyConfig, collideArcade, killSprite } from '../physics';
-import { onKilled } from '../events';
 import { Direction, settings } from '../global-config';
 import { AbstractPrefab } from './abstract-prefab';
 
@@ -106,7 +105,7 @@ export class Player extends AbstractPrefab {
       });
     }
 
-    onKilled(this, () => {
+    this.on('killed', () => {
       this.level.gameOver();
     });
   }
@@ -243,6 +242,9 @@ export class Player extends AbstractPrefab {
 
   preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
+    if (this.scene.physics.world.isPaused) {
+      return;
+    }
     collideArcade(this.scene, this, this.level.layer);
 
     this.move();

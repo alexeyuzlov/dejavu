@@ -1,4 +1,3 @@
-import { onResume } from '../../events';
 import { createGroup, getFirstDead, reviveAndReset } from '../../groups';
 import { applyBodyConfig, collideArcade, overlapArcade, killSprite } from '../../physics';
 import { BulletReject } from '../bullets/bullet-reject';
@@ -29,7 +28,14 @@ export class ShooterReject extends AbstractEnemy {
     }
     this.health = 100;
 
-    onResume(this.scene, (pauseDuration: number) => {
+    let pausedAt = 0;
+    this.scene.events.on(Phaser.Scenes.Events.PAUSE, () => {
+      pausedAt = this.scene.time.now;
+    });
+    this.scene.events.on(Phaser.Scenes.Events.RESUME, () => {
+      if (!pausedAt) return;
+      const pauseDuration = this.scene.time.now - pausedAt;
+      pausedAt = 0;
       this.lastBulletShotAt += pauseDuration;
     });
 
