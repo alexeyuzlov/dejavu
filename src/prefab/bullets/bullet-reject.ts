@@ -16,10 +16,12 @@ export class BulletReject extends AbstractPrefab {
 
   preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
-    overlapArcade(this.scene, this, this.level.player, (bulletReject: any, player: any) => {
+    const player = this.level.player;
+    const attackTarget = player.attackState ? player.getAttackHitbox() : player;
+    overlapArcade(this.scene, this, attackTarget, (bulletReject: any) => {
       if (bulletReject.rejectState) return;
 
-      if (this.level.player.attackState) {
+      if (player.attackState) {
         bulletReject.scaleX = bulletReject.scaleX === 1 ? -1 : 1;
         applyBodyConfig(bulletReject.body as Phaser.Physics.Arcade.Body, {
           velocityX: -(bulletReject.body as Phaser.Physics.Arcade.Body).velocity.x,
@@ -27,8 +29,8 @@ export class BulletReject extends AbstractPrefab {
         bulletReject.rejectState = true;
       } else {
         killSprite(bulletReject);
-        if (!this.level.player.immortalState) {
-          this.level.player.makeDamage(bulletReject.damagePoints);
+        if (!player.immortalState) {
+          player.makeDamage(bulletReject.damagePoints);
           this.level.hud.updateHealthState();
         }
       }

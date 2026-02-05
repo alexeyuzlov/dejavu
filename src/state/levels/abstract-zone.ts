@@ -56,6 +56,7 @@ export class AbstractZone extends Phaser.Scene {
     map.setCollisionBetween(1, 5, true, true, layer);
     layer.setCollisionBetween(1, 5);
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.physics.world.setBoundsCollision(true, true, true, true);
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.map = map;
     this.layer = layer;

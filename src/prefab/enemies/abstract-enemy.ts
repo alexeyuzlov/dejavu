@@ -59,7 +59,9 @@ export class AbstractEnemy extends AbstractPrefab {
 
   preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
-    overlapArcade(this.scene, this.level.player, this, (player: any, enemy: any) => {
+    const player = this.level.player;
+    const attackTarget = player.attackState ? player.getAttackHitbox() : player;
+    overlapArcade(this.scene, attackTarget, this, (_attacker: any, enemy: any) => {
       if (player.attackState) {
         enemy.makeDamage(player.damagePoints);
       } else if (!this.level.player.immortalState) {

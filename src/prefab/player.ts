@@ -31,6 +31,7 @@ export class Player extends AbstractPrefab {
   isActiveJumpKey: boolean;
   isAttackKeyPressed: boolean;
   inputState: PlayerInput | null;
+  attackHitbox: Phaser.GameObjects.Zone;
 
   constructor(scene: Phaser.Scene, x: number, y: number, inputState: PlayerInput | null) {
     super(scene, x, y, 'player');
@@ -54,6 +55,13 @@ export class Player extends AbstractPrefab {
     this.isActiveJumpKey = false;
     this.isAttackKeyPressed = false;
     this.inputState = inputState;
+
+    this.attackHitbox = this.scene.add.zone(this.x, this.y, 10, 10);
+    this.scene.physics.add.existing(this.attackHitbox);
+    const attackBody = this.attackHitbox.body as Phaser.Physics.Arcade.Body;
+    attackBody.setAllowGravity(false);
+    attackBody.setImmovable(true);
+    attackBody.enable = false;
 
     applyBodyConfig(this.body as Phaser.Physics.Arcade.Body, { gravityY: this.gravity });
     this.setOrigin(0.5, 1);
@@ -106,6 +114,9 @@ export class Player extends AbstractPrefab {
     }
 
     this.on('killed', () => {
+      if (this.attackHitbox.body) {
+        (this.attackHitbox.body as Phaser.Physics.Arcade.Body).enable = false;
+      }
       this.level.gameOver();
     });
   }
@@ -238,6 +249,27 @@ export class Player extends AbstractPrefab {
         currentFrame.frame.height,
       );
     }
+    this.updateAttackHitbox();
+  }
+
+  getAttackHitbox() {
+    return this.attackHitbox;
+  }
+
+  updateAttackHitbox() {
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    const attackBody = this.attackHitbox.body as Phaser.Physics.Arcade.Body;
+    if (!body || !attackBody) return;
+
+    const reach = Math.max(12, body.width * 0.6);
+    const hitboxWidth = body.width + reach;
+    const hitboxHeight = Math.max(10, body.height * 0.6);
+    const offsetX = this.direction === Direction.Right ? reach / 2 : -reach / 2;
+
+    this.attackHitbox.setPosition(body.center.x + offsetX, body.center.y - body.height * 0.1);
+    this.attackHitbox.setSize(hitboxWidth, hitboxHeight);
+    attackBody.setSize(hitboxWidth, hitboxHeight);
+    attackBody.enable = this.attackState;
   }
 
   preUpdate(time: number, delta: number) {
@@ -250,5 +282,22 @@ export class Player extends AbstractPrefab {
     this.attack();
 
     this.updateState();
+
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    const bounds = this.scene.physics.world.bounds;
+    const halfWidth = body.width * 0.5;
+    const minX = bounds.left + halfWidth;
+    const maxX = bounds.right - halfWidth;
+    if (this.x < minX) {
+      this.x = minX;
+      if (body.velocity.x < 0) {
+        body.velocity.x = 0;
+      }
+    } else if (this.x > maxX) {
+      this.x = maxX;
+      if (body.velocity.x > 0) {
+        body.velocity.x = 0;
+      }
+    }
   }
 }

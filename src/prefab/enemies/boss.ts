@@ -151,7 +151,9 @@ export class Boss extends AbstractEnemy {
       }
     });
 
-    overlapArcade(this.scene, this.level.player, this, (player: any, enemy: any) => {
+    const player = this.level.player;
+    const attackTarget = player.attackState ? player.getAttackHitbox() : player;
+    overlapArcade(this.scene, attackTarget, this, (_attacker: any, enemy: any) => {
       if (player.attackState) {
         if (this.isProtect) {
           this.makeDamage(1);
