@@ -1,6 +1,6 @@
-import { AbstractPrefab } from "./AbstractPrefab";
+import { ArcadePrefab } from "./ArcadePrefab";
 
-export class IceSpike extends AbstractPrefab {
+export class IceSpike extends ArcadePrefab {
     damagePoints: number = 10;
     distanceToTarget: number = Math.random() * 100 - 40; // from - 40 to 60 px to target
 

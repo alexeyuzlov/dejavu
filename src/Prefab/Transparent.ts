@@ -1,6 +1,6 @@
-import { AbstractPrefab } from "./AbstractPrefab";
+import { ArcadePrefab } from "./ArcadePrefab";
 
-export class Transparent extends AbstractPrefab {
+export class Transparent extends ArcadePrefab {
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "transparent");
 

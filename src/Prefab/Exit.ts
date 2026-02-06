@@ -1,6 +1,6 @@
-import { AbstractPrefab } from "./AbstractPrefab";
+import { ArcadePrefab } from "./ArcadePrefab";
 
-export class Exit extends AbstractPrefab {
+export class Exit extends ArcadePrefab {
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "exit");
         game.physics.arcade.enable(this);

@@ -1,6 +1,6 @@
-import { AbstractPrefab } from "../AbstractPrefab";
+import { ArcadePrefab } from "../ArcadePrefab";
 
-export class AbstractEnemy extends AbstractPrefab {
+export class AbstractEnemy extends ArcadePrefab {
     immortalState: boolean;
     immortalStateAt: number;
     immortalStateDuration: number;

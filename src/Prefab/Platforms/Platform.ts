@@ -1,7 +1,7 @@
 import { Direction } from "../../GlobalConfig";
-import { AbstractPrefab } from "../AbstractPrefab";
+import { ArcadePrefab } from "../ArcadePrefab";
 
-export class Platform extends AbstractPrefab {
+export class Platform extends ArcadePrefab {
     direction: Direction;
     velocity: number;
 

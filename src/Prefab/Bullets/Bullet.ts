@@ -1,6 +1,6 @@
-import { AbstractPrefab } from "../AbstractPrefab";
+import { ArcadePrefab } from "../ArcadePrefab";
 
-export class Bullet extends AbstractPrefab {
+export class Bullet extends ArcadePrefab {
     speed: number = 300;
     damagePoints: number = 20;
 

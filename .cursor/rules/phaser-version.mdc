@@ -1,0 +1,8 @@
+---
+description: Phaser version context (2.6.2, non-CE)
+alwaysApply: true
+---
+
+# Phaser Version
+
+Use Phaser 2.6.2 (non-CE) APIs and typings. Do not assume Phaser CE-specific types or behaviors.

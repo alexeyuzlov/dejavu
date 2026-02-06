@@ -1,7 +1,7 @@
 import { Direction, settings } from "../GlobalConfig";
-import { AbstractPrefab } from "./AbstractPrefab";
+import { ArcadePrefab } from "./ArcadePrefab";
 
-export class Player extends AbstractPrefab {
+export class Player extends ArcadePrefab {
     gravity: number;
     acceleration: number;
     drag: number;

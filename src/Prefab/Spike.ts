@@ -1,6 +1,6 @@
-import { AbstractPrefab } from "./AbstractPrefab";
+import { ArcadePrefab } from "./ArcadePrefab";
 
-export class Spike extends AbstractPrefab {
+export class Spike extends ArcadePrefab {
     damagePoints: number = 10;
 
     constructor(game: Phaser.Game, x: number, y: number) {

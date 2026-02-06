@@ -1,6 +1,6 @@
-import { AbstractPrefab } from "../AbstractPrefab";
+import { ArcadePrefab } from "../ArcadePrefab";
 
-export class Egg extends AbstractPrefab {
+export class Egg extends ArcadePrefab {
     speed: number = 180;
     damagePoints: number = 35;
     eggCrashState: boolean;

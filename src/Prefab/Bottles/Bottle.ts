@@ -1,7 +1,7 @@
 import type { AbstractZone } from "../../State/Levels/AbstractZone";
-import { AbstractPrefab } from "../AbstractPrefab";
+import { ArcadePrefab } from "../ArcadePrefab";
 
-export class Bottle extends AbstractPrefab {
+export class Bottle extends ArcadePrefab {
     level: AbstractZone;
 
     constructor(game: Phaser.Game, x: number, y: number, texture) {
