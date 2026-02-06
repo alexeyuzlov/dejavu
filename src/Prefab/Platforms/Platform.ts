@@ -1,7 +1,9 @@
 import { Direction } from "../../GlobalConfig";
 import { ArcadePrefab } from "../ArcadePrefab";
+import type { Player } from "../Player";
+import type { Transparent } from "../Transparent";
 
-export class Platform extends ArcadePrefab {
+export abstract class Platform extends ArcadePrefab {
     direction: Direction;
     velocity = 100;
 
@@ -37,12 +39,21 @@ export class Platform extends ArcadePrefab {
     }
 
     update() {
-        this.game.physics.arcade.collide(this.level.player, this, null, (player, platform) => {
-            return player.y - platform.body.height <= platform.y;
-        });
+        this.game.physics.arcade.collide(
+            this.level.player,
+            this,
+            null,
+            (player: Player, platform: Platform) => {
+                return player.y - platform.body.height <= platform.y;
+            }
+        );
 
-        this.game.physics.arcade.collide(this, this.level.transparents, (platform) => {
-            platform.toggleDirection();
-        });
+        this.game.physics.arcade.collide(
+            this,
+            this.level.transparents,
+            (platform: Platform, _transparent: Transparent) => {
+                platform.toggleDirection();
+            }
+        );
     }
 }

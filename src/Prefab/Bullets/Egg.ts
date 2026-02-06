@@ -1,4 +1,5 @@
 import { ArcadePrefab } from "../ArcadePrefab";
+import type { Player } from "../Player";
 
 export class Egg extends ArcadePrefab {
     speed = 180;
@@ -30,7 +31,7 @@ export class Egg extends ArcadePrefab {
     }
 
     update() {
-        this.game.physics.arcade.collide(this, this.level.player, (egg) => {
+        this.game.physics.arcade.collide(this, this.level.player, (egg: Egg, _player: Player) => {
             egg.kill();
 
             if (!this.level.player.immortalState && !this.level.player.attackState) {
@@ -39,10 +40,14 @@ export class Egg extends ArcadePrefab {
             }
         });
 
-        this.game.physics.arcade.collide(this, this.level.layer, (egg) => {
-            if (!this.eggCrashState) {
-                egg.setEggCrash();
+        this.game.physics.arcade.collide(
+            this,
+            this.level.layer,
+            (egg: Egg, _layer: Phaser.TilemapLayer) => {
+                if (!this.eggCrashState) {
+                    egg.setEggCrash();
+                }
             }
-        });
+        );
     }
 }

@@ -1,5 +1,6 @@
 import { Direction } from "../../GlobalConfig";
 import { AbstractEnemy } from "./AbstractEnemy";
+import type { Transparent } from "../Transparent";
 
 export class Runner extends AbstractEnemy {
     gravity = 300;
@@ -49,9 +50,13 @@ export class Runner extends AbstractEnemy {
 
         this.game.physics.arcade.collide(this, this.level.layer);
 
-        this.game.physics.arcade.collide(this, this.level.transparents, (runner) => {
-            runner.toggleDirection();
-        });
+        this.game.physics.arcade.collide(
+            this,
+            this.level.transparents,
+            (runner: Runner, _transparent: Transparent) => {
+                runner.toggleDirection();
+            }
+        );
 
         if (this.body.blocked.left || this.body.blocked.right) {
             this.toggleDirection();

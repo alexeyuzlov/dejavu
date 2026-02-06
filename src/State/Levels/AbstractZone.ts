@@ -152,13 +152,10 @@ export class AbstractZone extends Phaser.State {
     getNextLevel() {
         switch (this.game.state.current) {
             case Levels[Levels.Zone1Level1]:
-                //return Levels[Levels.Zone2Level1];
                 return Stories[Stories.Story2];
             case Levels[Levels.Zone2Level1]:
-                //return Levels[Levels.Zone3Level1];
                 return Stories[Stories.Story3];
             case Levels[Levels.Zone3Level1]:
-                //return Levels[Levels.Zone4Level1];
                 return Stories[Stories.Story4];
             case Levels[Levels.Zone4Level1]:
                 return "gameOver";

@@ -37,12 +37,16 @@ export class ShooterReject extends AbstractEnemy {
 
         this.game.physics.arcade.collide(this, this.level.layer);
 
-        this.game.physics.arcade.overlap(this, this.bullets, (shooterReject, bulletReject) => {
-            if (bulletReject.rejectState) {
-                bulletReject.kill();
-                this.makeDamage(bulletReject.damageRejectPoints);
+        this.game.physics.arcade.overlap(
+            this,
+            this.bullets,
+            (shooterReject: ShooterReject, bulletReject: BulletReject) => {
+                if (bulletReject.rejectState) {
+                    bulletReject.kill();
+                    shooterReject.makeDamage(bulletReject.damageRejectPoints);
+                }
             }
-        });
+        );
 
         if (!this.inCamera || !this.alive) {
             this.body.velocity.setTo(0, 0);

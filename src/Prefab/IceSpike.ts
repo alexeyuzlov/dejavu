@@ -1,4 +1,5 @@
 import { ArcadePrefab } from "./ArcadePrefab";
+import type { Player } from "./Player";
 
 export class IceSpike extends ArcadePrefab {
     damagePoints: number = 10;
@@ -12,12 +13,16 @@ export class IceSpike extends ArcadePrefab {
     }
 
     update() {
-        this.game.physics.arcade.overlap(this.level.player, this, (player, ice) => {
-            if (!this.level.player.immortalState) {
-                this.level.player.makeDamage(ice.damagePoints);
-                this.level.hud.updateHealthState();
+        this.game.physics.arcade.overlap(
+            this.level.player,
+            this,
+            (_player: Player, iceSpike: IceSpike) => {
+                if (!this.level.player.immortalState) {
+                    this.level.player.makeDamage(iceSpike.damagePoints);
+                    this.level.hud.updateHealthState();
+                }
             }
-        });
+        );
 
         if (!this.inCamera) return;
 
