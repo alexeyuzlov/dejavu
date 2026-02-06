@@ -16,13 +16,13 @@ To set up and build the project, follow these steps:
    ```bash
    npm run dev
    ```
-3. **Build the project**:
+3. **Build the project (local `/`)**:
    ```bash
    npm run build
    ```
 4. **Build for GitHub Pages**:
    ```bash
-   npm run build:prod
+   BASE_URL=/dejavu/ npm run build
    ```
 
 ## E2E Tests
@@ -33,11 +33,15 @@ Local e2e uses Playwright with browsers installed into `node_modules`.
    ```bash
    npm run test:e2e:install
    ```
-2. **Build the project**:
+2. **Build the project (local `/`)**:
    ```bash
    npm run build
    ```
-3. **Run e2e locally**:
+3. **Build for GitHub Pages**:
+   ```bash
+   BASE_URL=/dejavu/ npm run build
+   ```
+4. **Run e2e locally**:
    ```bash
    npm run test:e2e
    ```

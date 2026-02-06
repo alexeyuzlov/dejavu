@@ -6,6 +6,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build:prod
+ENV BASE_URL=/dejavu/
+RUN npm run build
 
 CMD ["npx", "playwright", "test"]

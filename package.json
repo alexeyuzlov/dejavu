@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "build": "npm run typecheck && vite build",
-    "build:prod": "npm run typecheck && vite build --base=/dejavu/",
     "dev": "vite",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
