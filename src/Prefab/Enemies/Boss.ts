@@ -17,9 +17,9 @@ export class Boss extends AbstractEnemy {
     damagePoints: number = 10;
     defensePoints: number = 40;
 
-    lightningBitmap: any;
-    lightning: any;
-    flash: any;
+    lightningBitmap: Phaser.BitmapData;
+    lightning: Phaser.Image;
+    flash: Phaser.Graphics;
 
     constructor(game: Phaser.Game, bossTweens: Phaser.Group) {
         super(game, bossTweens.children[0].x, bossTweens.children[0].y, "boss");
@@ -198,7 +198,14 @@ export class Boss extends AbstractEnemy {
         this.game.add.tween(this.flash).to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In).start();
     }
 
-    createLightningTexture(x, y, segments, boltWidth, branch, distance) {
+    createLightningTexture(
+        x: number,
+        y: number,
+        segments: number,
+        boltWidth: number,
+        branch: boolean,
+        distance: number
+    ) {
         // Get the canvas drawing context for the lightningBitmap
         var ctx = this.lightningBitmap.context;
         var width = this.lightningBitmap.width;
@@ -262,7 +269,7 @@ export class Boss extends AbstractEnemy {
 
             // Draw a branch 20% of the time off the main bolt only
             if (!branch) {
-                if (Phaser.Math.chanceRoll(20)) {
+                if (Phaser.Utils.chanceRoll(20)) {
                     // Draws another, thinner, bolt starting from this position
                     this.createLightningTexture(x, y, 10, 1, true, distance);
                 }

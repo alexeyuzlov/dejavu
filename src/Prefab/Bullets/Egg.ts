@@ -32,7 +32,7 @@ export class Egg extends AbstractPrefab {
     }
 
     update() {
-        this.game.physics.arcade.collide(this, this.level.player, (egg, player) => {
+        this.game.physics.arcade.collide(this, this.level.player, (egg) => {
             egg.kill();
 
             if (!this.level.player.immortalState && !this.level.player.attackState) {
@@ -41,7 +41,7 @@ export class Egg extends AbstractPrefab {
             }
         });
 
-        this.game.physics.arcade.collide(this, this.level.layer, (egg, layer) => {
+        this.game.physics.arcade.collide(this, this.level.layer, (egg) => {
             if (!this.eggCrashState) {
                 egg.setEggCrash();
             }

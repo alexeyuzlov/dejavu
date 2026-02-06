@@ -13,6 +13,15 @@ export default [
             parserOptions: {
                 ecmaVersion: 2015,
                 sourceType: "module",
+                project: "./tsconfig.json",
+                tsconfigRootDir: process.cwd(),
+            },
+            globals: {
+                Phaser: "readonly",
+                PIXI: "readonly",
+                console: "readonly",
+                localStorage: "readonly",
+                window: "readonly",
             },
         },
         plugins: {
@@ -21,12 +30,8 @@ export default [
         rules: {
             ...js.configs.recommended.rules,
             ...tseslint.configs.recommended.rules,
-            "no-undef": "off",
-            "@typescript-eslint/no-unused-vars": "off",
-            "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/no-namespace": "off",
-            "@typescript-eslint/prefer-namespace-keyword": "off",
-            "@typescript-eslint/triple-slash-reference": "off",
+            // ...tseslint.configs["recommended-type-checked"].rules,
+            "@typescript-eslint/strict-boolean-expressions": "off",
         },
     },
 ];

@@ -63,7 +63,12 @@ class Storage {
 class SettingsClass {
     storage = new Storage();
 
-    keys: any;
+    keys: {
+        moveLeft: number;
+        moveRight: number;
+        jump: number;
+        attack: number;
+    };
     font = {
         whiteWithRed: {
             font: "20px Arial",
@@ -103,4 +108,4 @@ class SettingsClass {
     }
 }
 
-export var settings: any = new SettingsClass();
+export var settings: SettingsClass = new SettingsClass();

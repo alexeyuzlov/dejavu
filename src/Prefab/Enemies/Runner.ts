@@ -56,7 +56,7 @@ export class Runner extends AbstractEnemy {
 
         this.game.physics.arcade.collide(this, this.level.layer);
 
-        this.game.physics.arcade.collide(this, this.level.transparents, (runner, transparent) => {
+        this.game.physics.arcade.collide(this, this.level.transparents, (runner) => {
             runner.toggleDirection();
         });
 

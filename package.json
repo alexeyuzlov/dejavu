@@ -3,8 +3,8 @@
   "version": "0.2.0",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "build:prod": "vite build --base=/dejavu/",
+    "build": "npm run typecheck && vite build",
+    "build:prod": "npm run typecheck && vite build --base=/dejavu/",
     "dev": "vite",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
@@ -13,7 +13,8 @@
     "prepare": "husky",
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
     "test:e2e:install": "NODE_TLS_REJECT_UNAUTHORIZED=0 PLAYWRIGHT_BROWSERS_PATH=0 playwright install",
-    "test:e2e:docker": "docker build -t e2e -f Dockerfile.playwright . && docker run --rm e2e"
+    "test:e2e:docker": "docker build -t e2e -f Dockerfile.playwright . && docker run --rm e2e",
+    "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
     "*.{js,ts,json,yml,yaml,md,html}": "prettier --write"

@@ -9,7 +9,7 @@ export class Exit extends AbstractPrefab {
     }
 
     update() {
-        this.game.physics.arcade.collide(this.level.player, this.level.exits, (player, exit) => {
+        this.game.physics.arcade.collide(this.level.player, this.level.exits, () => {
             this.level.startNextLevel();
         });
     }

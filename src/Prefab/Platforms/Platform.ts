@@ -42,7 +42,7 @@ export class Platform extends AbstractPrefab {
             return player.y - platform.body.height <= platform.y;
         });
 
-        this.game.physics.arcade.collide(this, this.level.transparents, (platform, transparent) => {
+        this.game.physics.arcade.collide(this, this.level.transparents, (platform) => {
             platform.toggleDirection();
         });
     }
