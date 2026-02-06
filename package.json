@@ -4,10 +4,16 @@
   "scripts": {
     "build": "grunt build",
     "dev": "grunt",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "lint": "eslint \"app/scripts/**/*.ts\"",
+    "prepare": "husky",
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
     "test:e2e:install": "NODE_TLS_REJECT_UNAUTHORIZED=0 PLAYWRIGHT_BROWSERS_PATH=0 playwright install",
     "test:e2e:docker": "docker build -t e2e -f Dockerfile.playwright . && docker run --rm e2e"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,yml,yaml,md,html}": "prettier --write"
   },
   "devDependencies": {
     "@playwright/test": "1.58.1",
@@ -22,6 +28,9 @@
     "grunt-contrib-watch": "1.1.0",
     "grunt-exec": "3.0.0",
     "grunt-open": "0.2.4",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.7",
+    "prettier": "3.8.1",
     "typescript": "5.9.3"
   }
 }

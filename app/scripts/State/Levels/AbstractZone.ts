@@ -1,31 +1,30 @@
 module Sample.State {
-
     export class AbstractZone extends Phaser.State {
-        map:Phaser.Tilemap;
-        layer:Phaser.TilemapLayer;
+        map: Phaser.Tilemap;
+        layer: Phaser.TilemapLayer;
 
-        player:Prefab.Player;
-        hud:Prefab.HUD;
-        blackScreen:Prefab.BlackScreen;
+        player: Prefab.Player;
+        hud: Prefab.HUD;
+        blackScreen: Prefab.BlackScreen;
 
-        transparents:Phaser.Group;
-        spikes:Phaser.Group;
-        iceSpikes:Phaser.Group;
-        exits:Phaser.Group;
+        transparents: Phaser.Group;
+        spikes: Phaser.Group;
+        iceSpikes: Phaser.Group;
+        exits: Phaser.Group;
 
-        platformsHorizontal:Phaser.Group;
-        platformsVertical:Phaser.Group;
+        platformsHorizontal: Phaser.Group;
+        platformsVertical: Phaser.Group;
 
-        shooters:Phaser.Group;
-        shootersReject:Phaser.Group;
-        runners:Phaser.Group;
-        fliers:Phaser.Group;
-        fliersCrash:Phaser.Group;
+        shooters: Phaser.Group;
+        shootersReject: Phaser.Group;
+        runners: Phaser.Group;
+        fliers: Phaser.Group;
+        fliersCrash: Phaser.Group;
 
-        bottlesHP:Phaser.Group;
-        bottlesSuper:Phaser.Group;
+        bottlesHP: Phaser.Group;
+        bottlesSuper: Phaser.Group;
 
-        game:Game;
+        game: Game;
 
         preload() {
             // All in preload file
@@ -37,11 +36,11 @@ module Sample.State {
             this.game.stage.backgroundColor = "#000000";
 
             // MAP AND LAYERS
-            this.map = this.game.add.tilemap('map');
-            this.map.addTilesetImage('ground');
+            this.map = this.game.add.tilemap("map");
+            this.map.addTilesetImage("ground");
             this.map.setCollisionBetween(1, 5);
 
-            this.layer = this.map.createLayer('layer');
+            this.layer = this.map.createLayer("layer");
             this.layer.resizeWorld();
 
             // PREFABS SINGLE
@@ -51,28 +50,32 @@ module Sample.State {
             this.hud.alpha = 0;
 
             // PREFABS MULTIPLE
-            this.transparents = this.getPrefabsFromMap('transparent', Prefab.Transparent);
-            this.exits = this.getPrefabsFromMap('exit', Prefab.Exit);
-            this.spikes = this.getPrefabsFromMap('spike', Prefab.Spike);
-            this.iceSpikes = this.getPrefabsFromMap('ice-spike', Prefab.IceSpike);
-            this.bottlesHP = this.getPrefabsFromMap('bottle-hp', Prefab.BottleHP);
-            this.bottlesSuper = this.getPrefabsFromMap('bottle-super', Prefab.BottleSuper);
-            this.shooters = this.getPrefabsFromMap('shooter', Prefab.Shooter);
-            this.shootersReject = this.getPrefabsFromMap('shooter-reject', Prefab.ShooterReject);
-            this.runners = this.getPrefabsFromMap('runner', Prefab.Runner);
-            this.fliers = this.getPrefabsFromMap('flier', Prefab.Flier);
-            this.fliersCrash = this.getPrefabsFromMap('flier-crash', Prefab.FlierCrash);
-            this.platformsHorizontal = this.getPrefabsFromMap('platform-h', Prefab.PlatformHorizontal);
-            this.platformsVertical = this.getPrefabsFromMap('platform-v', Prefab.PlatformVertical);
+            this.transparents = this.getPrefabsFromMap("transparent", Prefab.Transparent);
+            this.exits = this.getPrefabsFromMap("exit", Prefab.Exit);
+            this.spikes = this.getPrefabsFromMap("spike", Prefab.Spike);
+            this.iceSpikes = this.getPrefabsFromMap("ice-spike", Prefab.IceSpike);
+            this.bottlesHP = this.getPrefabsFromMap("bottle-hp", Prefab.BottleHP);
+            this.bottlesSuper = this.getPrefabsFromMap("bottle-super", Prefab.BottleSuper);
+            this.shooters = this.getPrefabsFromMap("shooter", Prefab.Shooter);
+            this.shootersReject = this.getPrefabsFromMap("shooter-reject", Prefab.ShooterReject);
+            this.runners = this.getPrefabsFromMap("runner", Prefab.Runner);
+            this.fliers = this.getPrefabsFromMap("flier", Prefab.Flier);
+            this.fliersCrash = this.getPrefabsFromMap("flier-crash", Prefab.FlierCrash);
+            this.platformsHorizontal = this.getPrefabsFromMap(
+                "platform-h",
+                Prefab.PlatformHorizontal
+            );
+            this.platformsVertical = this.getPrefabsFromMap("platform-v", Prefab.PlatformVertical);
 
             // POST-SETTINGS
             this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
 
             this.blackScreen = new Prefab.BlackScreen(this.game);
             this.blackScreen.setText(this.game.state.current);
-            this.game.add.tween(this.blackScreen)
+            this.game.add
+                .tween(this.blackScreen)
                 .to({ alpha: 0 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
-                .onComplete.add(()=> {
+                .onComplete.add(() => {
                     this.hud.alpha = 1;
                 });
 
@@ -81,15 +84,32 @@ module Sample.State {
             });
         }
 
-        getPrefabsFromMap(name:string, className?:object):Phaser.Group {
+        getPrefabsFromMap(name: string, className?: object): Phaser.Group {
             var group = this.game.add.group();
 
             var index = this.map.getTilesetIndex(name);
 
             if (className && index) {
-                this.map.createFromObjects('objects', this.map.tilesets[index].firstgid, name, 0, true, false, group, className);
+                this.map.createFromObjects(
+                    "objects",
+                    this.map.tilesets[index].firstgid,
+                    name,
+                    0,
+                    true,
+                    false,
+                    group,
+                    className
+                );
             } else if (index) {
-                this.map.createFromObjects('objects', this.map.tilesets[index].firstgid, name, 0, true, false, group);
+                this.map.createFromObjects(
+                    "objects",
+                    this.map.tilesets[index].firstgid,
+                    name,
+                    0,
+                    true,
+                    false,
+                    group
+                );
             }
 
             return group;
@@ -113,14 +133,14 @@ module Sample.State {
              }
 
             */
-
         }
 
         gameOver() {
             this.blackScreen.setText("Game Over. Reload Level.");
-            this.game.add.tween(this.blackScreen)
+            this.game.add
+                .tween(this.blackScreen)
                 .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
-                .onComplete.add(()=> {
+                .onComplete.add(() => {
                     this.game.state.start(this.game.state.current);
                 });
         }
@@ -142,7 +162,7 @@ module Sample.State {
                     //return Levels[Levels.Zone4Level1];
                     return Stories[Stories.Story4];
                 case Levels[Levels.Zone4Level1]:
-                    return 'gameOver';
+                    return "gameOver";
             }
         }
     }

@@ -1,5 +1,4 @@
 module Sample.Prefab {
-
     export class AbstractEnemy extends AbstractPrefab {
         immortalState: boolean;
         immortalStateAt: number;
@@ -7,7 +6,7 @@ module Sample.Prefab {
         defensePoints: number = 0;
         damagePoints: number = 0;
 
-        constructor(game:Phaser.Game, x:number, y:number, sprite:string) {
+        constructor(game: Phaser.Game, x: number, y: number, sprite: string) {
             super(game, x, y, sprite);
 
             game.physics.arcade.enable(this);
@@ -23,7 +22,7 @@ module Sample.Prefab {
         makeDamage(damagePoint) {
             if (!this.immortalState) {
                 if (damagePoint < this.defensePoints) {
-                    damagePoint = 1
+                    damagePoint = 1;
                 } else {
                     damagePoint = damagePoint - this.defensePoints;
                 }
@@ -33,14 +32,16 @@ module Sample.Prefab {
                 var textStyle = {
                     font: "20px Arial",
                     fill: "#ffffff",
-                    stroke: '#0000ff',
-                    strokeThickness: 1
+                    stroke: "#0000ff",
+                    strokeThickness: 1,
                 };
 
                 var text = this.game.add.text(this.x, this.y, damagePoint.toString(), textStyle);
-                var tween = this.game.add.tween(text).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true, 0, 0, false);
+                var tween = this.game.add
+                    .tween(text)
+                    .to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true, 0, 0, false);
 
-                tween.onComplete.add(()=> {
+                tween.onComplete.add(() => {
                     text.destroy();
                 });
 
@@ -50,7 +51,7 @@ module Sample.Prefab {
         }
 
         update() {
-            this.game.physics.arcade.overlap(this.level.player, this, (player, enemy)=> {
+            this.game.physics.arcade.overlap(this.level.player, this, (player, enemy) => {
                 if (player.attackState) {
                     enemy.makeDamage(player.damagePoints);
                 } else if (!this.level.player.immortalState) {
@@ -59,7 +60,10 @@ module Sample.Prefab {
                 }
             });
 
-            if (this.immortalState && Date.now() - this.immortalStateAt > this.immortalStateDuration) {
+            if (
+                this.immortalState &&
+                Date.now() - this.immortalStateAt > this.immortalStateDuration
+            ) {
                 this.immortalState = false;
             }
         }

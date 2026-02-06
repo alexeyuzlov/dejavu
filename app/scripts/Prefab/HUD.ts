@@ -1,16 +1,15 @@
 module Sample.Prefab {
-
     export class HUD extends AbstractPrefab {
         healthState: Phaser.Text;
 
-        constructor(game:Phaser.Game, x:number, y:number) {
-            super(game, x, y, 'hud');
+        constructor(game: Phaser.Game, x: number, y: number) {
+            super(game, x, y, "hud");
 
             this.fixedToCamera = true;
 
             var font = {
                 font: "13px Arial",
-                fill: "#ffffff"
+                fill: "#ffffff",
             };
 
             this.healthState = game.add.text(14, 1, "", font);
@@ -22,8 +21,6 @@ module Sample.Prefab {
             this.healthState.text = this.level.player.health.toString();
         }
 
-        update() {
-
-        }
+        update() {}
     }
 }

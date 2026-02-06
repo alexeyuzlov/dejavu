@@ -1,10 +1,9 @@
 module Sample.Prefab {
-
     export class Spike extends AbstractPrefab {
         damagePoints: number = 10;
 
-        constructor(game:Phaser.Game, x:number, y:number) {
-            super(game, x, y, 'spike');
+        constructor(game: Phaser.Game, x: number, y: number) {
+            super(game, x, y, "spike");
 
             game.physics.arcade.enable(this);
 

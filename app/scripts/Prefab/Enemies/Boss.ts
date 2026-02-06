@@ -1,5 +1,4 @@
 module Sample.Prefab {
-
     export class Boss extends AbstractEnemy {
         bossTweens: Phaser.Group;
         activeTweenID: number;
@@ -20,9 +19,8 @@ module Sample.Prefab {
         lightning: any;
         flash: any;
 
-        constructor(game:Phaser.Game, bossTweens: Phaser.Group) {
-            super(game, bossTweens.children[0].x,
-                bossTweens.children[0].y, 'boss');
+        constructor(game: Phaser.Game, bossTweens: Phaser.Group) {
+            super(game, bossTweens.children[0].x, bossTweens.children[0].y, "boss");
 
             this.activeTweenID = 0;
             this.bossTweens = bossTweens;
@@ -33,18 +31,28 @@ module Sample.Prefab {
             this.shotDelay = Phaser.Timer.SECOND * 3;
 
             this.bullets = this.game.add.group();
-            for(var i = 0; i < this.countBullets; i++) {
+            for (var i = 0; i < this.countBullets; i++) {
                 var bullet = new Prefab.BulletReject(game, 0, 0);
                 this.bullets.add(bullet);
             }
 
-            this.game.onResume.add(()=> {
+            this.game.onResume.add(() => {
                 this.lastBulletShotAt += this.game.time.pauseDuration;
             });
 
-            this.animations.add('move', Phaser.Animation.generateFrameNames('boss-', 1, 4, '.png', 0), 20, true);
-            this.animations.add('blue', Phaser.Animation.generateFrameNames('boss-blue-', 1, 4, '.png', 0), 20, true);
-            this.animations.play('move');
+            this.animations.add(
+                "move",
+                Phaser.Animation.generateFrameNames("boss-", 1, 4, ".png", 0),
+                20,
+                true
+            );
+            this.animations.add(
+                "blue",
+                Phaser.Animation.generateFrameNames("boss-blue-", 1, 4, ".png", 0),
+                20,
+                true
+            );
+            this.animations.play("move");
 
             this.anchor.set(0.5, 1);
 
@@ -60,12 +68,13 @@ module Sample.Prefab {
             this.flash.alpha = 0;
             this.flash.fixedToCamera = true;
 
-            this.events.onKilled.add(()=> {
+            this.events.onKilled.add(() => {
                 this.boom();
 
-                this.game.add.tween(this.level.blackScreen)
+                this.game.add
+                    .tween(this.level.blackScreen)
                     .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
-                    .onComplete.add(()=> {
+                    .onComplete.add(() => {
                         this.level.startNextLevel();
                     });
             });
@@ -80,12 +89,20 @@ module Sample.Prefab {
             this.activeTweenID = rand;
 
             var tween = this.game.add.tween(this);
-            tween.to({
-                x: this.bossTweens.children[this.activeTweenID].x,
-                y: this.bossTweens.children[this.activeTweenID].y
-            }, Math.random() * 1000 + 2000, Phaser.Easing.Quadratic.In, true, 0, 0, false);
+            tween.to(
+                {
+                    x: this.bossTweens.children[this.activeTweenID].x,
+                    y: this.bossTweens.children[this.activeTweenID].y,
+                },
+                Math.random() * 1000 + 2000,
+                Phaser.Easing.Quadratic.In,
+                true,
+                0,
+                0,
+                false
+            );
 
-            tween.onComplete.add(()=> {
+            tween.onComplete.add(() => {
                 this.inAction = false;
             });
         }
@@ -93,27 +110,24 @@ module Sample.Prefab {
         update() {
             if (!this.alive) return;
 
-            this.game.physics.arcade.overlap(this, this.bullets, (shooterReject, bulletReject)=> {
+            this.game.physics.arcade.overlap(this, this.bullets, (shooterReject, bulletReject) => {
                 if (bulletReject.rejectState) {
                     bulletReject.kill();
-                    this.animations.play('blue');
+                    this.animations.play("blue");
                     this.isProtect = false;
                 }
             });
 
-            this.game.physics.arcade.overlap(this.level.player, this, (player, enemy)=> {
+            this.game.physics.arcade.overlap(this.level.player, this, (player, enemy) => {
                 if (player.attackState) {
                     if (this.isProtect) {
                         this.makeDamage(1);
-                    }
-                    else {
+                    } else {
                         this.makeDamage(player.damagePoints);
                         this.isProtect = true;
-                        this.animations.play('move');
+                        this.animations.play("move");
                     }
-                }
-
-                else if (!this.level.player.immortalState) {
+                } else if (!this.level.player.immortalState) {
                     this.level.player.makeDamage(enemy.damagePoints);
                     this.level.hud.updateHealthState();
                 }
@@ -145,7 +159,10 @@ module Sample.Prefab {
                 this.scale.x = 1;
             }
 
-            if (this.immortalState && Date.now() - this.immortalStateAt > this.immortalStateDuration) {
+            if (
+                this.immortalState &&
+                Date.now() - this.immortalStateAt > this.immortalStateDuration
+            ) {
                 this.immortalState = false;
             }
         }
@@ -154,29 +171,22 @@ module Sample.Prefab {
             // Rotate the lightning sprite so it goes in the
             // direction of the pointer
             this.lightning.rotation =
-                Phaser.Math.angleBetween(
-                    this.lightning.x,
-                    this.lightning.y,
-                    this.x,
-                    this.y
-                ) - Math.PI/2;
+                Phaser.Math.angleBetween(this.lightning.x, this.lightning.y, this.x, this.y) -
+                Math.PI / 2;
 
             // Calculate the distance from the lightning source to the pointer
-            var distance = Phaser.Math.distance(
-                this.lightning.x, this.lightning.y,
-                this.x,
-                this.y
-            );
+            var distance = Phaser.Math.distance(this.lightning.x, this.lightning.y, this.x, this.y);
 
             // Create the lightning texture
-            this.createLightningTexture(this.lightningBitmap.width/2, 0, 100, 3, false, distance);
+            this.createLightningTexture(this.lightningBitmap.width / 2, 0, 100, 3, false, distance);
 
             // Make the lightning sprite visible
             this.lightning.alpha = 1;
 
             // Fade out the lightning sprite using a tween on the alpha property.
             // Check out the "Easing function" examples for more info.
-            this.game.add.tween(this.lightning)
+            this.game.add
+                .tween(this.lightning)
                 .to({ alpha: 0.5 }, 100, Phaser.Easing.Bounce.Out)
                 .to({ alpha: 1.0 }, 100, Phaser.Easing.Bounce.Out)
                 .to({ alpha: 0.5 }, 100, Phaser.Easing.Bounce.Out)
@@ -186,9 +196,7 @@ module Sample.Prefab {
 
             // Create the flash
             this.flash.alpha = 1;
-            this.game.add.tween(this.flash)
-                .to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In)
-                .start();
+            this.game.add.tween(this.flash).to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In).start();
         }
 
         createLightningTexture(x, y, segments, boltWidth, branch, distance) {
@@ -204,9 +212,9 @@ module Sample.Prefab {
             if (!branch) ctx.clearRect(0, 0, width, height);
 
             // Draw each of the segments
-            for(var i = 0; i < segments; i++) {
+            for (var i = 0; i < segments; i++) {
                 // Set the lightning color and bolt width
-                ctx.strokeStyle = 'rgb(255, 255, 255)';
+                ctx.strokeStyle = "rgb(255, 255, 255)";
                 ctx.lineWidth = boltWidth;
 
                 ctx.beginPath();
@@ -222,7 +230,7 @@ module Sample.Prefab {
                     x += this.game.rnd.integerInRange(-30, 30);
                 }
                 if (x <= 10) x = 10;
-                if (x >= width-10) x = width-10;
+                if (x >= width - 10) x = width - 10;
 
                 // Calculate a y offset from the end of the last line segment.
                 // When we've reached the target or there are no more segments left,
@@ -234,7 +242,7 @@ module Sample.Prefab {
                     y += this.game.rnd.integerInRange(10, 20);
                 } else {
                     // For the main bolt
-                    y += this.game.rnd.integerInRange(20, distance/segments);
+                    y += this.game.rnd.integerInRange(20, distance / segments);
                 }
                 if ((!branch && i == segments - 1) || y > distance) {
                     // This causes the bolt to always terminate at the center
@@ -243,7 +251,7 @@ module Sample.Prefab {
                     // rotated, this causes this point to be exactly where the
                     // player clicked or tapped.
                     y = distance;
-                    if (!branch) x = width/2;
+                    if (!branch) x = width / 2;
                 }
 
                 // Draw the line segment

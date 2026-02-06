@@ -1,10 +1,9 @@
 module Sample.Prefab {
-
     export class Platform extends AbstractPrefab {
-        direction:Direction;
-        velocity:number;
+        direction: Direction;
+        velocity: number;
 
-        constructor(game:Phaser.Game, x:number, y:number, texture) {
+        constructor(game: Phaser.Game, x: number, y: number, texture) {
             super(game, x, y, texture);
 
             game.physics.arcade.enable(this);
@@ -14,23 +13,23 @@ module Sample.Prefab {
 
         toggleDirection() {
             switch (this.direction) {
-                case Direction.Up :
+                case Direction.Up:
                     this.direction = Direction.Down;
                     this.body.velocity.y = this.velocity;
                     break;
-                case Direction.Down :
+                case Direction.Down:
                     this.direction = Direction.Up;
                     this.body.velocity.y = -this.velocity;
                     break;
-                case Direction.Left :
+                case Direction.Left:
                     this.direction = Direction.Right;
                     this.body.velocity.x = this.velocity;
                     break;
-                case Direction.Right :
+                case Direction.Right:
                     this.direction = Direction.Left;
                     this.body.velocity.x = -this.velocity;
                     break;
-                default :
+                default:
                     // Don't doing something
                     break;
             }
@@ -41,7 +40,10 @@ module Sample.Prefab {
                 return player.y - platform.body.height <= platform.y;
             });
 
-            this.game.physics.arcade.collide(this, this.level.transparents, (platform, transparent) => {
+            this.game.physics.arcade.collide(
+                this,
+                this.level.transparents,
+                (platform, transparent) => {
                     platform.toggleDirection();
                 }
             );

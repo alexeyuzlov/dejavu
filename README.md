@@ -1,21 +1,24 @@
 # Dejavu
 
 ## Overview
+
 Dejavu is a 2D platformer game built with the Phaser framework. Traverse through challenging levels, face enemies, and prepare for an epic boss fight at the end. Immerse yourself in this fast-paced, retro-style adventure.
 
 ## Build Instructions
+
 To set up and build the project, follow these steps:
 
 1. **Install dependencies**:
-    ```bash
-    npm install --legacy-peer-deps
-    ```
+   ```bash
+   npm install --legacy-peer-deps
+   ```
 2. **Build the project**:
-    ```bash
-    npx grunt
-    ```
+   ```bash
+   npx grunt
+   ```
 
 ## TODO
+
 - [ ] Enable ESLint type-aware linting (parserOptions.project) once baseline linting is clean.
 
 ## E2E Tests
@@ -23,16 +26,17 @@ To set up and build the project, follow these steps:
 Local e2e uses Playwright with browsers installed into `node_modules`.
 
 1. **Install Playwright browsers (local)**:
-    ```bash
-    npm run test:e2e:install
-    ```
+   ```bash
+   npm run test:e2e:install
+   ```
 2. **Build the project**:
-    ```bash
-    npm run build
-    ```
+   ```bash
+   npm run build
+   ```
 3. **Run e2e locally**:
-    ```bash
-    npm run test:e2e
+   ```bash
+   npm run test:e2e
+   ```
 
 ### Docker e2e
 
@@ -42,8 +46,6 @@ Run the e2e tests inside the Playwright Docker image:
 npm run test:e2e:docker
 ```
 
-
-
-
 ## License
+
 This project is licensed under the [MIT License](LICENSE).

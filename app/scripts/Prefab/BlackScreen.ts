@@ -1,12 +1,12 @@
 module Sample.Prefab {
     export class BlackScreen extends AbstractPrefab {
-        text:Phaser.Text;
+        text: Phaser.Text;
 
-        constructor(game:Phaser.Game) {
+        constructor(game: Phaser.Game) {
             var blackTexture = game.add.bitmapData(game.width, game.height);
             blackTexture.ctx.beginPath();
             blackTexture.ctx.rect(0, 0, game.width, game.height);
-            blackTexture.ctx.fillStyle = '#000000';
+            blackTexture.ctx.fillStyle = "#000000";
             blackTexture.ctx.fill();
 
             super(game, 0, 0, blackTexture);
@@ -18,7 +18,7 @@ module Sample.Prefab {
             this.addChild(this.text);
         }
 
-        setText(text:string) {
+        setText(text: string) {
             this.text.text = text;
         }
 

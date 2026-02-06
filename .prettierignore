@@ -1,0 +1,8 @@
+node_modules/
+build/
+playwright-report/
+test-results/
+app/vendor/
+app/assets/
+maps-gen/
+app/scripts/typing/

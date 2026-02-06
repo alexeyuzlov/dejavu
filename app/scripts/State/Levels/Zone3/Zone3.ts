@@ -1,17 +1,22 @@
 module Sample.State {
-
     export class Zone3 extends AbstractZone {
         bg: Phaser.TileSprite;
         emitter: Phaser.Particles.Arcade.Emitter;
 
         preload() {
             super.preload();
-            this.game.load.image('bg', 'assets/images/zone3.png');
-            this.game.load.spritesheet('snowflake', 'assets/images/snowflake.png', 16, 16);
+            this.game.load.image("bg", "assets/images/zone3.png");
+            this.game.load.spritesheet("snowflake", "assets/images/snowflake.png", 16, 16);
         }
 
         create() {
-            this.bg = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'bg');
+            this.bg = this.game.add.tileSprite(
+                0,
+                0,
+                this.game.world.width,
+                this.game.world.height,
+                "bg"
+            );
             this.bg.fixedToCamera = true;
 
             super.create();
@@ -25,7 +30,7 @@ module Sample.State {
 
             this.emitter.width = this.game.world.width;
 
-            this.emitter.makeParticles('snowflake');
+            this.emitter.makeParticles("snowflake");
 
             this.emitter.minParticleScale = 0.2;
             this.emitter.maxParticleScale = 1.5;

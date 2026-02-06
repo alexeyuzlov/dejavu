@@ -1,14 +1,13 @@
 module Sample.Prefab {
-
     export class Runner extends AbstractEnemy {
-        gravity:number;
-        velocity:number;
-        direction:Direction;
-        damagePoints:number;
-        defensePoints:number;
+        gravity: number;
+        velocity: number;
+        direction: Direction;
+        damagePoints: number;
+        defensePoints: number;
 
-        constructor(game:Phaser.Game, x:number, y:number) {
-            super(game, x, y, 'runner');
+        constructor(game: Phaser.Game, x: number, y: number) {
+            super(game, x, y, "runner");
 
             this.gravity = 300;
             this.velocity = 100;
@@ -25,8 +24,13 @@ module Sample.Prefab {
 
             this.anchor.set(0.5, 1);
 
-            this.animations.add('walk', Phaser.Animation.generateFrameNames('runner-', 1, 4, '.png', 0), 5, true);
-            this.animations.play('walk');
+            this.animations.add(
+                "walk",
+                Phaser.Animation.generateFrameNames("runner-", 1, 4, ".png", 0),
+                5,
+                true
+            );
+            this.animations.play("walk");
         }
 
         toggleDirection() {
@@ -50,9 +54,13 @@ module Sample.Prefab {
 
             this.game.physics.arcade.collide(this, this.level.layer);
 
-            this.game.physics.arcade.collide(this, this.level.transparents, (runner, transparent) => {
-                runner.toggleDirection();
-            });
+            this.game.physics.arcade.collide(
+                this,
+                this.level.transparents,
+                (runner, transparent) => {
+                    runner.toggleDirection();
+                }
+            );
 
             if (this.body.blocked.left || this.body.blocked.right) {
                 this.toggleDirection();

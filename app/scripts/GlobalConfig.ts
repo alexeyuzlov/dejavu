@@ -59,20 +59,25 @@
 /// <reference path='Prefab/Bullets/BulletReject.ts'/>
 
 module Sample {
-
     export enum Stories {
-        Story1, Story2, Story3, Story4
+        Story1,
+        Story2,
+        Story3,
+        Story4,
     }
 
     export enum Levels {
-        Zone1Level1, Zone2Level1, Zone3Level1, Zone4Level1
+        Zone1Level1,
+        Zone2Level1,
+        Zone3Level1,
+        Zone4Level1,
     }
 
     export enum Direction {
         Left,
         Right,
         Up,
-        Down
+        Down,
     }
 
     class Init {
@@ -81,13 +86,13 @@ module Sample {
     }
 
     class Storage {
-        private healthPoints:string;
-        private currentLevel:string;
+        private healthPoints: string;
+        private currentLevel: string;
 
         constructor() {}
 
-        getCurrentState():string {
-            var currentLevel = localStorage.getItem('currentLevel');
+        getCurrentState(): string {
+            var currentLevel = localStorage.getItem("currentLevel");
             if (currentLevel) {
                 return currentLevel;
             } else {
@@ -96,12 +101,12 @@ module Sample {
             }
         }
 
-        setCurrentState(currentState:string) {
-            localStorage.setItem('currentLevel', currentState);
+        setCurrentState(currentState: string) {
+            localStorage.setItem("currentLevel", currentState);
         }
 
-        getHealthPoints():string {
-            var healthPoints = localStorage.getItem('healthPoints');
+        getHealthPoints(): string {
+            var healthPoints = localStorage.getItem("healthPoints");
             if (healthPoints) {
                 return healthPoints;
             } else {
@@ -111,42 +116,42 @@ module Sample {
             }
         }
 
-        setHealthPoints(healthPoints:string) {
-            localStorage.setItem('healthPoints', healthPoints);
+        setHealthPoints(healthPoints: string) {
+            localStorage.setItem("healthPoints", healthPoints);
         }
     }
 
     class SettingsClass {
         storage = new Storage();
 
-        keys:any;
+        keys: any;
         font = {
             whiteWithRed: {
                 font: "20px Arial",
                 fill: "#ffffff",
                 stroke: "ff0000",
-                strokeThickness: 2
+                strokeThickness: 2,
             },
             whiteWithBlue: {
                 font: "20px Arial",
                 fill: "#ffffff",
                 stroke: "0000ff",
-                strokeThickness: 2
+                strokeThickness: 2,
             },
             whiteWithGreen: {
                 font: "20px Arial",
                 fill: "#ffffff",
                 stroke: "00ff00",
-                strokeThickness: 2
+                strokeThickness: 2,
             },
             whiteBig: {
                 font: "20px Arial",
-                fill: "#ffffff"
+                fill: "#ffffff",
             },
             blackBig: {
                 font: "20px Arial",
-                fill: "#000000"
-            }
+                fill: "#000000",
+            },
         };
 
         constructor() {
@@ -154,10 +159,10 @@ module Sample {
                 moveLeft: Phaser.Keyboard.LEFT,
                 moveRight: Phaser.Keyboard.RIGHT,
                 jump: Phaser.Keyboard.Z,
-                attack: Phaser.Keyboard.X
-            }
+                attack: Phaser.Keyboard.X,
+            };
         }
     }
 
-    export var settings:any = new SettingsClass();
+    export var settings: any = new SettingsClass();
 }
