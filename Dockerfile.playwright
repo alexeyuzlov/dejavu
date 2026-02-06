@@ -8,4 +8,4 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-CMD ["npm", "run", "test:e2e"]
+CMD ["npx", "playwright", "test"]

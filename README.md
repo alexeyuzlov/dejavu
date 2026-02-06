@@ -15,6 +15,30 @@ To set up and build the project, follow these steps:
     npx grunt
     ```
 
+## E2E Tests
+
+Local e2e uses Playwright with browsers installed into `node_modules`.
+
+1. **Install Playwright browsers (local)**:
+    ```bash
+    npm run test:e2e:install
+    ```
+2. **Build the project**:
+    ```bash
+    npm run build
+    ```
+3. **Run e2e locally**:
+    ```bash
+    npm run test:e2e
+
+### Docker e2e
+
+Run the e2e tests inside the Playwright Docker image:
+
+```bash
+npm run test:e2e:docker
+```
+
 
 
 

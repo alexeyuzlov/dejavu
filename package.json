@@ -4,11 +4,13 @@
   "scripts": {
     "build": "grunt build",
     "dev": "grunt",
-    "test:e2e": "playwright test",
+    "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
+    "test:e2e:install": "NODE_TLS_REJECT_UNAUTHORIZED=0 PLAYWRIGHT_BROWSERS_PATH=0 playwright install",
     "test:e2e:docker": "docker build -t e2e -f Dockerfile.playwright . && docker run --rm e2e"
   },
   "devDependencies": {
     "@playwright/test": "1.58.1",
+    "@types/node": "25.2.1",
     "connect-livereload": "0.6.1",
     "grunt": "1.4.1",
     "grunt-contrib-connect": "2.0.0",
