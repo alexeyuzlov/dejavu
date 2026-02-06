@@ -14,6 +14,9 @@ test('canvas renders with no console errors', async ({ page }) => {
   });
 
   await page.goto('/', { waitUntil: 'load' });
+
+  await page.pause();
+
   await expect(page.locator('canvas')).toBeVisible();
 
   expect(errors).toEqual([]);
