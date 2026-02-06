@@ -4,20 +4,16 @@ import { AbstractEnemy } from "./AbstractEnemy";
 export class ShooterReject extends AbstractEnemy {
     lastBulletShotAt: number;
     bullets: Phaser.Group;
-    countBullets: number;
-    shotDelay: number;
-    damagePoints: number;
-    defensePoints: number;
+    countBullets = 10;
+    shotDelay = Phaser.Timer.SECOND * 3;
+    damagePoints = 10;
+    defensePoints = 50;
 
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "shooter-reject");
 
         this.body.gravity.y = 300;
-        this.damagePoints = 10;
-        this.defensePoints = 50;
         this.lastBulletShotAt = this.game.time.now;
-        this.countBullets = 10;
-        this.shotDelay = Phaser.Timer.SECOND * 3;
 
         this.bullets = this.game.add.group();
         for (var i = 0; i < this.countBullets; i++) {

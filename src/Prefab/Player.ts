@@ -2,47 +2,31 @@ import { Direction, settings } from "../GlobalConfig";
 import { ArcadePrefab } from "./ArcadePrefab";
 
 export class Player extends ArcadePrefab {
-    gravity: number;
-    acceleration: number;
-    drag: number;
-    maxSpeed: number;
-    jumpPower: number;
-    immortalState: boolean;
-    attackState: boolean;
-    moveState: boolean;
-    defensePoints: number;
-    direction: Direction;
-    damagePoints: number;
+    gravity = 500;
+    acceleration = 500;
+    drag = 500;
+    maxSpeed = 270;
+    jumpPower = 350;
+    immortalState = false;
+    attackState = false;
+    moveState = false;
+    defensePoints = 5;
+    direction = Direction.Right;
+    damagePoints = 50;
     immortalStateAt: number;
     attackStateAt: number;
-    immortalDuration: number;
-    immortalDefaultDuration: number;
-    attackDuration: number;
-    isActiveJumpKey: boolean;
-    isAttackKeyPressed: boolean;
+    immortalDuration = Phaser.Timer.SECOND * 3;
+    immortalDefaultDuration = Phaser.Timer.SECOND * 3;
+    attackDuration = Phaser.Timer.SECOND / 3;
+    isActiveJumpKey = false;
+    isAttackKeyPressed = false;
 
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "player");
         game.physics.arcade.enable(this);
 
-        this.gravity = 500;
-        this.acceleration = 500;
-        this.drag = 500;
-        this.maxSpeed = 270;
-        this.jumpPower = 350;
-        this.immortalState = false;
-        this.attackState = false;
-        this.moveState = false;
-        this.defensePoints = 5;
-        this.direction = Direction.Right;
-        this.damagePoints = 50;
         this.immortalStateAt = this.game.time.now;
         this.attackStateAt = this.game.time.now;
-        this.immortalDuration = Phaser.Timer.SECOND * 3;
-        this.immortalDefaultDuration = Phaser.Timer.SECOND * 3;
-        this.attackDuration = Phaser.Timer.SECOND / 3;
-        this.isActiveJumpKey = false;
-        this.isAttackKeyPressed = false;
 
         this.body.gravity.y = this.gravity;
         this.anchor.set(0.5, 1);
@@ -81,14 +65,14 @@ export class Player extends ArcadePrefab {
         this.write(healthPoints.toString() + "HP", settings.font.whiteWithBlue);
     }
 
-    immortal(duration) {
+    immortal(duration: number) {
         this.immortalDuration = duration;
         this.immortalStateAt = this.game.time.now;
         this.immortalState = true;
         this.alpha = 0.5;
     }
 
-    write(text, style) {
+    write(text: string, style) {
         var textSprite = this.game.add.text(this.x, this.y, text, style);
         var tween = this.game.add
             .tween(textSprite)
@@ -99,7 +83,7 @@ export class Player extends ArcadePrefab {
         });
     }
 
-    makeDamage(damagePoint) {
+    makeDamage(damagePoint: number) {
         if (damagePoint < this.defensePoints) {
             damagePoint = 1;
         } else {

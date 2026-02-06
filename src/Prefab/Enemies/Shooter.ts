@@ -2,23 +2,19 @@ import { Bullet } from "../Bullets/Bullet";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class Shooter extends AbstractEnemy {
-    gravity: number;
+    gravity = 300;
     lastBulletShotAt: number;
     bullets: Phaser.Group;
-    countBullets: number;
-    shotDelay: number;
-    damagePoints: number;
-    defensePoints: number;
+    countBullets = 10;
+    shotDelay = Phaser.Timer.SECOND * 3;
+    damagePoints = 10;
+    defensePoints = 5;
 
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "shooter");
 
-        this.body.gravity.y = 300;
+        this.body.gravity.y = this.gravity;
         this.lastBulletShotAt = this.game.time.now;
-        this.countBullets = 10;
-        this.shotDelay = Phaser.Timer.SECOND * 3;
-        this.damagePoints = 10;
-        this.defensePoints = 5;
 
         this.bullets = this.game.add.group();
         for (var i = 0; i < this.countBullets; i++) {

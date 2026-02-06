@@ -3,14 +3,13 @@ import { ArcadePrefab } from "../ArcadePrefab";
 
 export class Platform extends ArcadePrefab {
     direction: Direction;
-    velocity: number;
+    velocity = 100;
 
     constructor(game: Phaser.Game, x: number, y: number, texture) {
         super(game, x, y, texture);
 
         game.physics.arcade.enable(this);
         this.body.immovable = true;
-        this.velocity = 100;
     }
 
     toggleDirection() {

@@ -1,9 +1,9 @@
 import { ArcadePrefab } from "../ArcadePrefab";
 
 export class Egg extends ArcadePrefab {
-    speed: number = 180;
-    damagePoints: number = 35;
-    eggCrashState: boolean;
+    speed = 180;
+    damagePoints = 35;
+    eggCrashState = false;
 
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "egg");
@@ -14,8 +14,6 @@ export class Egg extends ArcadePrefab {
 
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
-
-        this.eggCrashState = false;
 
         this.animations.add("egg", ["egg.png"], 10, true);
         this.animations.add("egg-crash", ["egg-crash.png"], 10, true);

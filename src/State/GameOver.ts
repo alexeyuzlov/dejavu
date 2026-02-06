@@ -10,7 +10,7 @@ export class GameOver extends Phaser.State {
         "Продолжение следует...",
         " ",
     ];
-    text;
+    text: Phaser.Text;
     index = 0;
     line = "";
 
@@ -31,7 +31,7 @@ export class GameOver extends Phaser.State {
             this.game.time.events.repeat(
                 80,
                 this.content[this.index].length + 1,
-                this.updateLine,
+                () => this.updateLine(),
                 this
             );
         } else {
@@ -44,7 +44,7 @@ export class GameOver extends Phaser.State {
             this.line = this.content[this.index].substr(0, this.line.length + 1);
             this.text.setText(this.line);
         } else {
-            this.game.time.events.add(Phaser.Timer.SECOND * 2, this.nextLine, this);
+            this.game.time.events.add(Phaser.Timer.SECOND * 2, () => this.nextLine(), this);
         }
     }
 }

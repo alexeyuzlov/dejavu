@@ -1,21 +1,22 @@
 import { BulletReject } from "../Bullets/BulletReject";
+import { Player } from "../Player";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class Boss extends AbstractEnemy {
     bossTweens: Phaser.Group;
-    activeTweenID: number;
+    activeTweenID = 0;
 
     lastEventAt: number;
     inAction = false;
-    isProtect: boolean = true;
-    health: number = 100;
+    isProtect = true;
+    health = 100;
 
     lastBulletShotAt: number;
     bullets: Phaser.Group;
-    countBullets: number;
-    shotDelay: number;
-    damagePoints: number = 10;
-    defensePoints: number = 40;
+    countBullets = 10;
+    shotDelay = Phaser.Timer.SECOND * 3;
+    damagePoints = 10;
+    defensePoints = 40;
 
     lightningBitmap: Phaser.BitmapData;
     lightning: Phaser.Image;
@@ -24,13 +25,10 @@ export class Boss extends AbstractEnemy {
     constructor(game: Phaser.Game, bossTweens: Phaser.Group) {
         super(game, bossTweens.children[0].x, bossTweens.children[0].y, "boss");
 
-        this.activeTweenID = 0;
         this.bossTweens = bossTweens;
 
         this.lastEventAt = this.game.time.now;
         this.lastBulletShotAt = this.game.time.now;
-        this.countBullets = 10;
-        this.shotDelay = Phaser.Timer.SECOND * 3;
 
         this.bullets = this.game.add.group();
         for (var i = 0; i < this.countBullets; i++) {
@@ -112,15 +110,19 @@ export class Boss extends AbstractEnemy {
     update() {
         if (!this.alive) return;
 
-        this.game.physics.arcade.overlap(this, this.bullets, (shooterReject, bulletReject) => {
-            if (bulletReject.rejectState) {
-                bulletReject.kill();
-                this.animations.play("blue");
-                this.isProtect = false;
+        this.game.physics.arcade.overlap(
+            this,
+            this.bullets,
+            (_boss: Boss, bulletReject: BulletReject) => {
+                if (bulletReject.rejectState) {
+                    bulletReject.kill();
+                    this.animations.play("blue");
+                    this.isProtect = false;
+                }
             }
-        });
+        );
 
-        this.game.physics.arcade.overlap(this.level.player, this, (player, enemy) => {
+        this.game.physics.arcade.overlap(this.level.player, this, (player: Player, boss: Boss) => {
             if (player.attackState) {
                 if (this.isProtect) {
                     this.makeDamage(1);
@@ -130,7 +132,7 @@ export class Boss extends AbstractEnemy {
                     this.animations.play("move");
                 }
             } else if (!this.level.player.immortalState) {
-                this.level.player.makeDamage(enemy.damagePoints);
+                this.level.player.makeDamage(boss.damagePoints);
                 this.level.hud.updateHealthState();
             }
         });

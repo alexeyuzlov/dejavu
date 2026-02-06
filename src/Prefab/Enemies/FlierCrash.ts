@@ -2,16 +2,16 @@ import { Egg } from "../Bullets/Egg";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class FlierCrash extends AbstractEnemy {
-    isActive: boolean;
-    isAttackOver: boolean;
+    isActive = false;
+    isAttackOver = false;
     minDistance: number;
-    damagePoints: number;
-    velocity: number;
-    defensePoints: number;
+    damagePoints = 11;
+    velocity = 100;
+    defensePoints = 6;
     lastEggShotAt: number;
     eggs: Phaser.Group;
     countEggs: number;
-    shotDelay: number;
+    shotDelay = 1500;
 
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "flier-crash");
@@ -27,13 +27,7 @@ export class FlierCrash extends AbstractEnemy {
         }
 
         this.minDistance = this.level.player.width / 2;
-        this.isAttackOver = false;
-        this.damagePoints = 11;
-        this.velocity = 100;
-        this.isActive = false;
-        this.defensePoints = 6;
         this.lastEggShotAt = this.game.time.now;
-        this.shotDelay = 1500;
 
         this.animations.add(
             "fly",

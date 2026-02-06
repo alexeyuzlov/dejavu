@@ -1,11 +1,12 @@
 import { ArcadePrefab } from "../ArcadePrefab";
+import { Player } from "../Player";
 
 export class AbstractEnemy extends ArcadePrefab {
-    immortalState: boolean;
+    immortalState = false;
     immortalStateAt: number;
-    immortalStateDuration: number;
-    defensePoints: number = 0;
-    damagePoints: number = 0;
+    immortalStateDuration = Phaser.Timer.SECOND / 3;
+    defensePoints = 0;
+    damagePoints = 0;
 
     constructor(game: Phaser.Game, x: number, y: number, sprite: string) {
         super(game, x, y, sprite);
@@ -14,13 +15,10 @@ export class AbstractEnemy extends ArcadePrefab {
         this.alive = true;
         this.anchor.set(0, 0.5);
 
-        this.immortalState = false;
         this.immortalStateAt = game.time.now;
-        this.immortalStateDuration = Phaser.Timer.SECOND / 3;
-        this.defensePoints = 0;
     }
 
-    makeDamage(damagePoint) {
+    makeDamage(damagePoint: number) {
         if (!this.immortalState) {
             if (damagePoint < this.defensePoints) {
                 damagePoint = 1;
@@ -52,14 +50,18 @@ export class AbstractEnemy extends ArcadePrefab {
     }
 
     update() {
-        this.game.physics.arcade.overlap(this.level.player, this, (player, enemy) => {
-            if (player.attackState) {
-                enemy.makeDamage(player.damagePoints);
-            } else if (!this.level.player.immortalState) {
-                this.level.player.makeDamage(enemy.damagePoints);
-                this.level.hud.updateHealthState();
+        this.game.physics.arcade.overlap(
+            this.level.player,
+            this,
+            (player: Player, enemy: AbstractEnemy) => {
+                if (player.attackState) {
+                    enemy.makeDamage(player.damagePoints);
+                } else if (!this.level.player.immortalState) {
+                    this.level.player.makeDamage(enemy.damagePoints);
+                    this.level.hud.updateHealthState();
+                }
             }
-        });
+        );
 
         if (this.immortalState && Date.now() - this.immortalStateAt > this.immortalStateDuration) {
             this.immortalState = false;

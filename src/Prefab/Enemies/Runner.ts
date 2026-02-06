@@ -2,23 +2,16 @@ import { Direction } from "../../GlobalConfig";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class Runner extends AbstractEnemy {
-    gravity: number;
-    velocity: number;
-    direction: Direction;
-    damagePoints: number;
-    defensePoints: number;
+    gravity = 300;
+    velocity = 100;
+    direction = Direction.Right;
+    damagePoints = 9;
+    defensePoints = 3;
 
     constructor(game: Phaser.Game, x: number, y: number) {
         super(game, x, y, "runner");
 
-        this.gravity = 300;
-        this.velocity = 100;
-
-        this.direction = Direction.Right;
         this.body.velocity.x = this.velocity;
-
-        this.damagePoints = 9;
-        this.defensePoints = 3;
 
         this.body.gravity.y = this.gravity;
         this.body.collideWorldBounds = true;
