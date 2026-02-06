@@ -1,4 +1,5 @@
 import { Bullet } from "../Bullets/Bullet";
+import { TextureKey } from "../../TextureKeys";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class Shooter extends AbstractEnemy {
@@ -11,7 +12,7 @@ export class Shooter extends AbstractEnemy {
     defensePoints = 5;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "shooter");
+        super(game, x, y, TextureKey.Shooter);
 
         this.body.gravity.y = this.gravity;
         this.lastBulletShotAt = this.game.time.now;

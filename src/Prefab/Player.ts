@@ -1,4 +1,5 @@
 import { Direction, settings } from "../GlobalConfig";
+import { TextureKey } from "../TextureKeys";
 import { ArcadePrefab } from "./ArcadePrefab";
 
 export class Player extends ArcadePrefab {
@@ -22,7 +23,7 @@ export class Player extends ArcadePrefab {
     isAttackKeyPressed = false;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "player");
+        super(game, x, y, TextureKey.Player);
         game.physics.arcade.enable(this);
 
         this.immortalStateAt = this.game.time.now;

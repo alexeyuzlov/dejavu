@@ -1,4 +1,5 @@
 import { BulletReject } from "../Bullets/BulletReject";
+import { TextureKey } from "../../TextureKeys";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class ShooterReject extends AbstractEnemy {
@@ -10,7 +11,7 @@ export class ShooterReject extends AbstractEnemy {
     defensePoints = 50;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "shooter-reject");
+        super(game, x, y, TextureKey.ShooterReject);
 
         this.body.gravity.y = 300;
         this.lastBulletShotAt = this.game.time.now;

@@ -1,10 +1,11 @@
+import { TextureKey } from "../../../TextureKeys";
 import { AbstractZone } from "../AbstractZone";
 
 export class Zone4 extends AbstractZone {
     bg: Phaser.TileSprite;
 
     preload() {
-        this.game.load.image("bg", "assets/images/zone4.jpg");
+        this.game.load.image(TextureKey.Bg, "assets/images/zone4.jpg");
         super.preload();
     }
 
@@ -14,7 +15,7 @@ export class Zone4 extends AbstractZone {
             0,
             this.game.world.width,
             this.game.world.height,
-            "bg"
+            TextureKey.Bg
         );
         this.bg.fixedToCamera = true;
 

@@ -1,3 +1,4 @@
+import { TextureKey } from "../../../TextureKeys";
 import { AbstractZone } from "../AbstractZone";
 
 export class Zone1 extends AbstractZone {
@@ -5,8 +6,8 @@ export class Zone1 extends AbstractZone {
 
     preload() {
         super.preload();
-        this.game.load.image("bg", "assets/images/zone1.png");
-        this.game.load.spritesheet("rain", "assets/images/rain.png", 8, 8);
+        this.game.load.image(TextureKey.Bg, "assets/images/zone1.png");
+        this.game.load.spritesheet(TextureKey.Rain, "assets/images/rain.png", 8, 8);
     }
 
     create() {
@@ -15,7 +16,7 @@ export class Zone1 extends AbstractZone {
             0,
             this.game.world.width,
             this.game.world.height,
-            "bg"
+            TextureKey.Bg
         );
         this.bg.fixedToCamera = true;
 
@@ -41,7 +42,7 @@ export class Zone1 extends AbstractZone {
         emitter.width = this.game.world.width + this.game.world.width * 0.2;
         emitter.angle = 20;
 
-        emitter.makeParticles("rain");
+        emitter.makeParticles(TextureKey.Rain);
 
         emitter.minParticleScale = 0.2;
         emitter.maxParticleScale = 0.7;

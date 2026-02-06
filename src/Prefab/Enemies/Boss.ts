@@ -1,5 +1,6 @@
 import { BulletReject } from "../Bullets/BulletReject";
 import { Player } from "../Player";
+import { TextureKey } from "../../TextureKeys";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class Boss extends AbstractEnemy {
@@ -23,7 +24,7 @@ export class Boss extends AbstractEnemy {
     flash: Phaser.Graphics;
 
     constructor(game: Phaser.Game, bossTweens: Phaser.Group) {
-        super(game, bossTweens.children[0].x, bossTweens.children[0].y, "boss");
+        super(game, bossTweens.children[0].x, bossTweens.children[0].y, TextureKey.Boss);
 
         this.bossTweens = bossTweens;
 

@@ -1,5 +1,6 @@
 import * as Prefab from "../../Prefab";
 import { Levels, Stories, settings } from "../../GlobalConfig";
+import { TextureKey, type TextureKeyValue } from "../../TextureKeys";
 
 export class AbstractZone extends Phaser.State {
     map: Phaser.Tilemap;
@@ -39,7 +40,7 @@ export class AbstractZone extends Phaser.State {
 
         // MAP AND LAYERS
         this.map = this.game.add.tilemap("map");
-        this.map.addTilesetImage("ground");
+        this.map.addTilesetImage(TextureKey.Ground);
         this.map.setCollisionBetween(1, 5);
 
         this.layer = this.map.createLayer("layer");
@@ -52,19 +53,28 @@ export class AbstractZone extends Phaser.State {
         this.hud.alpha = 0;
 
         // PREFABS MULTIPLE
-        this.transparents = this.getPrefabsFromMap("transparent", Prefab.Transparent);
-        this.exits = this.getPrefabsFromMap("exit", Prefab.Exit);
-        this.spikes = this.getPrefabsFromMap("spike", Prefab.Spike);
-        this.iceSpikes = this.getPrefabsFromMap("ice-spike", Prefab.IceSpike);
-        this.bottlesHP = this.getPrefabsFromMap("bottle-hp", Prefab.BottleHP);
-        this.bottlesSuper = this.getPrefabsFromMap("bottle-super", Prefab.BottleSuper);
-        this.shooters = this.getPrefabsFromMap("shooter", Prefab.Shooter);
-        this.shootersReject = this.getPrefabsFromMap("shooter-reject", Prefab.ShooterReject);
-        this.runners = this.getPrefabsFromMap("runner", Prefab.Runner);
-        this.fliers = this.getPrefabsFromMap("flier", Prefab.Flier);
-        this.fliersCrash = this.getPrefabsFromMap("flier-crash", Prefab.FlierCrash);
-        this.platformsHorizontal = this.getPrefabsFromMap("platform-h", Prefab.PlatformHorizontal);
-        this.platformsVertical = this.getPrefabsFromMap("platform-v", Prefab.PlatformVertical);
+        this.transparents = this.getPrefabsFromMap(TextureKey.Transparent, Prefab.Transparent);
+        this.exits = this.getPrefabsFromMap(TextureKey.Exit, Prefab.Exit);
+        this.spikes = this.getPrefabsFromMap(TextureKey.Spike, Prefab.Spike);
+        this.iceSpikes = this.getPrefabsFromMap(TextureKey.IceSpike, Prefab.IceSpike);
+        this.bottlesHP = this.getPrefabsFromMap(TextureKey.BottleHp, Prefab.BottleHP);
+        this.bottlesSuper = this.getPrefabsFromMap(TextureKey.BottleSuper, Prefab.BottleSuper);
+        this.shooters = this.getPrefabsFromMap(TextureKey.Shooter, Prefab.Shooter);
+        this.shootersReject = this.getPrefabsFromMap(
+            TextureKey.ShooterReject,
+            Prefab.ShooterReject
+        );
+        this.runners = this.getPrefabsFromMap(TextureKey.Runner, Prefab.Runner);
+        this.fliers = this.getPrefabsFromMap(TextureKey.Flier, Prefab.Flier);
+        this.fliersCrash = this.getPrefabsFromMap(TextureKey.FlierCrash, Prefab.FlierCrash);
+        this.platformsHorizontal = this.getPrefabsFromMap(
+            TextureKey.PlatformH,
+            Prefab.PlatformHorizontal
+        );
+        this.platformsVertical = this.getPrefabsFromMap(
+            TextureKey.PlatformV,
+            Prefab.PlatformVertical
+        );
 
         // POST-SETTINGS
         this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
@@ -83,7 +93,7 @@ export class AbstractZone extends Phaser.State {
         });
     }
 
-    getPrefabsFromMap(name: string, className?: object): Phaser.Group {
+    getPrefabsFromMap(name: TextureKeyValue, className?: object): Phaser.Group {
         var group = this.game.add.group();
 
         var index = this.map.getTilesetIndex(name);

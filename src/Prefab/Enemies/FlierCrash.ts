@@ -1,5 +1,6 @@
 import { Egg } from "../Bullets/Egg";
 import { AbstractEnemy } from "./AbstractEnemy";
+import { TextureKey } from "../../TextureKeys";
 
 export class FlierCrash extends AbstractEnemy {
     isActive = false;
@@ -14,7 +15,7 @@ export class FlierCrash extends AbstractEnemy {
     shotDelay = 1500;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "flier-crash");
+        super(game, x, y, TextureKey.FlierCrash);
 
         this.anchor.set(0.5, 0.5);
         this.health = 52;

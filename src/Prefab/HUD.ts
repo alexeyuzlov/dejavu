@@ -1,10 +1,11 @@
+import { TextureKey } from "../TextureKeys";
 import { AbstractPrefab } from "./AbstractPrefab";
 
 export class HUD extends AbstractPrefab {
     healthState: Phaser.Text;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "hud");
+        super(game, x, y, TextureKey.Hud);
 
         this.fixedToCamera = true;
 

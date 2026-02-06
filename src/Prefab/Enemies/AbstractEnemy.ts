@@ -1,5 +1,6 @@
 import { ArcadePrefab } from "../ArcadePrefab";
 import { Player } from "../Player";
+import type { TextureKeyValue } from "../../TextureKeys";
 
 export class AbstractEnemy extends ArcadePrefab {
     immortalState = false;
@@ -8,8 +9,8 @@ export class AbstractEnemy extends ArcadePrefab {
     defensePoints = 0;
     damagePoints = 0;
 
-    constructor(game: Phaser.Game, x: number, y: number, sprite: string) {
-        super(game, x, y, sprite);
+    constructor(game: Phaser.Game, x: number, y: number, texture: TextureKeyValue) {
+        super(game, x, y, texture);
 
         game.physics.arcade.enable(this);
         this.alive = true;

@@ -1,3 +1,4 @@
+import { TextureKey } from "../TextureKeys";
 import { ArcadePrefab } from "./ArcadePrefab";
 import type { Player } from "./Player";
 
@@ -6,7 +7,7 @@ export class IceSpike extends ArcadePrefab {
     distanceToTarget: number = Math.random() * 100 - 40; // from - 40 to 60 px to target
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "ice-spike");
+        super(game, x, y, TextureKey.IceSpike);
         game.physics.arcade.enable(this);
 
         this.checkWorldBounds = true;

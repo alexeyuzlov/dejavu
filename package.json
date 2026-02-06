@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
-    "*.{js,ts,json,yml,yaml,md,html}": "prettier --write"
+    "*.{js,ts,mjs,cjs,json,yml,yaml,md,html}": "prettier --write"
   },
   "devDependencies": {
     "@playwright/test": "1.58.1",

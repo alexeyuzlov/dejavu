@@ -1,6 +1,7 @@
 import { Direction } from "../../GlobalConfig";
 import { AbstractEnemy } from "./AbstractEnemy";
 import type { Transparent } from "../Transparent";
+import { TextureKey } from "../../TextureKeys";
 
 export class Runner extends AbstractEnemy {
     gravity = 300;
@@ -10,7 +11,7 @@ export class Runner extends AbstractEnemy {
     defensePoints = 3;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "runner");
+        super(game, x, y, TextureKey.Runner);
 
         this.body.velocity.x = this.velocity;
 

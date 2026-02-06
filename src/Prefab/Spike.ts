@@ -1,3 +1,4 @@
+import { TextureKey } from "../TextureKeys";
 import { ArcadePrefab } from "./ArcadePrefab";
 import type { Player } from "./Player";
 
@@ -5,7 +6,7 @@ export class Spike extends ArcadePrefab {
     damagePoints: number = 10;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "spike");
+        super(game, x, y, TextureKey.Spike);
 
         game.physics.arcade.enable(this);
 

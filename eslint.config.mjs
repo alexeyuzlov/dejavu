@@ -31,6 +31,7 @@ export default [
             ...js.configs.recommended.rules,
             ...tseslint.configs.recommended.rules,
             // ...tseslint.configs["recommended-type-checked"].rules,
+            "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
             "@typescript-eslint/strict-boolean-expressions": "off",
         },
     },

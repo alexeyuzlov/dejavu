@@ -1,11 +1,12 @@
 import type { AbstractZone } from "../../State/Levels/AbstractZone";
 import { ArcadePrefab } from "../ArcadePrefab";
 import type { Player } from "../Player";
+import type { TextureKeyValue } from "../../TextureKeys";
 
 export abstract class Bottle extends ArcadePrefab {
     level: AbstractZone;
 
-    constructor(game: Phaser.Game, x: number, y: number, texture) {
+    constructor(game: Phaser.Game, x: number, y: number, texture: TextureKeyValue) {
         super(game, x, y, texture);
         game.physics.arcade.enable(this);
     }

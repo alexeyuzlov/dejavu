@@ -1,3 +1,4 @@
+import { TextureKey } from "../../../TextureKeys";
 import { AbstractZone } from "../AbstractZone";
 
 export class Zone3 extends AbstractZone {
@@ -6,8 +7,8 @@ export class Zone3 extends AbstractZone {
 
     preload() {
         super.preload();
-        this.game.load.image("bg", "assets/images/zone3.png");
-        this.game.load.spritesheet("snowflake", "assets/images/snowflake.png", 16, 16);
+        this.game.load.image(TextureKey.Bg, "assets/images/zone3.png");
+        this.game.load.spritesheet(TextureKey.Snowflake, "assets/images/snowflake.png", 16, 16);
     }
 
     create() {
@@ -16,7 +17,7 @@ export class Zone3 extends AbstractZone {
             0,
             this.game.world.width,
             this.game.world.height,
-            "bg"
+            TextureKey.Bg
         );
         this.bg.fixedToCamera = true;
 
@@ -31,7 +32,7 @@ export class Zone3 extends AbstractZone {
 
         this.emitter.width = this.game.world.width;
 
-        this.emitter.makeParticles("snowflake");
+        this.emitter.makeParticles(TextureKey.Snowflake);
 
         this.emitter.minParticleScale = 0.2;
         this.emitter.maxParticleScale = 1.5;

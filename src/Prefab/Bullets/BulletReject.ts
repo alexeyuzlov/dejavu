@@ -1,5 +1,6 @@
 import { ArcadePrefab } from "../ArcadePrefab";
 import type { Player } from "../Player";
+import { TextureKey } from "../../TextureKeys";
 
 export class BulletReject extends ArcadePrefab {
     speed: number = 300;
@@ -8,7 +9,7 @@ export class BulletReject extends ArcadePrefab {
     rejectState: boolean = false;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "bullet-reject");
+        super(game, x, y, TextureKey.BulletReject);
 
         game.physics.arcade.enable(this);
         this.anchor.set(0.5, 0.5);

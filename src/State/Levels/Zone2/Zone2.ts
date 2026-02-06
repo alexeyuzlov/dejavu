@@ -1,3 +1,4 @@
+import { TextureKey } from "../../../TextureKeys";
 import { AbstractZone } from "../AbstractZone";
 
 export class Zone2 extends AbstractZone {
@@ -7,7 +8,7 @@ export class Zone2 extends AbstractZone {
     lightSprite: Phaser.Image;
 
     preload() {
-        this.game.load.image("bg", "assets/images/zone2.png");
+        this.game.load.image(TextureKey.Bg, "assets/images/zone2.png");
         super.preload();
     }
 
@@ -17,7 +18,7 @@ export class Zone2 extends AbstractZone {
             0,
             this.game.world.width,
             this.game.world.height,
-            "bg"
+            TextureKey.Bg
         );
         this.bg.fixedToCamera = true;
 

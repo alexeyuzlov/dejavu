@@ -1,6 +1,8 @@
+import { TextureKey } from "../TextureKeys";
+
 export class Boot extends Phaser.State {
     preload() {
-        this.load.image("preload-bar", "assets/images/prefabs/preload-bar.png");
+        this.load.image(TextureKey.PreloadBar, "assets/images/prefabs/preload-bar.png");
     }
 
     create() {

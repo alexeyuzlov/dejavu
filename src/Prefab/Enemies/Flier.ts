@@ -1,3 +1,4 @@
+import { TextureKey } from "../../TextureKeys";
 import { AbstractEnemy } from "./AbstractEnemy";
 
 export class Flier extends AbstractEnemy {
@@ -8,7 +9,7 @@ export class Flier extends AbstractEnemy {
     defensePoints: number = 7;
 
     constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, "flier");
+        super(game, x, y, TextureKey.Flier);
 
         this.anchor.set(0.5, 0.5);
         this.health = 84;
