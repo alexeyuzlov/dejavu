@@ -27,6 +27,11 @@ jobs:
           docker build -t e2e -f Dockerfile.playwright .
           docker run --rm e2e
 
+      - name: Set build metadata
+        run: |
+          echo "VITE_BUILD_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
+          echo "VITE_BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_ENV"
+
       - run: npm run build:prod
       - name: Upload artifact for Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
