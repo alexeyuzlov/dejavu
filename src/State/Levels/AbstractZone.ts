@@ -94,9 +94,9 @@ export class AbstractZone extends Phaser.State {
     }
 
     getPrefabsFromMap(name: TextureKeyValue, className?: object): Phaser.Group {
-        var group = this.game.add.group();
+        const group = this.game.add.group();
 
-        var index = this.map.getTilesetIndex(name);
+        const index = this.map.getTilesetIndex(name);
 
         if (className && index) {
             this.map.createFromObjects(

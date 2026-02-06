@@ -9,7 +9,7 @@ export class HUD extends AbstractPrefab {
 
         this.fixedToCamera = true;
 
-        var font = {
+        const font = {
             font: "13px Arial",
             fill: "#ffffff",
         };

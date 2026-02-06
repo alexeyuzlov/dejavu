@@ -74,8 +74,8 @@ export class Player extends ArcadePrefab {
     }
 
     write(text: string, style) {
-        var textSprite = this.game.add.text(this.x, this.y, text, style);
-        var tween = this.game.add
+        const textSprite = this.game.add.text(this.x, this.y, text, style);
+        const tween = this.game.add
             .tween(textSprite)
             .to({ alpha: 0 }, Phaser.Timer.SECOND, Phaser.Easing.Linear.None, true, 0, 0, false);
 

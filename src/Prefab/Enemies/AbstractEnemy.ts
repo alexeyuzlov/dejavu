@@ -29,15 +29,15 @@ export class AbstractEnemy extends ArcadePrefab {
 
             this.damage(damagePoint);
 
-            var textStyle = {
+            const textStyle = {
                 font: "20px Arial",
                 fill: "#ffffff",
                 stroke: "#0000ff",
                 strokeThickness: 1,
             };
 
-            var text = this.game.add.text(this.x, this.y, damagePoint.toString(), textStyle);
-            var tween = this.game.add
+            const text = this.game.add.text(this.x, this.y, damagePoint.toString(), textStyle);
+            const tween = this.game.add
                 .tween(text)
                 .to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true, 0, 0, false);
 

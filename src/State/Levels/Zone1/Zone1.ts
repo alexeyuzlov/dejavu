@@ -33,7 +33,7 @@ export class Zone1 extends AbstractZone {
     }
 
     rainCreate() {
-        var emitter = this.game.add.emitter(
+        const emitter = this.game.add.emitter(
             this.game.world.centerX,
             -this.game.world.centerY,
             2000

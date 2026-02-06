@@ -32,8 +32,8 @@ export class Boss extends AbstractEnemy {
         this.lastBulletShotAt = this.game.time.now;
 
         this.bullets = this.game.add.group();
-        for (var i = 0; i < this.countBullets; i++) {
-            var bullet = new BulletReject(game, 0, 0);
+        for (let i = 0; i < this.countBullets; i++) {
+            const bullet = new BulletReject(game, 0, 0);
             this.bullets.add(bullet);
         }
 
@@ -84,12 +84,13 @@ export class Boss extends AbstractEnemy {
     generateAction() {
         this.lastEventAt = this.game.time.now;
 
+        let rand = this.activeTweenID;
         do {
-            var rand = Math.floor(Math.random() * this.bossTweens.children.length);
+            rand = Math.floor(Math.random() * this.bossTweens.children.length);
         } while (rand == this.activeTweenID);
         this.activeTweenID = rand;
 
-        var tween = this.game.add.tween(this);
+        const tween = this.game.add.tween(this);
         tween.to(
             {
                 x: this.bossTweens.children[this.activeTweenID].x,
@@ -146,7 +147,7 @@ export class Boss extends AbstractEnemy {
         if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;
         this.lastBulletShotAt = this.game.time.now;
 
-        var bullet = this.bullets.getFirstDead();
+        const bullet = this.bullets.getFirstDead();
 
         if (bullet === null || bullet === undefined) return;
 
@@ -177,7 +178,7 @@ export class Boss extends AbstractEnemy {
             Math.PI / 2;
 
         // Calculate the distance from the lightning source to the pointer
-        var distance = Phaser.Math.distance(this.lightning.x, this.lightning.y, this.x, this.y);
+        const distance = Phaser.Math.distance(this.lightning.x, this.lightning.y, this.x, this.y);
 
         // Create the lightning texture
         this.createLightningTexture(this.lightningBitmap.width / 2, 0, 100, 3, false, distance);
@@ -210,9 +211,9 @@ export class Boss extends AbstractEnemy {
         distance: number
     ) {
         // Get the canvas drawing context for the lightningBitmap
-        var ctx = this.lightningBitmap.context;
-        var width = this.lightningBitmap.width;
-        var height = this.lightningBitmap.height;
+        const ctx = this.lightningBitmap.context;
+        const width = this.lightningBitmap.width;
+        const height = this.lightningBitmap.height;
 
         // Our lightning will be made up of several line segments starting at
         // the center of the top edge of the bitmap and ending at the target.
@@ -221,7 +222,7 @@ export class Boss extends AbstractEnemy {
         if (!branch) ctx.clearRect(0, 0, width, height);
 
         // Draw each of the segments
-        for (var i = 0; i < segments; i++) {
+        for (let i = 0; i < segments; i++) {
             // Set the lightning color and bolt width
             ctx.strokeStyle = "rgb(255, 255, 255)";
             ctx.lineWidth = boltWidth;

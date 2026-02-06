@@ -47,7 +47,7 @@ export class Zone2 extends AbstractZone {
         this.shadowTexture.context.fillStyle = "#222222";
         this.shadowTexture.context.fillRect(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-        var gradient = this.shadowTexture.context.createRadialGradient(
+        const gradient = this.shadowTexture.context.createRadialGradient(
             this.player.body.x,
             this.player.body.y,
             this.lightRadius * 0.75,

@@ -4,7 +4,7 @@ import { TextureKey } from "../TextureKeys";
 
 export class Preload extends Phaser.State {
     preload() {
-        var preloadBar = new Prefab.PreloadBar(
+        const preloadBar = new Prefab.PreloadBar(
             this.game,
             this.game.world.width - 10,
             this.game.world.height - 10

@@ -15,7 +15,7 @@ export class Zone4Level1 extends Zone4 {
 
         //this.player.x = this.game.world.width - 600;
 
-        var bossTweens = this.getPrefabsFromMap(TextureKey.Tween);
+        const bossTweens = this.getPrefabsFromMap(TextureKey.Tween);
         this.boss = new Prefab.Boss(this.game, bossTweens);
     }
 

@@ -31,7 +31,7 @@ class Storage {
     constructor() {}
 
     getCurrentState(): string {
-        var currentLevel = localStorage.getItem("currentLevel");
+        const currentLevel = localStorage.getItem("currentLevel");
         if (currentLevel) {
             return currentLevel;
         } else {
@@ -45,7 +45,7 @@ class Storage {
     }
 
     getHealthPoints(): string {
-        var healthPoints = localStorage.getItem("healthPoints");
+        let healthPoints = localStorage.getItem("healthPoints");
         if (healthPoints) {
             return healthPoints;
         } else {
@@ -108,4 +108,4 @@ class SettingsClass {
     }
 }
 
-export var settings: SettingsClass = new SettingsClass();
+export const settings: SettingsClass = new SettingsClass();

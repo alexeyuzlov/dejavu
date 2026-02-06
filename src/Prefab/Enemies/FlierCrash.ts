@@ -22,8 +22,8 @@ export class FlierCrash extends AbstractEnemy {
 
         this.eggs = this.game.add.group();
         this.countEggs = 10;
-        for (var i = 0; i < this.countEggs; i++) {
-            var egg = new Egg(game, 0, 0);
+        for (let i = 0; i < this.countEggs; i++) {
+            const egg = new Egg(game, 0, 0);
             this.eggs.add(egg);
         }
 
@@ -48,7 +48,7 @@ export class FlierCrash extends AbstractEnemy {
         }
 
         if (!this.isAttackOver) {
-            var distance = Phaser.Math.distance(
+            const distance = Phaser.Math.distance(
                 this.x,
                 this.y,
                 this.level.player.x,
@@ -56,7 +56,7 @@ export class FlierCrash extends AbstractEnemy {
             );
 
             if (distance > this.minDistance) {
-                var rotation = Phaser.Math.angleBetween(
+                const rotation = Phaser.Math.angleBetween(
                     this.x,
                     this.y,
                     this.level.player.x,
@@ -79,7 +79,7 @@ export class FlierCrash extends AbstractEnemy {
         if (this.game.time.now - this.lastEggShotAt < this.shotDelay) return;
         this.lastEggShotAt = this.game.time.now;
 
-        var egg = this.eggs.getFirstDead();
+        const egg = this.eggs.getFirstDead();
         if (egg === null || egg === undefined) return;
 
         egg.revive();

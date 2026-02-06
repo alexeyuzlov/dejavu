@@ -18,8 +18,8 @@ export class Shooter extends AbstractEnemy {
         this.lastBulletShotAt = this.game.time.now;
 
         this.bullets = this.game.add.group();
-        for (var i = 0; i < this.countBullets; i++) {
-            var bullet = new Bullet(game, 0, 0);
+        for (let i = 0; i < this.countBullets; i++) {
+            const bullet = new Bullet(game, 0, 0);
             this.bullets.add(bullet);
         }
         this.health = 100;
@@ -53,7 +53,7 @@ export class Shooter extends AbstractEnemy {
         if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;
         this.lastBulletShotAt = this.game.time.now;
 
-        var bullet = this.bullets.getFirstDead();
+        const bullet = this.bullets.getFirstDead();
 
         if (bullet === null || bullet === undefined) return;
 

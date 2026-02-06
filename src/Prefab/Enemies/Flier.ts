@@ -34,7 +34,7 @@ export class Flier extends AbstractEnemy {
             return;
         }
 
-        var distance = Phaser.Math.distance(
+        const distance = Phaser.Math.distance(
             this.x,
             this.y,
             this.level.player.x,
@@ -42,7 +42,7 @@ export class Flier extends AbstractEnemy {
         );
 
         if (distance > this.minDistance) {
-            var rotation = Phaser.Math.angleBetween(
+            const rotation = Phaser.Math.angleBetween(
                 this.x,
                 this.y,
                 this.level.player.x,

@@ -5,7 +5,7 @@ export class BlackScreen extends AbstractPrefab {
     text: Phaser.Text;
 
     constructor(game: Phaser.Game) {
-        var blackTexture = game.add.bitmapData(game.width, game.height);
+        const blackTexture = game.add.bitmapData(game.width, game.height);
         blackTexture.ctx.beginPath();
         blackTexture.ctx.rect(0, 0, game.width, game.height);
         blackTexture.ctx.fillStyle = "#000000";
