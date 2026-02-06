@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "none",
-    "outFile": "build/js/main.js",
-    "sourceMap": true,
+    "target": "ES2015",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "skipLibCheck": true
   },
-  "files": ["app/scripts/Game.ts"]
+  "include": ["src/**/*.ts", "src/typing/**/*.d.ts"]
 }

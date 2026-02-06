@@ -1,8 +1,8 @@
 node_modules/
-build/
+dist/
 playwright-report/
 test-results/
-app/vendor/
-app/assets/
 maps-gen/
-app/scripts/typing/
+public/vendor/
+public/assets/
+src/typing/

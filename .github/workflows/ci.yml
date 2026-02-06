@@ -15,23 +15,24 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20.19.0
           cache: npm
 
-      - run: npm install --legacy-peer-deps
+      - run: npm ci
       - run: npm run format:check
       - run: npm run lint
-      - run: npx grunt build
+      - run: npm run build
       - name: Run Playwright in Docker
         run: |
           docker build -t e2e -f Dockerfile.playwright .
           docker run --rm e2e
 
+      - run: npm run build:prod
       - name: Upload artifact for Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: dist
 
   deploy:
     runs-on: ubuntu-latest

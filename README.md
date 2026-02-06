@@ -10,11 +10,19 @@ To set up and build the project, follow these steps:
 
 1. **Install dependencies**:
    ```bash
-   npm install --legacy-peer-deps
+   npm install
    ```
-2. **Build the project**:
+2. **Start dev server**:
    ```bash
-   npx grunt
+   npm run dev
+   ```
+3. **Build the project**:
+   ```bash
+   npm run build
+   ```
+4. **Build for GitHub Pages**:
+   ```bash
+   npm run build:prod
    ```
 
 ## TODO

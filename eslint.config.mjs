@@ -4,15 +4,15 @@ import tsParser from "@typescript-eslint/parser";
 
 export default [
     {
-        ignores: ["app/assets/**", "app/vendor/**", "maps-gen/**", "app/scripts/typing/**/*.d.ts"],
+        ignores: ["public/assets/**", "public/vendor/**", "maps-gen/**", "src/typing/**/*.d.ts"],
     },
     {
-        files: ["app/scripts/**/*.ts"],
+        files: ["src/**/*.ts"],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
-                ecmaVersion: 5,
-                sourceType: "script",
+                ecmaVersion: 2015,
+                sourceType: "module",
             },
         },
         plugins: {
