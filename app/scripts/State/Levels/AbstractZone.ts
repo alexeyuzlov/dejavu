@@ -81,7 +81,7 @@ module Sample.State {
             });
         }
 
-        getPrefabsFromMap(name:string, className?:Object):Phaser.Group {
+        getPrefabsFromMap(name:string, className?:object):Phaser.Group {
             var group = this.game.add.group();
 
             var index = this.map.getTilesetIndex(name);
@@ -135,18 +135,14 @@ module Sample.State {
                 case Levels[Levels.Zone1Level1]:
                     //return Levels[Levels.Zone2Level1];
                     return Stories[Stories.Story2];
-                    break;
                 case Levels[Levels.Zone2Level1]:
                     //return Levels[Levels.Zone3Level1];
                     return Stories[Stories.Story3];
-                    break;
                 case Levels[Levels.Zone3Level1]:
                     //return Levels[Levels.Zone4Level1];
                     return Stories[Stories.Story4];
-                    break;
                 case Levels[Levels.Zone4Level1]:
                     return 'gameOver';
-                    break;
             }
         }
     }

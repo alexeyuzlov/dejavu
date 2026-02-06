@@ -15,6 +15,9 @@ To set up and build the project, follow these steps:
     npx grunt
     ```
 
+## TODO
+- [ ] Enable ESLint type-aware linting (parserOptions.project) once baseline linting is clean.
+
 ## E2E Tests
 
 Local e2e uses Playwright with browsers installed into `node_modules`.
