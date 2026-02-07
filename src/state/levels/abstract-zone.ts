@@ -1,3 +1,4 @@
+import { GameEvents, GameEventType } from '../../bridge/game-events';
 import * as Prefab from '../../prefab';
 import { Levels, Stories, settings } from '../../global-config';
 import { keys } from '../../input-config';
@@ -38,6 +39,7 @@ export class AbstractZone extends Phaser.State {
   create() {
     settings.storage.setCurrentState(this.game.state.current);
     this.game.stage.backgroundColor = '#000000';
+    GameEvents.emit(GameEventType.LevelStarted, { name: this.game.state.current });
 
     // MAP AND LAYERS
     this.map = this.game.add.tilemap('map');

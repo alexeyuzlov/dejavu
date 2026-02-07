@@ -1,3 +1,4 @@
+import { GameEvents, GameEventType } from '../bridge/game-events';
 import { Direction, settings } from '../global-config';
 import { keys } from '../input-config';
 import { TextureKey } from '../texture-keys';
@@ -22,6 +23,7 @@ export class Player extends ArcadePrefab {
   attackDuration = Phaser.Timer.SECOND / 3;
   isActiveJumpKey = false;
   isAttackKeyPressed = false;
+  private playerReadyEmitted = false;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.Player);
@@ -169,6 +171,10 @@ export class Player extends ArcadePrefab {
 
   update() {
     this.game.physics.arcade.collide(this, this.level.layer);
+    if (!this.playerReadyEmitted && (this.body.blocked.down || this.body.touching.down)) {
+      this.playerReadyEmitted = true;
+      GameEvents.emit(GameEventType.PlayerReady, { name: this.game.state.current });
+    }
 
     this.move();
     this.jump();

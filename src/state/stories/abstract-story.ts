@@ -1,3 +1,4 @@
+import { GameEvents, GameEventType } from '../../bridge/game-events';
 import { settings } from '../../global-config';
 import { keys } from '../../input-config';
 
@@ -8,6 +9,7 @@ export class AbstractStory extends Phaser.State {
   text: Phaser.Text;
   index = 0;
   line = '';
+  completed = false;
 
   preload() {}
 
@@ -17,9 +19,8 @@ export class AbstractStory extends Phaser.State {
     this.text = this.game.add.text(10, 10, '', settings.font.whiteBig);
     this.text.wordWrap = true;
     this.text.wordWrapWidth = this.game.width;
-    this.game.input.keyboard
-      .addKey(keys.skip)
-      .onDown.addOnce(() => this.game.state.start(this.nextLevel), this);
+    GameEvents.emit(GameEventType.StoryStarted, { name: this.game.state.current });
+    this.game.input.keyboard.addKey(keys.skip).onDown.addOnce(() => this.completeStory(), this);
     this.nextLine();
   }
 
@@ -35,7 +36,7 @@ export class AbstractStory extends Phaser.State {
         this,
       );
     } else {
-      this.game.state.start(this.nextLevel);
+      this.completeStory();
     }
   }
 
@@ -43,8 +44,21 @@ export class AbstractStory extends Phaser.State {
     if (this.line.length < this.content[this.index].length) {
       this.line = this.content[this.index].substr(0, this.line.length + 1);
       this.text.setText(this.line);
+      GameEvents.emit(GameEventType.StoryTextProgress, {
+        name: this.game.state.current,
+        length: this.line.length,
+      });
     } else {
       this.game.time.events.add(Phaser.Timer.SECOND * 2, () => this.nextLine(), this);
     }
+  }
+
+  completeStory() {
+    if (this.completed) {
+      return;
+    }
+    this.completed = true;
+    GameEvents.emit(GameEventType.StoryCompleted, { name: this.game.state.current });
+    this.game.state.start(this.nextLevel);
   }
 }

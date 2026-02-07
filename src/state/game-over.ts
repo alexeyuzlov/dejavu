@@ -1,3 +1,4 @@
+import { GameEvents, GameEventType } from '../bridge/game-events';
 import { settings } from '../global-config';
 
 export class GameOver extends Phaser.State {
@@ -20,6 +21,7 @@ export class GameOver extends Phaser.State {
     this.text = this.game.add.text(10, 10, '', settings.font.whiteBig);
     this.text.wordWrap = true;
     this.text.wordWrapWidth = this.game.width;
+    GameEvents.emit(GameEventType.GameOver, {});
     this.nextLine();
   }
 

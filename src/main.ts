@@ -1,3 +1,4 @@
+import { GameCommandType, GameCommands } from './bridge/game-commands';
 import { Game } from './game';
 import { buildInfoMessage } from './build-info';
 
@@ -8,5 +9,13 @@ window.addEventListener('load', () => {
     console.info(message);
   }
 
-  new Game();
+  const game = new Game();
+  GameCommands.attachWindowListeners();
+  GameCommands.on((type, payload) => {
+    switch (type) {
+      case GameCommandType.StateStart:
+        game.state.start(payload.name);
+        break;
+    }
+  });
 });
