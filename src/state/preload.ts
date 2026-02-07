@@ -1,10 +1,10 @@
-import * as Prefab from '../prefab';
 import { settings } from '../global-config';
+import { PreloadBar } from '../prefab';
 import { TextureKey } from '../texture-keys';
 
 export class Preload extends Phaser.State {
   preload() {
-    const preloadBar = new Prefab.PreloadBar(
+    const preloadBar = new PreloadBar(
       this.game,
       this.game.world.width - 10,
       this.game.world.height - 10,

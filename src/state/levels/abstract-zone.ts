@@ -1,16 +1,33 @@
 import { GameEvents, GameEventType } from '../../bridge/game-events';
-import * as Prefab from '../../prefab';
-import { Levels, Stories, settings } from '../../global-config';
+import { Levels, settings, Stories } from '../../global-config';
 import { keys } from '../../input-config';
+import {
+  BlackScreen,
+  BottleHP,
+  BottleSuper,
+  Exit,
+  Flier,
+  FlierCrash,
+  HUD,
+  IceSpike,
+  PlatformHorizontal,
+  PlatformVertical,
+  Player,
+  Runner,
+  Shooter,
+  ShooterReject,
+  Spike,
+  Transparent,
+} from '../../prefab';
 import { TextureKey, type TextureKeyValue } from '../../texture-keys';
 
 export class AbstractZone extends Phaser.State {
   map: Phaser.Tilemap;
   layer: Phaser.TilemapLayer;
 
-  player: Prefab.Player;
-  hud: Prefab.HUD;
-  blackScreen: Prefab.BlackScreen;
+  player: Player;
+  hud: HUD;
+  blackScreen: BlackScreen;
 
   transparents: Phaser.Group;
   spikes: Phaser.Group;
@@ -50,33 +67,30 @@ export class AbstractZone extends Phaser.State {
     this.layer.resizeWorld();
 
     // PREFABS SINGLE
-    this.player = new Prefab.Player(this.game, 120, this.game.world.height - 200);
+    this.player = new Player(this.game, 120, this.game.world.height - 200);
 
-    this.hud = new Prefab.HUD(this.game, 10, 10);
+    this.hud = new HUD(this.game, 10, 10);
     this.hud.alpha = 0;
 
     // PREFABS MULTIPLE
-    this.transparents = this.getPrefabsFromMap(TextureKey.Transparent, Prefab.Transparent);
-    this.exits = this.getPrefabsFromMap(TextureKey.Exit, Prefab.Exit);
-    this.spikes = this.getPrefabsFromMap(TextureKey.Spike, Prefab.Spike);
-    this.iceSpikes = this.getPrefabsFromMap(TextureKey.IceSpike, Prefab.IceSpike);
-    this.bottlesHP = this.getPrefabsFromMap(TextureKey.BottleHp, Prefab.BottleHP);
-    this.bottlesSuper = this.getPrefabsFromMap(TextureKey.BottleSuper, Prefab.BottleSuper);
-    this.shooters = this.getPrefabsFromMap(TextureKey.Shooter, Prefab.Shooter);
-    this.shootersReject = this.getPrefabsFromMap(TextureKey.ShooterReject, Prefab.ShooterReject);
-    this.runners = this.getPrefabsFromMap(TextureKey.Runner, Prefab.Runner);
-    this.fliers = this.getPrefabsFromMap(TextureKey.Flier, Prefab.Flier);
-    this.fliersCrash = this.getPrefabsFromMap(TextureKey.FlierCrash, Prefab.FlierCrash);
-    this.platformsHorizontal = this.getPrefabsFromMap(
-      TextureKey.PlatformH,
-      Prefab.PlatformHorizontal,
-    );
-    this.platformsVertical = this.getPrefabsFromMap(TextureKey.PlatformV, Prefab.PlatformVertical);
+    this.transparents = this.getPrefabsFromMap(TextureKey.Transparent, Transparent);
+    this.exits = this.getPrefabsFromMap(TextureKey.Exit, Exit);
+    this.spikes = this.getPrefabsFromMap(TextureKey.Spike, Spike);
+    this.iceSpikes = this.getPrefabsFromMap(TextureKey.IceSpike, IceSpike);
+    this.bottlesHP = this.getPrefabsFromMap(TextureKey.BottleHp, BottleHP);
+    this.bottlesSuper = this.getPrefabsFromMap(TextureKey.BottleSuper, BottleSuper);
+    this.shooters = this.getPrefabsFromMap(TextureKey.Shooter, Shooter);
+    this.shootersReject = this.getPrefabsFromMap(TextureKey.ShooterReject, ShooterReject);
+    this.runners = this.getPrefabsFromMap(TextureKey.Runner, Runner);
+    this.fliers = this.getPrefabsFromMap(TextureKey.Flier, Flier);
+    this.fliersCrash = this.getPrefabsFromMap(TextureKey.FlierCrash, FlierCrash);
+    this.platformsHorizontal = this.getPrefabsFromMap(TextureKey.PlatformH, PlatformHorizontal);
+    this.platformsVertical = this.getPrefabsFromMap(TextureKey.PlatformV, PlatformVertical);
 
     // POST-SETTINGS
     this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
 
-    this.blackScreen = new Prefab.BlackScreen(this.game);
+    this.blackScreen = new BlackScreen(this.game);
     this.blackScreen.setText(this.game.state.current);
     this.game.add
       .tween(this.blackScreen)

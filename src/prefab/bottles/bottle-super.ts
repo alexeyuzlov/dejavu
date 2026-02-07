@@ -1,5 +1,5 @@
-import { Bottle } from './bottle';
 import { TextureKey } from '../../texture-keys';
+import { Bottle } from './bottle';
 
 export class BottleSuper extends Bottle {
   duration: number = Phaser.Timer.SECOND * 10;
@@ -8,7 +8,7 @@ export class BottleSuper extends Bottle {
     super(game, x, y, TextureKey.BottleSuper);
   }
 
-  makeAction() {
+  drink() {
     this.level.player.immortal(this.duration);
   }
 }

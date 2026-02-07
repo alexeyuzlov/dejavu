@@ -1,5 +1,5 @@
-import { Bottle } from './bottle';
 import { TextureKey } from '../../texture-keys';
+import { Bottle } from './bottle';
 
 export class BottleHP extends Bottle {
   amount: number = 30;
@@ -8,7 +8,7 @@ export class BottleHP extends Bottle {
     super(game, x, y, TextureKey.BottleHp);
   }
 
-  makeAction() {
+  drink() {
     this.level.player.getHP(this.amount);
   }
 }

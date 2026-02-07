@@ -1,9 +1,9 @@
-import * as Prefab from '../../../prefab';
+import { Boss } from '../../../prefab';
 import { TextureKey } from '../../../texture-keys';
 import { Zone4 } from './zone-4';
 
 export class Zone4Level1 extends Zone4 {
-  boss: Prefab.Boss;
+  boss: Boss;
 
   preload() {
     super.preload();
@@ -13,10 +13,11 @@ export class Zone4Level1 extends Zone4 {
   create() {
     super.create();
 
-    //this.player.x = this.game.world.width - 600;
+    // to debug fight vs boss
+    // this.player.x = this.game.world.width - 600;
 
     const bossTweens = this.getPrefabsFromMap(TextureKey.Tween);
-    this.boss = new Prefab.Boss(this.game, bossTweens);
+    this.boss = new Boss(this.game, bossTweens);
   }
 
   update() {
