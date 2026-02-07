@@ -2,11 +2,11 @@ import { TextureKey } from '../../texture-keys';
 import { AbstractEnemy } from './abstract-enemy';
 
 export class Flier extends AbstractEnemy {
-  isActive: boolean = false;
+  isActive = false;
   minDistance: number;
-  damagePoints: number = 10;
-  speed: number = 150;
-  defensePoints: number = 7;
+  damagePoints = 10;
+  speed = 150;
+  defensePoints = 7;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.Flier);

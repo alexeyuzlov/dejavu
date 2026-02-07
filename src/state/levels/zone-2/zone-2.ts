@@ -3,7 +3,7 @@ import { AbstractZone } from '../abstract-zone';
 
 export class Zone2 extends AbstractZone {
   bg: Phaser.TileSprite;
-  lightRadius: number = 150;
+  lightRadius = 150;
   shadowTexture: Phaser.BitmapData;
   lightSprite: Phaser.Image;
 

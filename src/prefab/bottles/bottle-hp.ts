@@ -2,7 +2,7 @@ import { TextureKey } from '../../texture-keys';
 import { Bottle } from './bottle';
 
 export class BottleHP extends Bottle {
-  amount: number = 30;
+  amount = 30;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.BottleHp);

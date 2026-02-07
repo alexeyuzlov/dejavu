@@ -3,10 +3,10 @@ import type { Player } from '../player';
 import { TextureKey } from '../../texture-keys';
 
 export class BulletReject extends ArcadePrefab {
-  speed: number = 300;
-  damagePoints: number = 25;
-  damageRejectPoints: number = 300;
-  rejectState: boolean = false;
+  speed = 300;
+  damagePoints = 25;
+  damageRejectPoints = 300;
+  rejectState = false;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.BulletReject);

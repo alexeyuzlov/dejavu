@@ -21,7 +21,7 @@ export enum Direction {
 
 class Init {
   static HealthPoints = 100;
-  static FirstState: string = Stories[Stories.Story1];
+  static FirstState = Stories[Stories.Story1];
 }
 
 class Storage {

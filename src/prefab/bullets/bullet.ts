@@ -3,8 +3,8 @@ import type { Player } from '../player';
 import { TextureKey } from '../../texture-keys';
 
 export class Bullet extends ArcadePrefab {
-  speed: number = 300;
-  damagePoints: number = 20;
+  speed = 300;
+  damagePoints = 20;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.Bullet);

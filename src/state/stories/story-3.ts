@@ -2,7 +2,7 @@ import { Levels } from '../../global-config';
 import { AbstractStory } from './abstract-story';
 
 export class Story3 extends AbstractStory {
-  nextLevel: string = Levels[Levels.Zone3Level1];
+  nextLevel = Levels[Levels.Zone3Level1];
   content = [
     '',
     'Целую ночь ты шел по холмам, усыпанными камнями.',

@@ -2,7 +2,7 @@ import { TextureKey } from '../../texture-keys';
 import { Bottle } from './bottle';
 
 export class BottleSuper extends Bottle {
-  duration: number = Phaser.Timer.SECOND * 10;
+  duration = Phaser.Timer.SECOND * 10;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.BottleSuper);

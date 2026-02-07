@@ -3,8 +3,8 @@ import { ArcadePrefab } from './arcade-prefab';
 import type { Player } from './player';
 
 export class IceSpike extends ArcadePrefab {
-  damagePoints: number = 10;
-  distanceToTarget: number = Math.random() * 100 - 40; // from - 40 to 60 px to target
+  damagePoints = 10;
+  distanceToTarget = Math.random() * 100 - 40; // from - 40 to 60 px to target
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.IceSpike);

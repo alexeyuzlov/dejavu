@@ -3,7 +3,7 @@ import { ArcadePrefab } from './arcade-prefab';
 import type { Player } from './player';
 
 export class Spike extends ArcadePrefab {
-  damagePoints: number = 10;
+  damagePoints = 10;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.Spike);
