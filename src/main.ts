@@ -1,11 +1,11 @@
 import { Game } from './game';
+import { buildInfoMessage } from './build-info';
 
 window.addEventListener('load', () => {
-  const buildSha = import.meta.env.VITE_BUILD_SHA;
-  const buildTime = import.meta.env.VITE_BUILD_TIME;
+  const message = buildInfoMessage(import.meta.env.VITE_BUILD_SHA, import.meta.env.VITE_BUILD_TIME);
 
-  if (buildSha || buildTime) {
-    console.info('Build:', buildSha ?? 'unknown', buildTime ?? 'unknown');
+  if (message) {
+    console.info(message);
   }
 
   new Game();
