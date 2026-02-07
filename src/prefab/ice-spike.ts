@@ -8,7 +8,6 @@ export class IceSpike extends ArcadePrefab {
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.IceSpike);
-    game.physics.arcade.enable(this);
 
     this.checkWorldBounds = true;
   }

@@ -6,7 +6,6 @@ export class BottleSuper extends Bottle {
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.BottleSuper);
-    game.physics.arcade.enable(this);
   }
 
   makeAction() {

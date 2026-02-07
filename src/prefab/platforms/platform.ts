@@ -10,8 +10,6 @@ export abstract class Platform extends ArcadePrefab {
 
   constructor(game: Phaser.Game, x: number, y: number, texture: TextureKeyValue) {
     super(game, x, y, texture);
-
-    game.physics.arcade.enable(this);
     this.body.immovable = true;
   }
 

@@ -27,7 +27,6 @@ export class Player extends ArcadePrefab {
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.Player);
-    game.physics.arcade.enable(this);
 
     this.immortalStateAt = this.game.time.now;
     this.attackStateAt = this.game.time.now;

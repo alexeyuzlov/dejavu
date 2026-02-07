@@ -10,8 +10,6 @@ export class BulletReject extends ArcadePrefab {
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.BulletReject);
-
-    game.physics.arcade.enable(this);
     this.anchor.set(0.5, 0.5);
     this.kill();
 

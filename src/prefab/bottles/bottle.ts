@@ -8,7 +8,6 @@ export abstract class Bottle extends ArcadePrefab {
 
   constructor(game: Phaser.Game, x: number, y: number, texture: TextureKeyValue) {
     super(game, x, y, texture);
-    game.physics.arcade.enable(this);
   }
 
   abstract makeAction(): void;

@@ -8,8 +8,6 @@ export class Spike extends ArcadePrefab {
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.Spike);
 
-    game.physics.arcade.enable(this);
-
     this.body.immovable = true;
   }
 

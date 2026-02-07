@@ -8,8 +8,6 @@ export class Bullet extends ArcadePrefab {
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.Bullet);
-
-    game.physics.arcade.enable(this);
     this.anchor.set(0.5, 0.5);
     this.kill();
 

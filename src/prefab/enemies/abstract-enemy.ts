@@ -11,8 +11,6 @@ export class AbstractEnemy extends ArcadePrefab {
 
   constructor(game: Phaser.Game, x: number, y: number, texture: TextureKeyValue) {
     super(game, x, y, texture);
-
-    game.physics.arcade.enable(this);
     this.alive = true;
     this.anchor.set(0, 0.5);
 
