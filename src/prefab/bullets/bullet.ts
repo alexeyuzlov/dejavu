@@ -1,13 +1,18 @@
 import { ArcadePrefab } from '../arcade-prefab';
 import type { Player } from '../player';
-import { TextureKey } from '../../texture-keys';
+import { TextureKey, type TextureKeyValue } from '../../texture-keys';
 
 export class Bullet extends ArcadePrefab {
   speed = 300;
   damagePoints = 20;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.Bullet);
+  constructor(
+    game: Phaser.Game,
+    x: number,
+    y: number,
+    texture: TextureKeyValue = TextureKey.Bullet,
+  ) {
+    super(game, x, y, texture);
     this.anchor.set(0.5, 0.5);
     this.kill();
 

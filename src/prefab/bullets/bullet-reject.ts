@@ -1,20 +1,14 @@
-import { ArcadePrefab } from '../arcade-prefab';
+import { Bullet } from './bullet';
 import type { Player } from '../player';
 import { TextureKey } from '../../texture-keys';
 
-export class BulletReject extends ArcadePrefab {
-  speed = 300;
+export class BulletReject extends Bullet {
   damagePoints = 25;
   damageRejectPoints = 300;
   rejectState = false;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y, TextureKey.BulletReject);
-    this.anchor.set(0.5, 0.5);
-    this.kill();
-
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
   }
 
   update() {
