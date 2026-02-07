@@ -17,5 +17,6 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     include: ['src/**/*.spec.ts'],
+    setupFiles: ['src/test/phaser-setup.ts'],
   },
 });

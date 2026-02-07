@@ -84,6 +84,11 @@ export class Boss extends AbstractEnemy {
   generateAction() {
     this.lastEventAt = this.game.time.now;
 
+    if (this.bossTweens.children.length < 2) {
+      this.inAction = false;
+      return;
+    }
+
     let rand = this.activeTweenID;
     do {
       rand = Math.floor(Math.random() * this.bossTweens.children.length);
@@ -111,6 +116,13 @@ export class Boss extends AbstractEnemy {
 
   update() {
     if (!this.alive) return;
+
+    if (
+      this.immortalState &&
+      this.game.time.now - this.immortalStateAt > this.immortalStateDuration
+    ) {
+      this.immortalState = false;
+    }
 
     this.game.physics.arcade.overlap(
       this,
@@ -162,10 +174,6 @@ export class Boss extends AbstractEnemy {
       bullet.body.velocity.x = bullet.speed;
       bullet.scale.x = 1;
       this.scale.x = 1;
-    }
-
-    if (this.immortalState && Date.now() - this.immortalStateAt > this.immortalStateDuration) {
-      this.immortalState = false;
     }
   }
 

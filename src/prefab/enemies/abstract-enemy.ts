@@ -43,7 +43,7 @@ export class AbstractEnemy extends ArcadePrefab {
         text.destroy();
       });
 
-      this.immortalStateAt = Date.now();
+      this.immortalStateAt = this.game.time.now;
       this.immortalState = true;
     }
   }

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "types": ["vite/client", "vitest/globals", "node"]
   },
-  "include": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.test.ts", "src/**/*.ts", "src/typing/**/*.d.ts"],
+  "files": ["node_modules/phaser/typescript/phaser.d.ts"],
   "exclude": ["node_modules"]
 }

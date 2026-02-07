@@ -4,6 +4,7 @@ import type { Player } from './player';
 
 export class IceSpike extends ArcadePrefab {
   damagePoints = 10;
+  // TODO: Review gameplay impact of negative thresholds.
   distanceToTarget = Math.random() * 100 - 40; // from - 40 to 60 px to target
 
   constructor(game: Phaser.Game, x: number, y: number) {
