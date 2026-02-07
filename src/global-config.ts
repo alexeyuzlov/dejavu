@@ -62,13 +62,6 @@ class Storage {
 
 class SettingsClass {
     storage = new Storage();
-
-    keys: {
-        moveLeft: number;
-        moveRight: number;
-        jump: number;
-        attack: number;
-    };
     font = {
         whiteWithRed: {
             font: "20px Arial",
@@ -97,15 +90,6 @@ class SettingsClass {
             fill: "#000000",
         },
     };
-
-    constructor() {
-        this.keys = {
-            moveLeft: Phaser.Keyboard.LEFT,
-            moveRight: Phaser.Keyboard.RIGHT,
-            jump: Phaser.Keyboard.Z,
-            attack: Phaser.Keyboard.X,
-        };
-    }
 }
 
 export const settings: SettingsClass = new SettingsClass();

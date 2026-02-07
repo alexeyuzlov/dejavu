@@ -1,4 +1,5 @@
 import { Direction, settings } from "../global-config";
+import { keys } from "../input-config";
 import { TextureKey } from "../texture-keys";
 import { ArcadePrefab } from "./arcade-prefab";
 
@@ -98,7 +99,7 @@ export class Player extends ArcadePrefab {
 
     jump() {
         if (
-            this.game.input.keyboard.isDown(settings.keys.jump) &&
+            this.game.input.keyboard.isDown(keys.jump) &&
             (this.body.blocked.down || this.body.touching.down) &&
             !this.isActiveJumpKey
         ) {
@@ -106,18 +107,18 @@ export class Player extends ArcadePrefab {
             this.body.velocity.y = -this.jumpPower;
         }
 
-        if (!this.game.input.keyboard.isDown(settings.keys.jump)) {
+        if (!this.game.input.keyboard.isDown(keys.jump)) {
             this.isActiveJumpKey = false;
         }
     }
 
     move() {
-        if (this.game.input.keyboard.isDown(settings.keys.moveRight)) {
+        if (this.game.input.keyboard.isDown(keys.moveRight)) {
             this.moveState = true;
             this.body.acceleration.x = this.acceleration;
             this.direction = Direction.Right;
             this.scale.x = 1;
-        } else if (this.game.input.keyboard.isDown(settings.keys.moveLeft)) {
+        } else if (this.game.input.keyboard.isDown(keys.moveLeft)) {
             this.moveState = true;
             this.body.acceleration.x = -this.acceleration;
             this.direction = Direction.Left;
@@ -130,7 +131,7 @@ export class Player extends ArcadePrefab {
 
     attack() {
         if (
-            this.game.input.keyboard.isDown(settings.keys.attack) &&
+            this.game.input.keyboard.isDown(keys.attack) &&
             !this.attackState &&
             !this.isAttackKeyPressed
         ) {
@@ -139,7 +140,7 @@ export class Player extends ArcadePrefab {
             this.attackStateAt = this.game.time.now;
         }
 
-        if (!this.game.input.keyboard.isDown(settings.keys.attack)) {
+        if (!this.game.input.keyboard.isDown(keys.attack)) {
             this.isAttackKeyPressed = false;
         }
 

@@ -1,4 +1,5 @@
 import { settings } from "../../global-config";
+import { keys } from "../../input-config";
 
 export class AbstractStory extends Phaser.State {
     nextLevel: string;
@@ -17,7 +18,7 @@ export class AbstractStory extends Phaser.State {
         this.text.wordWrap = true;
         this.text.wordWrapWidth = this.game.width;
         this.game.input.keyboard
-            .addKey(Phaser.Keyboard.SPACEBAR)
+            .addKey(keys.skip)
             .onDown.addOnce(() => this.game.state.start(this.nextLevel), this);
         this.nextLine();
     }

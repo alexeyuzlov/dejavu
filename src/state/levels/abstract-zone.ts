@@ -1,5 +1,6 @@
 import * as Prefab from "../../prefab";
 import { Levels, Stories, settings } from "../../global-config";
+import { keys } from "../../input-config";
 import { TextureKey, type TextureKeyValue } from "../../texture-keys";
 
 export class AbstractZone extends Phaser.State {
@@ -88,7 +89,7 @@ export class AbstractZone extends Phaser.State {
                 this.hud.alpha = 1;
             });
 
-        this.game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
+        this.game.input.keyboard.addKey(keys.pause).onDown.add(() => {
             this.game.paused = !this.game.paused;
         });
     }
