@@ -1,4 +1,4 @@
-import { settings } from "../GlobalConfig";
+import { settings } from "../global-config";
 
 export class GameOver extends Phaser.State {
     content: string[] = [

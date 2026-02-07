@@ -1,6 +1,6 @@
-import { TextureKey } from "../TextureKeys";
-import { ArcadePrefab } from "./ArcadePrefab";
-import type { Player } from "./Player";
+import { TextureKey } from "../texture-keys";
+import { ArcadePrefab } from "./arcade-prefab";
+import type { Player } from "./player";
 
 export class IceSpike extends ArcadePrefab {
     damagePoints: number = 10;

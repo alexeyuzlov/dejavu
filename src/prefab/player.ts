@@ -1,6 +1,6 @@
-import { Direction, settings } from "../GlobalConfig";
-import { TextureKey } from "../TextureKeys";
-import { ArcadePrefab } from "./ArcadePrefab";
+import { Direction, settings } from "../global-config";
+import { TextureKey } from "../texture-keys";
+import { ArcadePrefab } from "./arcade-prefab";
 
 export class Player extends ArcadePrefab {
     gravity = 500;

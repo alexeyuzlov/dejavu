@@ -1,6 +1,6 @@
-import { Bullet } from "../Bullets/Bullet";
-import { TextureKey } from "../../TextureKeys";
-import { AbstractEnemy } from "./AbstractEnemy";
+import { Bullet } from "../bullets/bullet";
+import { TextureKey } from "../../texture-keys";
+import { AbstractEnemy } from "./abstract-enemy";
 
 export class Shooter extends AbstractEnemy {
     gravity = 300;

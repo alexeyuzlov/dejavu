@@ -1,4 +1,4 @@
-import { Zone1 } from "./Zone1";
+import { Zone1 } from "./zone-1";
 
 export class Zone1Level1 extends Zone1 {
     preload() {

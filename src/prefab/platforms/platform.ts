@@ -1,8 +1,8 @@
-import { Direction } from "../../GlobalConfig";
-import { ArcadePrefab } from "../ArcadePrefab";
-import type { Player } from "../Player";
-import type { Transparent } from "../Transparent";
-import type { TextureKeyValue } from "../../TextureKeys";
+import { Direction } from "../../global-config";
+import { ArcadePrefab } from "../arcade-prefab";
+import type { Player } from "../player";
+import type { Transparent } from "../transparent";
+import type { TextureKeyValue } from "../../texture-keys";
 
 export abstract class Platform extends ArcadePrefab {
     direction: Direction;

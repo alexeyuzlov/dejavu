@@ -1,6 +1,6 @@
-import { BulletReject } from "../Bullets/BulletReject";
-import { TextureKey } from "../../TextureKeys";
-import { AbstractEnemy } from "./AbstractEnemy";
+import { BulletReject } from "../bullets/bullet-reject";
+import { TextureKey } from "../../texture-keys";
+import { AbstractEnemy } from "./abstract-enemy";
 
 export class ShooterReject extends AbstractEnemy {
     lastBulletShotAt: number;

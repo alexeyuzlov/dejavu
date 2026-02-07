@@ -1,6 +1,6 @@
-import * as Prefab from "../../../Prefab";
-import { TextureKey } from "../../../TextureKeys";
-import { Zone4 } from "./Zone4";
+import * as Prefab from "../../../prefab";
+import { TextureKey } from "../../../texture-keys";
+import { Zone4 } from "./zone-4";
 
 export class Zone4Level1 extends Zone4 {
     boss: Prefab.Boss;

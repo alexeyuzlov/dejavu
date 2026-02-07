@@ -1,5 +1,5 @@
-import { TextureKey } from "../TextureKeys";
-import { AbstractPrefab } from "./AbstractPrefab";
+import { TextureKey } from "../texture-keys";
+import { AbstractPrefab } from "./abstract-prefab";
 
 export class HUD extends AbstractPrefab {
     healthState: Phaser.Text;

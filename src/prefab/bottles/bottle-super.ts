@@ -1,5 +1,5 @@
-import { Bottle } from "./Bottle";
-import { TextureKey } from "../../TextureKeys";
+import { Bottle } from "./bottle";
+import { TextureKey } from "../../texture-keys";
 
 export class BottleSuper extends Bottle {
     duration: number = Phaser.Timer.SECOND * 10;

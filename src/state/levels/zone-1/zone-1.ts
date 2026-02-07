@@ -1,5 +1,5 @@
-import { TextureKey } from "../../../TextureKeys";
-import { AbstractZone } from "../AbstractZone";
+import { TextureKey } from "../../../texture-keys";
+import { AbstractZone } from "../abstract-zone";
 
 export class Zone1 extends AbstractZone {
     bg: Phaser.TileSprite;

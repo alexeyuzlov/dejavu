@@ -1,6 +1,6 @@
-import * as Prefab from "../../Prefab";
-import { Levels, Stories, settings } from "../../GlobalConfig";
-import { TextureKey, type TextureKeyValue } from "../../TextureKeys";
+import * as Prefab from "../../prefab";
+import { Levels, Stories, settings } from "../../global-config";
+import { TextureKey, type TextureKeyValue } from "../../texture-keys";
 
 export class AbstractZone extends Phaser.State {
     map: Phaser.Tilemap;

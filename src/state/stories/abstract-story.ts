@@ -1,4 +1,4 @@
-import { settings } from "../../GlobalConfig";
+import { settings } from "../../global-config";
 
 export class AbstractStory extends Phaser.State {
     nextLevel: string;

@@ -1,5 +1,5 @@
-import { TextureKey } from "../TextureKeys";
-import { ArcadePrefab } from "./ArcadePrefab";
+import { TextureKey } from "../texture-keys";
+import { ArcadePrefab } from "./arcade-prefab";
 
 export class Exit extends ArcadePrefab {
     constructor(game: Phaser.Game, x: number, y: number) {

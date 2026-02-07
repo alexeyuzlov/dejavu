@@ -1,5 +1,5 @@
-import { TextureKey } from "../../TextureKeys";
-import { AbstractEnemy } from "./AbstractEnemy";
+import { TextureKey } from "../../texture-keys";
+import { AbstractEnemy } from "./abstract-enemy";
 
 export class Flier extends AbstractEnemy {
     isActive: boolean = false;

@@ -1,6 +1,6 @@
-import { ArcadePrefab } from "../ArcadePrefab";
-import type { Player } from "../Player";
-import { TextureKey } from "../../TextureKeys";
+import { ArcadePrefab } from "../arcade-prefab";
+import type { Player } from "../player";
+import { TextureKey } from "../../texture-keys";
 
 export class Egg extends ArcadePrefab {
     speed = 180;

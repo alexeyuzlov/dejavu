@@ -1,7 +1,7 @@
-import type { AbstractZone } from "../../State/Levels/AbstractZone";
-import { ArcadePrefab } from "../ArcadePrefab";
-import type { Player } from "../Player";
-import type { TextureKeyValue } from "../../TextureKeys";
+import type { AbstractZone } from "../../state/levels/abstract-zone";
+import { ArcadePrefab } from "../arcade-prefab";
+import type { Player } from "../player";
+import type { TextureKeyValue } from "../../texture-keys";
 
 export abstract class Bottle extends ArcadePrefab {
     level: AbstractZone;

@@ -1,5 +1,5 @@
-import { Levels } from "../../GlobalConfig";
-import { AbstractStory } from "./AbstractStory";
+import { Levels } from "../../global-config";
+import { AbstractStory } from "./abstract-story";
 
 export class Story4 extends AbstractStory {
     nextLevel: string = Levels[Levels.Zone4Level1];

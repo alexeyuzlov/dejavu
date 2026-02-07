@@ -1,4 +1,4 @@
-import { Game } from "./Game";
+import { Game } from "./game";
 
 window.addEventListener("load", () => {
     const buildSha = import.meta.env.VITE_BUILD_SHA;

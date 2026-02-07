@@ -1,5 +1,5 @@
-import { settings } from "../GlobalConfig";
-import { AbstractPrefab } from "./AbstractPrefab";
+import { settings } from "../global-config";
+import { AbstractPrefab } from "./abstract-prefab";
 
 export class BlackScreen extends AbstractPrefab {
     text: Phaser.Text;

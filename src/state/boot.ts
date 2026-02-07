@@ -1,4 +1,4 @@
-import { TextureKey } from "../TextureKeys";
+import { TextureKey } from "../texture-keys";
 
 export class Boot extends Phaser.State {
     preload() {

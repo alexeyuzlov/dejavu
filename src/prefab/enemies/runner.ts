@@ -1,7 +1,7 @@
-import { Direction } from "../../GlobalConfig";
-import { AbstractEnemy } from "./AbstractEnemy";
-import type { Transparent } from "../Transparent";
-import { TextureKey } from "../../TextureKeys";
+import { Direction } from "../../global-config";
+import { AbstractEnemy } from "./abstract-enemy";
+import type { Transparent } from "../transparent";
+import { TextureKey } from "../../texture-keys";
 
 export class Runner extends AbstractEnemy {
     gravity = 300;

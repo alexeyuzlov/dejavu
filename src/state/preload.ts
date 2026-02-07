@@ -1,6 +1,6 @@
-import * as Prefab from "../Prefab";
-import { settings } from "../GlobalConfig";
-import { TextureKey } from "../TextureKeys";
+import * as Prefab from "../prefab";
+import { settings } from "../global-config";
+import { TextureKey } from "../texture-keys";
 
 export class Preload extends Phaser.State {
     preload() {

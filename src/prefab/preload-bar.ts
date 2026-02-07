@@ -1,5 +1,5 @@
-import { TextureKey } from "../TextureKeys";
-import { AbstractPrefab } from "./AbstractPrefab";
+import { TextureKey } from "../texture-keys";
+import { AbstractPrefab } from "./abstract-prefab";
 
 export class PreloadBar extends AbstractPrefab {
     constructor(game: Phaser.Game, x: number, y: number) {

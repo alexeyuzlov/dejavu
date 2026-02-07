@@ -1,7 +1,7 @@
-import { BulletReject } from "../Bullets/BulletReject";
-import { Player } from "../Player";
-import { TextureKey } from "../../TextureKeys";
-import { AbstractEnemy } from "./AbstractEnemy";
+import { BulletReject } from "../bullets/bullet-reject";
+import { Player } from "../player";
+import { TextureKey } from "../../texture-keys";
+import { AbstractEnemy } from "./abstract-enemy";
 
 export class Boss extends AbstractEnemy {
     bossTweens: Phaser.Group;

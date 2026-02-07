@@ -1,6 +1,6 @@
-import { ArcadePrefab } from "../ArcadePrefab";
-import { Player } from "../Player";
-import type { TextureKeyValue } from "../../TextureKeys";
+import { ArcadePrefab } from "../arcade-prefab";
+import { Player } from "../player";
+import type { TextureKeyValue } from "../../texture-keys";
 
 export class AbstractEnemy extends ArcadePrefab {
     immortalState = false;

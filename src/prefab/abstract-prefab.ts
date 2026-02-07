@@ -1,5 +1,5 @@
-import type { AbstractZone } from "../State/Levels/AbstractZone";
-import type { TextureKeyValue } from "../TextureKeys";
+import type { AbstractZone } from "../state/levels/abstract-zone";
+import type { TextureKeyValue } from "../texture-keys";
 
 export class AbstractPrefab extends Phaser.Sprite {
     level: AbstractZone;

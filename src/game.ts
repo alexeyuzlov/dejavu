@@ -1,5 +1,5 @@
-import * as State from "./State";
-import { Levels, Stories } from "./GlobalConfig";
+import * as State from "./state";
+import { Levels, Stories } from "./global-config";
 
 export class Game extends Phaser.Game {
     constructor() {

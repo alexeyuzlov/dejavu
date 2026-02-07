@@ -1,6 +1,6 @@
-import { Direction } from "../../GlobalConfig";
-import { Platform } from "./Platform";
-import { TextureKey } from "../../TextureKeys";
+import { Direction } from "../../global-config";
+import { Platform } from "./platform";
+import { TextureKey } from "../../texture-keys";
 
 export class PlatformHorizontal extends Platform {
     constructor(game: Phaser.Game, x: number, y: number) {

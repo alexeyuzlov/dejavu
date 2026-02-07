@@ -1,5 +1,5 @@
-import { Bottle } from "./Bottle";
-import { TextureKey } from "../../TextureKeys";
+import { Bottle } from "./bottle";
+import { TextureKey } from "../../texture-keys";
 
 export class BottleHP extends Bottle {
     amount: number = 30;
