@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
+    "*.ts": "eslint --fix",
     "*.{js,ts,mjs,cjs,json,yml,yaml,md,html}": "prettier --write"
   },
   "devDependencies": {
