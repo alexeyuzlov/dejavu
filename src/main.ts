@@ -10,7 +10,6 @@ window.addEventListener('load', () => {
   }
 
   const game = new Game();
-  GameCommands.attachWindowListeners();
   GameCommands.on((type, payload) => {
     switch (type) {
       case GameCommandType.StateStart:

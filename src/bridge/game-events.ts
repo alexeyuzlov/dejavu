@@ -1,4 +1,4 @@
-import { BridgeChannels, getEventSignal } from './bridge-shared';
+import { BridgeChannels } from './bridge-shared';
 
 // Outbound notifications: game -> tests/other app.
 export const GameEventType = {
@@ -26,25 +26,12 @@ type BridgeEvent<T extends GameEventName> = {
   payload: GameEventMap[T];
 };
 
-// Use this to emit or observe game events from runtime code.
 export class GameEvents {
   static emit<T extends GameEventName>(type: T, payload: GameEventMap[T]) {
-    getEventSignal().dispatch(type, payload);
     window.dispatchEvent(
       new window.CustomEvent(BridgeChannels.GameEvent, {
         detail: { type, payload } satisfies BridgeEvent<T>,
       }),
     );
-  }
-
-  static on(
-    handler: <T extends GameEventName>(type: T, payload: GameEventMap[T]) => void,
-    context?: unknown,
-  ) {
-    getEventSignal().add(handler, context);
-  }
-
-  static clearListeners() {
-    getEventSignal().removeAll();
   }
 }
