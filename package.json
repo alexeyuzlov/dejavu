@@ -13,7 +13,9 @@
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
     "test:e2e:install": "NODE_TLS_REJECT_UNAUTHORIZED=0 PLAYWRIGHT_BROWSERS_PATH=0 playwright install",
     "test:e2e:docker": "docker build -t e2e -f Dockerfile.playwright . && docker run --rm e2e",
-    "typecheck": "tsc --noEmit"
+    "test:unit": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "typecheck:tests": "tsc -p tsconfig.test.json --noEmit"
   },
   "lint-staged": {
     "*.ts": "eslint --fix",
@@ -30,7 +32,8 @@
     "prettier": "3.8.1",
     "typescript": "5.9.3",
     "vite": "6.4.1",
-    "vite-plugin-static-copy": "3.2.0"
+    "vite-plugin-static-copy": "3.2.0",
+    "vitest": "4.0.18"
   },
   "dependencies": {
     "phaser": "2.6.2"

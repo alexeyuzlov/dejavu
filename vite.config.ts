@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
@@ -13,4 +13,9 @@ export default defineConfig({
             ],
         }),
     ],
+    test: {
+        environment: "node",
+        globals: true,
+        include: ["src/**/*.spec.ts"],
+    },
 });

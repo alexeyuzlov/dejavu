@@ -124,25 +124,9 @@ export class AbstractZone extends Phaser.State {
         return group;
     }
 
-    render() {
-        //this.game.debug.spriteInfo(this.player, 100, 100);
-    }
+    render() {}
 
-    update() {
-        /*
-        DEBUG FEATURE
-
-         if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-             this.blackScreen.setText("");
-             this.game.add.tween(this.blackScreen)
-                .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
-                .onComplete.add(()=> {
-                    this.startNextLevel();
-                });
-         }
-
-        */
-    }
+    update() {}
 
     gameOver() {
         this.blackScreen.setText("Game Over. Reload Level.");

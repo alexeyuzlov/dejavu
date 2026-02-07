@@ -23,6 +23,8 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint
+      - run: npm run typecheck:tests
+      - run: npm run test:unit
       - run: npm run build
       - name: Run Playwright in Docker
         run: |

@@ -16,6 +16,9 @@ export class AbstractStory extends Phaser.State {
         this.text = this.game.add.text(10, 10, "", settings.font.whiteBig);
         this.text.wordWrap = true;
         this.text.wordWrapWidth = this.game.width;
+        this.game.input.keyboard
+            .addKey(Phaser.Keyboard.SPACEBAR)
+            .onDown.addOnce(() => this.game.state.start(this.nextLevel), this);
         this.nextLine();
     }
 

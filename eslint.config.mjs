@@ -35,4 +35,40 @@ export default [
             "@typescript-eslint/strict-boolean-expressions": "off",
         },
     },
+    {
+        files: ["src/**/*.spec.ts"],
+        languageOptions: {
+            parser: tsParser,
+            parserOptions: {
+                ecmaVersion: 2015,
+                sourceType: "module",
+                project: "./tsconfig.test.json",
+                tsconfigRootDir: process.cwd(),
+            },
+            globals: {
+                Phaser: "readonly",
+                PIXI: "readonly",
+                console: "readonly",
+                localStorage: "readonly",
+                window: "readonly",
+                afterAll: "readonly",
+                afterEach: "readonly",
+                beforeAll: "readonly",
+                beforeEach: "readonly",
+                describe: "readonly",
+                expect: "readonly",
+                it: "readonly",
+                vi: "readonly",
+            },
+        },
+        plugins: {
+            "@typescript-eslint": tseslint,
+        },
+        rules: {
+            ...js.configs.recommended.rules,
+            ...tseslint.configs.recommended.rules,
+            "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+            "@typescript-eslint/strict-boolean-expressions": "off",
+        },
+    },
 ];
