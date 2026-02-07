@@ -21,8 +21,4 @@ export class Zone4 extends AbstractZone {
 
     super.create();
   }
-
-  update() {
-    super.update();
-  }
 }

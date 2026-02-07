@@ -10,16 +10,4 @@ export class Story2 extends AbstractStory {
     'Над головой сгущались тучи, солнце уходило за горизонт.',
     'Стало совсем темно, но тебе поможет твое дежавю...',
   ];
-
-  preload() {
-    super.preload();
-  }
-
-  create() {
-    super.create();
-  }
-
-  update() {
-    super.update();
-  }
 }

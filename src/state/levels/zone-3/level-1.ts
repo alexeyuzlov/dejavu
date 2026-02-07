@@ -11,8 +11,4 @@ export class Zone3Level1 extends Zone3 {
 
     this.player.y = 100;
   }
-
-  update() {
-    super.update();
-  }
 }

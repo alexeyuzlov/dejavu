@@ -10,16 +10,4 @@ export class Story1 extends AbstractStory {
     'Их объединяет одно: чувство ужаса и страха смерти главного героя, исходящие от картины!',
     'Ты просыпаешься. И, вместо привычных желаний, ты испытываешь дежавю...',
   ];
-
-  preload() {
-    super.preload();
-  }
-
-  create() {
-    super.create();
-  }
-
-  update() {
-    super.update();
-  }
 }

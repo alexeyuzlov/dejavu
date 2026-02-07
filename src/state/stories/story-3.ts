@@ -9,16 +9,4 @@ export class Story3 extends AbstractStory {
     'Когда забрезжил утренний свет, ты увидел, что тропинка поднимается в гору.',
     'Один из путников одолжил тебе коньки: «На твоём пути встретится немало горных озер!»',
   ];
-
-  preload() {
-    super.preload();
-  }
-
-  create() {
-    super.create();
-  }
-
-  update() {
-    super.update();
-  }
 }

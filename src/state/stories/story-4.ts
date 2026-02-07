@@ -9,16 +9,4 @@ export class Story4 extends AbstractStory {
     'Страх неизвестности охватил тебя.',
     '«Вспоминая сон, только так я смогу, наконец, выбраться отсюда!» - собрав все мужество, ты двинулся вперед...',
   ];
-
-  preload() {
-    super.preload();
-  }
-
-  create() {
-    super.create();
-  }
-
-  update() {
-    super.update();
-  }
 }

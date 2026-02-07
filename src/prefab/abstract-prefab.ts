@@ -12,7 +12,7 @@ export class AbstractPrefab extends Phaser.Sprite {
   ) {
     super(game, x, y, texture);
 
-    this.level = this.game.state.states[this.game.state.current];
+    this.level = this.game.state.getCurrentState() as AbstractZone;
 
     game.add.existing(this);
   }

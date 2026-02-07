@@ -1,6 +1,6 @@
+import { TextureKey, type TextureKeyValue } from '../../texture-keys';
 import { ArcadePrefab } from '../arcade-prefab';
 import type { Player } from '../player';
-import { TextureKey, type TextureKeyValue } from '../../texture-keys';
 
 export class Bullet extends ArcadePrefab {
   speed = 300;

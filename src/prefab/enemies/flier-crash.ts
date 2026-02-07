@@ -1,6 +1,6 @@
+import { TextureKey } from '../../texture-keys';
 import { Egg } from '../bullets/egg';
 import { AbstractEnemy } from './abstract-enemy';
-import { TextureKey } from '../../texture-keys';
 
 export class FlierCrash extends AbstractEnemy {
   isActive = false;
