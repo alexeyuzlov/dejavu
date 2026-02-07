@@ -1,27 +1,27 @@
-import { TextureKey } from "../texture-keys";
-import { AbstractPrefab } from "./abstract-prefab";
+import { TextureKey } from '../texture-keys';
+import { AbstractPrefab } from './abstract-prefab';
 
 export class HUD extends AbstractPrefab {
-    healthState: Phaser.Text;
+  healthState: Phaser.Text;
 
-    constructor(game: Phaser.Game, x: number, y: number) {
-        super(game, x, y, TextureKey.Hud);
+  constructor(game: Phaser.Game, x: number, y: number) {
+    super(game, x, y, TextureKey.Hud);
 
-        this.fixedToCamera = true;
+    this.fixedToCamera = true;
 
-        const font = {
-            font: "13px Arial",
-            fill: "#ffffff",
-        };
+    const font = {
+      font: '13px Arial',
+      fill: '#ffffff',
+    };
 
-        this.healthState = game.add.text(14, 1, "", font);
-        this.updateHealthState();
-        this.addChild(this.healthState);
-    }
+    this.healthState = game.add.text(14, 1, '', font);
+    this.updateHealthState();
+    this.addChild(this.healthState);
+  }
 
-    updateHealthState() {
-        this.healthState.text = this.level.player.health.toString();
-    }
+  updateHealthState() {
+    this.healthState.text = this.level.player.health.toString();
+  }
 
-    update() {}
+  update() {}
 }

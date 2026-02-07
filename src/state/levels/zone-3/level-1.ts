@@ -1,18 +1,18 @@
-import { Zone3 } from "./zone-3";
+import { Zone3 } from './zone-3';
 
 export class Zone3Level1 extends Zone3 {
-    preload() {
-        super.preload();
-        this.game.load.tilemap("map", "assets/levels/3-1.json", null, Phaser.Tilemap.TILED_JSON);
-    }
+  preload() {
+    super.preload();
+    this.game.load.tilemap('map', 'assets/levels/3-1.json', null, Phaser.Tilemap.TILED_JSON);
+  }
 
-    create() {
-        super.create();
+  create() {
+    super.create();
 
-        this.player.y = 100;
-    }
+    this.player.y = 100;
+  }
 
-    update() {
-        super.update();
-    }
+  update() {
+    super.update();
+  }
 }
