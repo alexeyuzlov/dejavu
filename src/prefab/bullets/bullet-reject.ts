@@ -30,10 +30,7 @@ export class BulletReject extends ArcadePrefab {
           bulletReject.rejectState = true;
         } else {
           bulletReject.kill();
-          if (!this.level.player.immortalState) {
-            this.level.player.makeDamage(bulletReject.damagePoints);
-            this.level.hud.updateHealthState();
-          }
+          this.level.player.makeDamage(bulletReject.damagePoints);
         }
       },
     );

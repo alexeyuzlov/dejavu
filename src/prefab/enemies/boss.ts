@@ -133,9 +133,8 @@ export class Boss extends AbstractEnemy {
           this.isProtect = true;
           this.animations.play('move');
         }
-      } else if (!this.level.player.immortalState) {
+      } else {
         this.level.player.makeDamage(boss.damagePoints);
-        this.level.hud.updateHealthState();
       }
     });
 

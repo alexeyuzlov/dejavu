@@ -11,7 +11,9 @@ export class AbstractStory extends Phaser.State {
   line = '';
   completed = false;
 
-  preload() {}
+  preload() {
+    // Phaser hook; required for Phaser to call.
+  }
 
   create() {
     this.game.stage.backgroundColor = '#000000';

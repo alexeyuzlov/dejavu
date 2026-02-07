@@ -17,10 +17,7 @@ export class IceSpike extends ArcadePrefab {
       this.level.player,
       this,
       (_player: Player, iceSpike: IceSpike) => {
-        if (!this.level.player.immortalState) {
-          this.level.player.makeDamage(iceSpike.damagePoints);
-          this.level.hud.updateHealthState();
-        }
+        this.level.player.makeDamage(iceSpike.damagePoints);
       },
     );
 

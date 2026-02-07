@@ -13,10 +13,7 @@ export class Spike extends ArcadePrefab {
 
   update() {
     this.game.physics.arcade.collide(this.level.player, this, (_player: Player, spike: Spike) => {
-      if (!this.level.player.immortalState) {
-        this.level.player.makeDamage(spike.damagePoints);
-        this.level.hud.updateHealthState();
-      }
+      this.level.player.makeDamage(spike.damagePoints);
     });
   }
 }

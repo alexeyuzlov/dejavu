@@ -135,9 +135,13 @@ export class AbstractZone extends Phaser.State {
     return group;
   }
 
-  render() {}
+  render() {
+    // Phaser hook; required for Phaser to call.
+  }
 
-  update() {}
+  update() {
+    // Phaser hook; required for Phaser to call.
+  }
 
   gameOver() {
     this.blackScreen.setText('Game Over. Reload Level.');

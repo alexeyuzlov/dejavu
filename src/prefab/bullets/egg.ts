@@ -33,9 +33,8 @@ export class Egg extends ArcadePrefab {
     this.game.physics.arcade.collide(this, this.level.player, (egg: Egg, _player: Player) => {
       egg.kill();
 
-      if (!this.level.player.immortalState && !this.level.player.attackState) {
+      if (!this.level.player.attackState) {
         this.level.player.makeDamage(egg.damagePoints);
-        this.level.hud.updateHealthState();
       }
     });
 

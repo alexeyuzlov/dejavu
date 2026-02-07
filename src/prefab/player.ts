@@ -87,6 +87,8 @@ export class Player extends ArcadePrefab {
   }
 
   makeDamage(damagePoint: number) {
+    if (this.immortalState) return;
+
     if (damagePoint < this.defensePoints) {
       damagePoint = 1;
     } else {
@@ -94,6 +96,7 @@ export class Player extends ArcadePrefab {
     }
 
     this.damage(damagePoint);
+    this.level.hud.updateHealthState();
     this.write(damagePoint.toString(), settings.font.whiteWithRed);
     this.immortal(this.immortalDefaultDuration);
   }

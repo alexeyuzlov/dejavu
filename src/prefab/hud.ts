@@ -23,5 +23,7 @@ export class HUD extends AbstractPrefab {
     this.healthState.text = this.level.player.health.toString();
   }
 
-  update() {}
+  update() {
+    // Phaser hook; required for Phaser to call.
+  }
 }

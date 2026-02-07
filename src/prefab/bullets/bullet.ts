@@ -18,10 +18,7 @@ export class Bullet extends ArcadePrefab {
   update() {
     this.game.physics.arcade.collide(this, this.level.player, (bullet: Bullet, _player: Player) => {
       bullet.kill();
-      if (!this.level.player.immortalState) {
-        this.level.player.makeDamage(bullet.damagePoints);
-        this.level.hud.updateHealthState();
-      }
+      this.level.player.makeDamage(bullet.damagePoints);
     });
   }
 }

@@ -55,9 +55,8 @@ export class AbstractEnemy extends ArcadePrefab {
       (player: Player, enemy: AbstractEnemy) => {
         if (player.attackState) {
           enemy.makeDamage(player.damagePoints);
-        } else if (!this.level.player.immortalState) {
+        } else {
           this.level.player.makeDamage(enemy.damagePoints);
-          this.level.hud.updateHealthState();
         }
       },
     );
