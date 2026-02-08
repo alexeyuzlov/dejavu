@@ -88,8 +88,8 @@ export class AbstractZone extends Scene {
     this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
     // PREFABS SINGLE
-    // this.player = new Player(this, 120, this.map.heightInPixels - 200);
-    this.player = new Player(this, 80, 600);
+    this.player = new Player(this, 120, this.map.heightInPixels - 200);
+    // this.player = new Player(this, 80, 600);
     this.physics.add.collider(this.player, this.layer);
 
     this.hud = new HUD(this, 10, 10);
