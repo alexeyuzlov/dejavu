@@ -1,38 +1,33 @@
+import type { Scene } from 'phaser';
 import { TextureKey } from '../texture-keys';
 import { ArcadePrefab } from './arcade-prefab';
-import type { Player } from './player';
 
 export class IceSpike extends ArcadePrefab {
   damagePoints = 10;
   // TODO: Review gameplay impact of negative thresholds.
   distanceToTarget = Math.random() * 100 - 40; // from - 40 to 60 px to target
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.IceSpike);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.IceSpike);
 
-    this.checkWorldBounds = true;
+    this.scene.physics.add.overlap(this.level.player, this, () => {
+      this.level.player.makeDamage(this.damagePoints);
+    });
   }
 
-  update() {
-    this.game.physics.arcade.overlap(
-      this.level.player,
-      this,
-      (_player: Player, iceSpike: IceSpike) => {
-        this.level.player.makeDamage(iceSpike.damagePoints);
-      },
-    );
-
-    if (!this.inCamera) return;
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
+    if (!this.scene.cameras.main.worldView.contains(this.x, this.y)) return;
 
     if (
       Math.abs(this.level.player.x - this.body.x) < this.distanceToTarget &&
       this.level.player.y > this.body.y
     ) {
-      this.body.gravity.y = 100;
-      this.body.acceleration.y = 1000;
+      this.body.setGravityY(100);
+      this.body.setAccelerationY(1000);
     }
 
-    if (this.y > this.game.world.height) {
+    if (this.y > this.scene.physics.world.bounds.height) {
       this.kill();
     }
   }

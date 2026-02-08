@@ -1,7 +1,7 @@
+import type { Scene } from 'phaser';
 import { Direction } from '../../global-config';
-import { AbstractEnemy } from './abstract-enemy';
-import type { Transparent } from '../transparent';
 import { TextureKey } from '../../texture-keys';
+import { AbstractEnemy } from './abstract-enemy';
 
 export class Runner extends AbstractEnemy {
   gravity = 300;
@@ -10,54 +10,56 @@ export class Runner extends AbstractEnemy {
   damagePoints = 9;
   defensePoints = 3;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.Runner);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.Runner);
 
-    this.body.velocity.x = this.velocity;
+    this.body.setVelocityX(this.velocity);
 
-    this.body.gravity.y = this.gravity;
-    this.body.collideWorldBounds = true;
+    this.body.setGravityY(this.gravity);
+    this.setCollideWorldBounds(true);
     this.health = 90;
 
-    this.anchor.set(0.5, 1);
+    this.setOrigin(0.5, 1);
 
-    this.animations.add(
-      'walk',
-      Phaser.Animation.generateFrameNames('runner-', 1, 4, '.png', 0),
-      5,
-      true,
-    );
-    this.animations.play('walk');
+    if (!this.scene.anims.exists('runner-walk')) {
+      this.scene.anims.create({
+        key: 'runner-walk',
+        frames: this.scene.anims.generateFrameNames(TextureKey.Runner, {
+          prefix: 'runner-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 5,
+        repeat: -1,
+      });
+    }
+    this.play('runner-walk', true);
+
+    this.scene.physics.add.collider(this, this.level.layer);
+    this.scene.physics.add.collider(this, this.level.transparents, () => {
+      this.toggleDirection();
+    });
   }
 
   toggleDirection() {
     switch (this.direction) {
       case Direction.Left:
         this.direction = Direction.Right;
-        this.body.velocity.x = this.velocity;
-        this.scale.x = 1;
+        this.body.setVelocityX(this.velocity);
+        this.setFlipX(false);
         break;
       case Direction.Right:
         this.direction = Direction.Left;
-        this.body.velocity.x = -this.velocity;
-        this.scale.x = -1;
+        this.body.setVelocityX(-this.velocity);
+        this.setFlipX(true);
         break;
       default:
     }
   }
 
-  update() {
-    super.update();
-
-    this.game.physics.arcade.collide(this, this.level.layer);
-
-    this.game.physics.arcade.collide(
-      this,
-      this.level.transparents,
-      (runner: Runner, _transparent: Transparent) => {
-        runner.toggleDirection();
-      },
-    );
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
 
     if (this.body.blocked.left || this.body.blocked.right) {
       this.toggleDirection();

@@ -1,3 +1,4 @@
+import type { Input, Scene } from 'phaser';
 import { GameEvents, GameEventType } from '../bridge/game-events';
 import { Direction, settings } from '../global-config';
 import { keys } from '../input-config';
@@ -18,48 +19,86 @@ export class Player extends ArcadePrefab {
   damagePoints = 50;
   immortalStateAt: number;
   attackStateAt: number;
-  immortalDuration = Phaser.Timer.SECOND * 3;
-  immortalDefaultDuration = Phaser.Timer.SECOND * 3;
-  attackDuration = Phaser.Timer.SECOND / 3;
+  immortalDuration = 3000;
+  immortalDefaultDuration = 3000;
+  attackDuration = 333;
   isActiveJumpKey = false;
   isAttackKeyPressed = false;
   private playerReadyEmitted = false;
+  private inputKeys?: {
+    left: Input.Keyboard.Key;
+    right: Input.Keyboard.Key;
+    jump: Input.Keyboard.Key;
+    attack: Input.Keyboard.Key;
+  };
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.Player);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.Player);
 
-    this.immortalStateAt = this.game.time.now;
-    this.attackStateAt = this.game.time.now;
+    this.immortalStateAt = this.scene.time.now;
+    this.attackStateAt = this.scene.time.now;
 
-    this.body.gravity.y = this.gravity;
-    this.anchor.set(0.5, 1);
+    this.body.setGravityY(this.gravity);
 
-    this.body.drag.x = this.drag;
-    this.body.maxVelocity.x = this.maxSpeed;
-    this.body.maxVelocity.y = this.jumpPower * 2;
+    this.body.setDragX(this.drag);
+    this.body.setMaxVelocity(this.maxSpeed, this.jumpPower * 2);
 
-    this.body.collideWorldBounds = true;
-    this.alive = true;
+    this.setCollideWorldBounds(true);
+    this.setActive(true);
 
     this.health = +settings.storage.getHealthPoints();
 
-    this.animations.add('stay', ['player-walk-1.png'], 10, true);
-    this.animations.add(
-      'walk',
-      Phaser.Animation.generateFrameNames('player-walk-', 1, 4, '.png', 0),
-      15,
-      true,
-    );
-    this.animations.add(
-      'attack',
-      Phaser.Animation.generateFrameNames('player-attack-', 1, 3, '.png', 0),
-      10,
-      true,
-    );
+    this.ensureAnimations();
 
-    this.events.onKilled.add(() => {
+    this.inputKeys = this.scene.input.keyboard?.addKeys({
+      left: keys.moveLeft,
+      right: keys.moveRight,
+      jump: keys.jump,
+      attack: keys.attack,
+    }) as typeof this.inputKeys;
+
+    this.on('killed', () => {
       this.level.gameOver();
     });
+  }
+
+  private ensureAnimations() {
+    if (!this.scene.anims.exists('player-stay')) {
+      this.scene.anims.create({
+        key: 'player-stay',
+        frames: [{ key: TextureKey.Player, frame: 'player-walk-1.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+
+    if (!this.scene.anims.exists('player-walk')) {
+      this.scene.anims.create({
+        key: 'player-walk',
+        frames: this.scene.anims.generateFrameNames(TextureKey.Player, {
+          prefix: 'player-walk-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 15,
+        repeat: -1,
+      });
+    }
+
+    if (!this.scene.anims.exists('player-attack')) {
+      this.scene.anims.create({
+        key: 'player-attack',
+        frames: this.scene.anims.generateFrameNames(TextureKey.Player, {
+          prefix: 'player-attack-',
+          start: 1,
+          end: 3,
+          suffix: '.png',
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
   }
 
   getHP(healthPoints: number) {
@@ -70,19 +109,21 @@ export class Player extends ArcadePrefab {
 
   immortal(duration: number) {
     this.immortalDuration = duration;
-    this.immortalStateAt = this.game.time.now;
+    this.immortalStateAt = this.scene.time.now;
     this.immortalState = true;
     this.alpha = 0.5;
   }
 
   write(text: string, style: Record<string, unknown>) {
-    const textSprite = this.game.add.text(this.x, this.y, text, style);
-    const tween = this.game.add
-      .tween(textSprite)
-      .to({ alpha: 0 }, Phaser.Timer.SECOND, Phaser.Easing.Linear.None, true, 0, 0, false);
-
-    tween.onComplete.add(() => {
-      textSprite.destroy();
+    const textSprite = this.scene.add.text(this.x, this.y, text, style);
+    this.scene.tweens.add({
+      targets: textSprite,
+      alpha: 0,
+      duration: 1000,
+      ease: 'Linear',
+      onComplete: () => {
+        textSprite.destroy();
+      },
     });
   }
 
@@ -102,86 +143,87 @@ export class Player extends ArcadePrefab {
   }
 
   jump() {
+    const jumpKey = this.inputKeys?.jump;
     if (
-      this.game.input.keyboard.isDown(keys.jump) &&
+      jumpKey?.isDown &&
       (this.body.blocked.down || this.body.touching.down) &&
       !this.isActiveJumpKey
     ) {
       this.isActiveJumpKey = true;
-      this.body.velocity.y = -this.jumpPower;
+      this.body.setVelocityY(-this.jumpPower);
     }
 
-    if (!this.game.input.keyboard.isDown(keys.jump)) {
+    if (!jumpKey?.isDown) {
       this.isActiveJumpKey = false;
     }
   }
 
   move() {
-    if (this.game.input.keyboard.isDown(keys.moveRight)) {
+    const rightKey = this.inputKeys?.right;
+    const leftKey = this.inputKeys?.left;
+    if (rightKey?.isDown) {
       this.moveState = true;
-      this.body.acceleration.x = this.acceleration;
+      this.body.setAccelerationX(this.acceleration);
       this.direction = Direction.Right;
-      this.scale.x = 1;
-    } else if (this.game.input.keyboard.isDown(keys.moveLeft)) {
+      this.setFlipX(false);
+    } else if (leftKey?.isDown) {
       this.moveState = true;
-      this.body.acceleration.x = -this.acceleration;
+      this.body.setAccelerationX(-this.acceleration);
       this.direction = Direction.Left;
-      this.scale.x = -1;
+      this.setFlipX(true);
     } else {
       this.moveState = false;
-      this.body.acceleration.x = 0;
+      this.body.setAccelerationX(0);
     }
   }
 
   attack() {
-    if (
-      this.game.input.keyboard.isDown(keys.attack) &&
-      !this.attackState &&
-      !this.isAttackKeyPressed
-    ) {
+    const attackKey = this.inputKeys?.attack;
+    if (attackKey?.isDown && !this.attackState && !this.isAttackKeyPressed) {
       this.isAttackKeyPressed = true;
       this.attackState = true;
-      this.attackStateAt = this.game.time.now;
+      this.attackStateAt = this.scene.time.now;
     }
 
-    if (!this.game.input.keyboard.isDown(keys.attack)) {
+    if (!attackKey?.isDown) {
       this.isAttackKeyPressed = false;
     }
 
-    if (this.game.time.now - this.attackStateAt > this.attackDuration) {
+    if (this.scene.time.now - this.attackStateAt > this.attackDuration) {
       this.attackState = false;
     }
   }
 
-  state() {
-    if (this.immortalState && this.game.time.now - this.immortalStateAt > this.immortalDuration) {
+  updateState() {
+    if (this.immortalState && this.scene.time.now - this.immortalStateAt > this.immortalDuration) {
       this.alpha = 1;
       this.immortalState = false;
     }
 
     if (this.attackState) {
-      this.animations.play('attack');
+      this.play('player-attack', true);
     } else if (this.moveState) {
-      this.animations.play('walk');
+      this.play('player-walk', true);
     } else {
-      this.animations.play('stay');
+      this.play('player-stay', true);
     }
 
-    this.body.width = this.animations.currentFrame.width;
-    this.body.height = this.animations.currentFrame.height;
+    if (this.frame) {
+      this.body.setSize(this.frame.width, this.frame.height);
+    }
   }
 
-  update() {
-    this.game.physics.arcade.collide(this, this.level.layer);
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
     if (!this.playerReadyEmitted && (this.body.blocked.down || this.body.touching.down)) {
       this.playerReadyEmitted = true;
-      GameEvents.emit(GameEventType.PlayerReady, { name: this.game.state.current });
+      GameEvents.emit(GameEventType.PlayerReady, { name: this.level.sys.settings.key });
     }
 
     this.move();
     this.jump();
     this.attack();
 
-    this.state();
+    this.updateState();
   }
 }

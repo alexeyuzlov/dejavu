@@ -1,29 +1,32 @@
+import type { Scene } from 'phaser';
 import { TextureKey, type TextureKeyValue } from '../../texture-keys';
 import { ArcadePrefab } from '../arcade-prefab';
-import type { Player } from '../player';
 
 export class Bullet extends ArcadePrefab {
   speed = 300;
   damagePoints = 20;
 
-  constructor(
-    game: Phaser.Game,
-    x: number,
-    y: number,
-    texture: TextureKeyValue = TextureKey.Bullet,
-  ) {
-    super(game, x, y, texture);
-    this.anchor.set(0.5, 0.5);
+  constructor(scene: Scene, x: number, y: number, texture: TextureKeyValue = TextureKey.Bullet) {
+    super(scene, x, y, texture);
+    this.setOrigin(0.5, 0.5);
+    this.body.setAllowGravity(false);
     this.kill();
-
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
   }
 
-  update() {
-    this.game.physics.arcade.collide(this, this.level.player, (bullet: Bullet, _player: Player) => {
-      bullet.kill();
-      this.level.player.makeDamage(bullet.damagePoints);
-    });
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
+    if (!this.active) {
+      return;
+    }
+
+    const bounds = this.scene.physics.world.bounds;
+    if (
+      this.x < bounds.left ||
+      this.x > bounds.right ||
+      this.y < bounds.top ||
+      this.y > bounds.bottom
+    ) {
+      this.kill();
+    }
   }
 }

@@ -13,7 +13,7 @@ window.addEventListener('load', () => {
   GameCommands.on((type, payload) => {
     switch (type) {
       case GameCommandType.StateStart:
-        game.state.start(payload.name);
+        game.scene.start(payload.name);
         break;
     }
   });

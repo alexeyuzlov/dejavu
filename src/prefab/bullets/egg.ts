@@ -1,51 +1,69 @@
-import { ArcadePrefab } from '../arcade-prefab';
-import type { Player } from '../player';
+import type { Scene } from 'phaser';
 import { TextureKey } from '../../texture-keys';
+import { ArcadePrefab } from '../arcade-prefab';
 
 export class Egg extends ArcadePrefab {
   speed = 180;
   damagePoints = 35;
   eggCrashState = false;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.Egg);
-    this.anchor.set(0.5, 0.5);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.Egg);
+    this.body.setAllowGravity(false);
     this.kill();
 
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
+    this.ensureAnimations();
+    this.play('egg', true);
 
-    this.animations.add('egg', ['egg.png'], 10, true);
-    this.animations.add('egg-crash', ['egg-crash.png'], 10, true);
+    this.scene.physics.add.collider(this, this.level.player, () => {
+      this.kill();
+      if (!this.level.player.attackState) {
+        this.level.player.makeDamage(this.damagePoints);
+      }
+    });
 
-    this.animations.play('egg');
+    this.scene.physics.add.collider(this, this.level.layer, () => {
+      if (!this.eggCrashState) {
+        this.setEggCrash();
+      }
+    });
+  }
+
+  private ensureAnimations() {
+    if (!this.scene.anims.exists('egg')) {
+      this.scene.anims.create({
+        key: 'egg',
+        frames: [{ key: TextureKey.Egg, frame: 'egg.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+
+    if (!this.scene.anims.exists('egg-crash')) {
+      this.scene.anims.create({
+        key: 'egg-crash',
+        frames: [{ key: TextureKey.Egg, frame: 'egg-crash.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+  }
+
+  resetEggState() {
+    this.eggCrashState = false;
+    this.play('egg', true);
+
+    if (this.frame) {
+      this.body.setSize(this.frame.width, this.frame.height);
+    }
   }
 
   setEggCrash() {
     this.eggCrashState = true;
-    this.animations.play('egg-crash');
+    this.play('egg-crash', true);
 
-    this.body.width = this.animations.currentFrame.width;
-    this.body.height = this.animations.currentFrame.height;
-  }
-
-  update() {
-    this.game.physics.arcade.collide(this, this.level.player, (egg: Egg, _player: Player) => {
-      egg.kill();
-
-      if (!this.level.player.attackState) {
-        this.level.player.makeDamage(egg.damagePoints);
-      }
-    });
-
-    this.game.physics.arcade.collide(
-      this,
-      this.level.layer,
-      (egg: Egg, _layer: Phaser.TilemapLayer) => {
-        if (!this.eggCrashState) {
-          egg.setEggCrash();
-        }
-      },
-    );
+    if (this.frame) {
+      this.body.setSize(this.frame.width, this.frame.height);
+    }
   }
 }

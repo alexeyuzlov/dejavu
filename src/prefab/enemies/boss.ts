@@ -1,10 +1,12 @@
+import type { GameObjects, Scene, Textures } from 'phaser';
+import { Math as PhaserMath } from 'phaser';
+import { TextureKey } from '../../texture-keys';
 import { BulletReject } from '../bullets/bullet-reject';
 import { Player } from '../player';
-import { TextureKey } from '../../texture-keys';
 import { AbstractEnemy } from './abstract-enemy';
 
 export class Boss extends AbstractEnemy {
-  bossTweens: Phaser.Group;
+  bossTweens: GameObjects.Group;
   activeTweenID = 0;
 
   lastEventAt: number;
@@ -13,152 +15,170 @@ export class Boss extends AbstractEnemy {
   health = 100;
 
   lastBulletShotAt: number;
-  bullets: Phaser.Group;
+  bullets: GameObjects.Group;
   countBullets = 10;
-  shotDelay = Phaser.Timer.SECOND * 3;
+  shotDelay = 3000;
   damagePoints = 10;
   defensePoints = 40;
 
-  lightningBitmap: Phaser.BitmapData;
-  lightning: Phaser.Image;
-  flash: Phaser.Graphics;
+  lightningTexture: Textures.CanvasTexture;
+  lightning: GameObjects.Image;
+  flash: GameObjects.Rectangle;
 
-  constructor(game: Phaser.Game, bossTweens: Phaser.Group) {
-    super(game, bossTweens.children[0].x, bossTweens.children[0].y, TextureKey.Boss);
+  constructor(scene: Scene, bossTweens: GameObjects.Group) {
+    const startPoint = bossTweens.getChildren()[0] as GameObjects.Sprite;
+    super(scene, startPoint.x, startPoint.y, TextureKey.Boss);
 
     this.bossTweens = bossTweens;
+    this.body.setAllowGravity(false);
 
-    this.lastEventAt = this.game.time.now;
-    this.lastBulletShotAt = this.game.time.now;
+    this.lastEventAt = this.scene.time.now;
+    this.lastBulletShotAt = this.scene.time.now;
 
-    this.bullets = this.game.add.group();
+    this.bullets = this.scene.add.group();
+    this.bullets.runChildUpdate = true;
     for (let i = 0; i < this.countBullets; i++) {
-      const bullet = new BulletReject(game, 0, 0);
+      const bullet = new BulletReject(scene, 0, 0);
       this.bullets.add(bullet);
     }
 
-    this.game.onResume.add(() => {
-      this.lastBulletShotAt += this.game.time.pauseDuration;
+    this.scene.physics.add.collider(this, this.level.layer);
+    this.scene.physics.add.overlap(this, this.bullets, (_boss, bulletReject) => {
+      const activeBullet = bulletReject as BulletReject;
+      if (activeBullet.rejectState) {
+        activeBullet.kill();
+        this.play('boss-blue', true);
+        this.isProtect = false;
+      }
     });
 
-    this.animations.add(
-      'move',
-      Phaser.Animation.generateFrameNames('boss-', 1, 4, '.png', 0),
-      20,
-      true,
-    );
-    this.animations.add(
-      'blue',
-      Phaser.Animation.generateFrameNames('boss-blue-', 1, 4, '.png', 0),
-      20,
-      true,
-    );
-    this.animations.play('move');
-
-    this.anchor.set(0.5, 1);
-
-    this.lightningBitmap = this.game.add.bitmapData(200, 1000);
-    this.lightning = this.game.add.image(this.game.width / 2, 0, this.lightningBitmap);
-    this.lightning.anchor.setTo(0.5, 0);
-    this.lightning.fixedToCamera = true;
-
-    this.flash = this.game.add.graphics(0, 0);
-    this.flash.beginFill(0xffffff, 1);
-    this.flash.drawRect(0, 0, this.game.width, this.game.height);
-    this.flash.endFill();
-    this.flash.alpha = 0;
-    this.flash.fixedToCamera = true;
-
-    this.events.onKilled.add(() => {
-      this.boom();
-
-      this.game.add
-        .tween(this.level.blackScreen)
-        .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
-        .onComplete.add(() => {
-          this.level.startNextLevel();
-        });
-    });
-  }
-
-  generateAction() {
-    this.lastEventAt = this.game.time.now;
-
-    if (this.bossTweens.children.length < 2) {
-      this.inAction = false;
-      return;
-    }
-
-    let rand = this.activeTweenID;
-    do {
-      rand = Math.floor(Math.random() * this.bossTweens.children.length);
-    } while (rand == this.activeTweenID);
-    this.activeTweenID = rand;
-
-    const tween = this.game.add.tween(this);
-    tween.to(
-      {
-        x: this.bossTweens.children[this.activeTweenID].x,
-        y: this.bossTweens.children[this.activeTweenID].y,
-      },
-      Math.random() * 1000 + 2000,
-      Phaser.Easing.Quadratic.In,
-      true,
-      0,
-      0,
-      false,
-    );
-
-    tween.onComplete.add(() => {
-      this.inAction = false;
-    });
-  }
-
-  update() {
-    if (!this.alive) return;
-
-    if (
-      this.immortalState &&
-      this.game.time.now - this.immortalStateAt > this.immortalStateDuration
-    ) {
-      this.immortalState = false;
-    }
-
-    this.game.physics.arcade.overlap(
-      this,
-      this.bullets,
-      (_boss: Boss, bulletReject: BulletReject) => {
-        if (bulletReject.rejectState) {
-          bulletReject.kill();
-          this.animations.play('blue');
-          this.isProtect = false;
-        }
-      },
-    );
-
-    this.game.physics.arcade.overlap(this.level.player, this, (player: Player, boss: Boss) => {
+    this.scene.physics.add.overlap(this.level.player, this, (player: Player, boss: Boss) => {
       if (player.attackState) {
         if (this.isProtect) {
           this.makeDamage(1);
         } else {
           this.makeDamage(player.damagePoints);
           this.isProtect = true;
-          this.animations.play('move');
+          this.play('boss-move', true);
         }
       } else {
         this.level.player.makeDamage(boss.damagePoints);
       }
     });
 
+    if (!this.scene.anims.exists('boss-move')) {
+      this.scene.anims.create({
+        key: 'boss-move',
+        frames: this.scene.anims.generateFrameNames(TextureKey.Boss, {
+          prefix: 'boss-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 20,
+        repeat: -1,
+      });
+    }
+    if (!this.scene.anims.exists('boss-blue')) {
+      this.scene.anims.create({
+        key: 'boss-blue',
+        frames: this.scene.anims.generateFrameNames(TextureKey.Boss, {
+          prefix: 'boss-blue-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 20,
+        repeat: -1,
+      });
+    }
+    this.play('boss-move', true);
+
+    this.setOrigin(0.5, 1);
+
+    if (!this.scene.textures.exists('boss-lightning')) {
+      this.lightningTexture = this.scene.textures.createCanvas('boss-lightning', 200, 1000);
+    } else {
+      this.lightningTexture = this.scene.textures.get('boss-lightning') as Textures.CanvasTexture;
+    }
+    this.lightning = this.scene.add.image(this.scene.scale.width / 2, 0, 'boss-lightning');
+    this.lightning.setOrigin(0.5, 0);
+    this.lightning.setScrollFactor(0);
+
+    this.flash = this.scene.add.rectangle(
+      0,
+      0,
+      this.scene.scale.width,
+      this.scene.scale.height,
+      0xffffff,
+      1,
+    );
+    this.flash.setOrigin(0, 0);
+    this.flash.setAlpha(0);
+    this.flash.setScrollFactor(0);
+
+    this.on('killed', () => {
+      this.boom();
+
+      this.scene.tweens.add({
+        targets: this.level.blackScreen,
+        alpha: 1,
+        duration: 3000,
+        ease: 'Linear',
+        onComplete: () => {
+          this.level.startNextLevel();
+        },
+      });
+    });
+  }
+
+  generateAction() {
+    this.lastEventAt = this.scene.time.now;
+
+    if (this.bossTweens.getChildren().length < 2) {
+      this.inAction = false;
+      return;
+    }
+
+    let rand = this.activeTweenID;
+    do {
+      rand = Math.floor(Math.random() * this.bossTweens.getChildren().length);
+    } while (rand == this.activeTweenID);
+    this.activeTweenID = rand;
+
+    const target = this.bossTweens.getChildren()[this.activeTweenID] as GameObjects.Sprite;
+    this.scene.tweens.add({
+      targets: this,
+      x: target.x,
+      y: target.y,
+      duration: Math.random() * 1000 + 2000,
+      ease: 'Quadratic.In',
+      onComplete: () => {
+        this.inAction = false;
+      },
+    });
+  }
+
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
+    if (!this.active) return;
+
+    if (
+      this.immortalState &&
+      this.scene.time.now - this.immortalStateAt > this.immortalStateDuration
+    ) {
+      this.immortalState = false;
+    }
+
     if (!this.inAction) {
       this.inAction = true;
       this.generateAction();
     }
 
-    if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;
-    this.lastBulletShotAt = this.game.time.now;
+    if (this.scene.time.now - this.lastBulletShotAt < this.shotDelay) return;
+    this.lastBulletShotAt = this.scene.time.now;
 
-    const bullet = this.bullets.getFirstDead();
+    const bullet = this.bullets.getFirstDead(false) as BulletReject | null;
 
     if (bullet === null || bullet === undefined) return;
 
@@ -167,13 +187,13 @@ export class Boss extends AbstractEnemy {
     bullet.rejectState = false;
 
     if (this.x > this.level.player.x) {
-      bullet.body.velocity.x = -bullet.speed;
-      bullet.scale.x = -1;
-      this.scale.x = -1;
+      bullet.body.setVelocityX(-bullet.speed);
+      bullet.setFlipX(true);
+      this.setFlipX(true);
     } else {
-      bullet.body.velocity.x = bullet.speed;
-      bullet.scale.x = 1;
-      this.scale.x = 1;
+      bullet.body.setVelocityX(bullet.speed);
+      bullet.setFlipX(false);
+      this.setFlipX(false);
     }
   }
 
@@ -181,31 +201,38 @@ export class Boss extends AbstractEnemy {
     // Rotate the lightning sprite so it goes in the
     // direction of the pointer
     this.lightning.rotation =
-      Phaser.Math.angleBetween(this.lightning.x, this.lightning.y, this.x, this.y) - Math.PI / 2;
+      PhaserMath.Angle.Between(this.lightning.x, this.lightning.y, this.x, this.y) - Math.PI / 2;
 
     // Calculate the distance from the lightning source to the pointer
-    const distance = Phaser.Math.distance(this.lightning.x, this.lightning.y, this.x, this.y);
+    const distance = PhaserMath.Distance.Between(
+      this.lightning.x,
+      this.lightning.y,
+      this.x,
+      this.y,
+    );
 
     // Create the lightning texture
-    this.createLightningTexture(this.lightningBitmap.width / 2, 0, 100, 3, false, distance);
+    this.createLightningTexture(this.lightningTexture.width / 2, 0, 100, 3, false, distance);
 
     // Make the lightning sprite visible
-    this.lightning.alpha = 1;
+    this.lightning.setAlpha(1);
 
     // Fade out the lightning sprite using a tween on the alpha property.
     // Check out the "Easing function" examples for more info.
-    this.game.add
-      .tween(this.lightning)
-      .to({ alpha: 0.5 }, 100, Phaser.Easing.Bounce.Out)
-      .to({ alpha: 1.0 }, 100, Phaser.Easing.Bounce.Out)
-      .to({ alpha: 0.5 }, 100, Phaser.Easing.Bounce.Out)
-      .to({ alpha: 1.0 }, 100, Phaser.Easing.Bounce.Out)
-      .to({ alpha: 0 }, 250, Phaser.Easing.Cubic.In)
-      .start();
+    this.scene.tweens.chain({
+      targets: this.lightning,
+      tweens: [
+        { alpha: 0.5, duration: 100, ease: 'Bounce.Out' },
+        { alpha: 1.0, duration: 100, ease: 'Bounce.Out' },
+        { alpha: 0.5, duration: 100, ease: 'Bounce.Out' },
+        { alpha: 1.0, duration: 100, ease: 'Bounce.Out' },
+        { alpha: 0, duration: 250, ease: 'Cubic.In' },
+      ],
+    });
 
     // Create the flash
-    this.flash.alpha = 1;
-    this.game.add.tween(this.flash).to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In).start();
+    this.flash.setAlpha(1);
+    this.scene.tweens.add({ targets: this.flash, alpha: 0, duration: 100, ease: 'Cubic.In' });
   }
 
   createLightningTexture(
@@ -216,10 +243,10 @@ export class Boss extends AbstractEnemy {
     branch: boolean,
     distance: number,
   ) {
-    // Get the canvas drawing context for the lightningBitmap
-    const ctx = this.lightningBitmap.context;
-    const width = this.lightningBitmap.width;
-    const height = this.lightningBitmap.height;
+    // Get the canvas drawing context for the lightningTexture
+    const ctx = this.lightningTexture.context;
+    const width = this.lightningTexture.width;
+    const height = this.lightningTexture.height;
 
     // Our lightning will be made up of several line segments starting at
     // the center of the top edge of the bitmap and ending at the target.
@@ -240,10 +267,10 @@ export class Boss extends AbstractEnemy {
       // keep it within the bounds of the bitmap
       if (branch) {
         // For a branch
-        x += this.game.rnd.integerInRange(-10, 10);
+        x += PhaserMath.Between(-10, 10);
       } else {
         // For the main bolt
-        x += this.game.rnd.integerInRange(-30, 30);
+        x += PhaserMath.Between(-30, 30);
       }
       if (x <= 10) x = 10;
       if (x >= width - 10) x = width - 10;
@@ -255,10 +282,10 @@ export class Boss extends AbstractEnemy {
       // to the target if it's hanging in the air.
       if (branch) {
         // For a branch
-        y += this.game.rnd.integerInRange(10, 20);
+        y += PhaserMath.Between(10, 20);
       } else {
         // For the main bolt
-        y += this.game.rnd.integerInRange(20, distance / segments);
+        y += PhaserMath.Between(20, Math.floor(distance / segments));
       }
       if ((!branch && i == segments - 1) || y > distance) {
         // This causes the bolt to always terminate at the center
@@ -279,7 +306,7 @@ export class Boss extends AbstractEnemy {
 
       // Draw a branch 20% of the time off the main bolt only
       if (!branch) {
-        if (Phaser.Utils.chanceRoll(20)) {
+        if (PhaserMath.Between(1, 100) <= 20) {
           // Draws another, thinner, bolt starting from this position
           this.createLightningTexture(x, y, 10, 1, true, distance);
         }
@@ -287,6 +314,6 @@ export class Boss extends AbstractEnemy {
     }
 
     // This just tells the engine it should update the texture cache
-    this.lightningBitmap.dirty = true;
+    this.lightningTexture.refresh();
   }
 }

@@ -1,5 +1,4 @@
 export const TextureKey = {
-  Bg: 'bg',
   Boss: 'boss',
   BottleHp: 'bottle-hp',
   BottleSuper: 'bottle-super',

@@ -1,3 +1,4 @@
+import { Levels } from '../../../global-config';
 import { Boss } from '../../../prefab';
 import { TextureKey } from '../../../texture-keys';
 import { Zone4 } from './zone-4';
@@ -5,18 +6,22 @@ import { Zone4 } from './zone-4';
 export class Zone4Level1 extends Zone4 {
   boss: Boss;
 
+  constructor() {
+    super({ key: Levels[Levels.Zone4Level1] });
+  }
+
   preload() {
     super.preload();
-    this.game.load.tilemap('map', 'assets/levels/4-1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemapTiledJSON(this.sys.settings.key, 'assets/levels/4-1.json');
   }
 
   create() {
     super.create();
 
     // to debug fight vs boss
-    // this.player.x = this.game.world.width - 600;
+    // this.player.x = this.scale.width - 600;
 
     const bossTweens = this.getPrefabsFromMap(TextureKey.Tween);
-    this.boss = new Boss(this.game, bossTweens);
+    this.boss = new Boss(this, bossTweens);
   }
 }

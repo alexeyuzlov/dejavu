@@ -1,3 +1,5 @@
+import type { GameObjects, Tilemaps, Types } from 'phaser';
+import { Scene } from 'phaser';
 import { GameEvents, GameEventType } from '../../bridge/game-events';
 import { Levels, settings, Stories } from '../../global-config';
 import { keys } from '../../input-config';
@@ -19,34 +21,45 @@ import {
   Spike,
   Transparent,
 } from '../../prefab';
-import { TextureKey, type TextureKeyValue } from '../../texture-keys';
+import { TextureKey } from '../../texture-keys';
+import { PrefabSpawner } from './prefab-spawner';
+import { ZoneMap } from './zone-map';
 
-export class AbstractZone extends Phaser.State {
-  map: Phaser.Tilemap;
-  layer: Phaser.TilemapLayer;
+export class AbstractZone extends Scene {
+  map: Tilemaps.Tilemap;
+  layer: Tilemaps.TilemapLayer;
+  bg: GameObjects.TileSprite;
 
   player: Player;
   hud: HUD;
   blackScreen: BlackScreen;
 
-  transparents: Phaser.Group;
-  spikes: Phaser.Group;
-  iceSpikes: Phaser.Group;
-  exits: Phaser.Group;
+  transparents: GameObjects.Group;
+  spikes: GameObjects.Group;
+  iceSpikes: GameObjects.Group;
+  exits: GameObjects.Group;
 
-  platformsHorizontal: Phaser.Group;
-  platformsVertical: Phaser.Group;
+  platformsHorizontal: GameObjects.Group;
+  platformsVertical: GameObjects.Group;
 
-  shooters: Phaser.Group;
-  shootersReject: Phaser.Group;
-  runners: Phaser.Group;
-  fliers: Phaser.Group;
-  fliersCrash: Phaser.Group;
+  shooters: GameObjects.Group;
+  shootersReject: GameObjects.Group;
+  runners: GameObjects.Group;
+  fliers: GameObjects.Group;
+  fliersCrash: GameObjects.Group;
 
-  bottlesHP: Phaser.Group;
-  bottlesSuper: Phaser.Group;
+  bottlesHP: GameObjects.Group;
+  bottlesSuper: GameObjects.Group;
 
-  game: Phaser.Game;
+  private isPaused = false;
+
+  constructor(config: Types.Scenes.SettingsConfig) {
+    super(config);
+  }
+
+  protected get bgKey() {
+    return `bg-${this.sys.settings.key}`;
+  }
 
   preload() {
     // All in preload file
@@ -54,112 +67,93 @@ export class AbstractZone extends Phaser.State {
   }
 
   create() {
-    settings.storage.setCurrentState(this.game.state.current);
-    this.game.stage.backgroundColor = '#000000';
-    GameEvents.emit(GameEventType.LevelStarted, { name: this.game.state.current });
+    settings.storage.setCurrentState(this.sys.settings.key);
+    this.cameras.main.setBackgroundColor('#000000');
+    GameEvents.emit(GameEventType.LevelStarted, { name: this.sys.settings.key });
+
+    const width = Number(this.sys.game.config.width);
+    const height = Number(this.sys.game.config.height);
+    this.bg = this.add
+      .tileSprite(0, 0, width, height, this.bgKey)
+      .setOrigin(0, 0)
+      .setScrollFactor(0);
 
     // MAP AND LAYERS
-    this.map = this.game.add.tilemap('map');
-    this.map.addTilesetImage(TextureKey.Ground);
-    this.map.setCollisionBetween(1, 5);
+    const zoneMap = new ZoneMap(this, this.sys.settings.key);
+    const { map, layer, objectLayer } = zoneMap.create();
+    this.map = map;
+    this.layer = layer;
 
-    this.layer = this.map.createLayer('layer');
-    this.layer.resizeWorld();
+    this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+    this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
     // PREFABS SINGLE
-    this.player = new Player(this.game, 120, this.game.world.height - 200);
+    // this.player = new Player(this, 120, this.map.heightInPixels - 200);
+    this.player = new Player(this, 80, 600);
+    this.physics.add.collider(this.player, this.layer);
 
-    this.hud = new HUD(this.game, 10, 10);
-    this.hud.alpha = 0;
+    this.hud = new HUD(this, 10, 10);
 
     // PREFABS MULTIPLE
-    this.transparents = this.getPrefabsFromMap(TextureKey.Transparent, Transparent);
-    this.exits = this.getPrefabsFromMap(TextureKey.Exit, Exit);
-    this.spikes = this.getPrefabsFromMap(TextureKey.Spike, Spike);
-    this.iceSpikes = this.getPrefabsFromMap(TextureKey.IceSpike, IceSpike);
-    this.bottlesHP = this.getPrefabsFromMap(TextureKey.BottleHp, BottleHP);
-    this.bottlesSuper = this.getPrefabsFromMap(TextureKey.BottleSuper, BottleSuper);
-    this.shooters = this.getPrefabsFromMap(TextureKey.Shooter, Shooter);
-    this.shootersReject = this.getPrefabsFromMap(TextureKey.ShooterReject, ShooterReject);
-    this.runners = this.getPrefabsFromMap(TextureKey.Runner, Runner);
-    this.fliers = this.getPrefabsFromMap(TextureKey.Flier, Flier);
-    this.fliersCrash = this.getPrefabsFromMap(TextureKey.FlierCrash, FlierCrash);
-    this.platformsHorizontal = this.getPrefabsFromMap(TextureKey.PlatformH, PlatformHorizontal);
-    this.platformsVertical = this.getPrefabsFromMap(TextureKey.PlatformV, PlatformVertical);
+    const prefabSpawner = new PrefabSpawner(this, this.map, objectLayer);
+    this.transparents = prefabSpawner.spawn(TextureKey.Transparent, Transparent);
+    this.exits = prefabSpawner.spawn(TextureKey.Exit, Exit);
+    this.spikes = prefabSpawner.spawn(TextureKey.Spike, Spike);
+    this.iceSpikes = prefabSpawner.spawn(TextureKey.IceSpike, IceSpike);
+    this.bottlesHP = prefabSpawner.spawn(TextureKey.BottleHp, BottleHP);
+    this.bottlesSuper = prefabSpawner.spawn(TextureKey.BottleSuper, BottleSuper);
+    this.shooters = prefabSpawner.spawn(TextureKey.Shooter, Shooter);
+    this.shootersReject = prefabSpawner.spawn(TextureKey.ShooterReject, ShooterReject);
+    this.runners = prefabSpawner.spawn(TextureKey.Runner, Runner);
+    this.fliers = prefabSpawner.spawn(TextureKey.Flier, Flier);
+    this.fliersCrash = prefabSpawner.spawn(TextureKey.FlierCrash, FlierCrash);
+    this.platformsHorizontal = prefabSpawner.spawn(TextureKey.PlatformH, PlatformHorizontal);
+    this.platformsVertical = prefabSpawner.spawn(TextureKey.PlatformV, PlatformVertical);
 
     // POST-SETTINGS
-    this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
+    this.cameras.main.startFollow(this.player);
 
-    this.blackScreen = new BlackScreen(this.game);
-    this.blackScreen.setText(this.game.state.current);
-    this.game.add
-      .tween(this.blackScreen)
-      .to({ alpha: 0 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
-      .onComplete.add(() => {
+    this.blackScreen = new BlackScreen(this, this.sys.settings.key);
+    this.tweens.add({
+      targets: this.blackScreen,
+      alpha: 0,
+      duration: 3000,
+      ease: 'Linear',
+      onComplete: () => {
         this.hud.alpha = 1;
-      });
-
-    this.game.input.keyboard.addKey(keys.pause).onDown.add(() => {
-      this.game.paused = !this.game.paused;
+      },
     });
-  }
 
-  getPrefabsFromMap(name: TextureKeyValue, className?: object): Phaser.Group {
-    const group = this.game.add.group();
+    this.input.keyboard?.addKey(keys.pause).on('down', () => {
+      this.isPaused = !this.isPaused;
+      this.physics.world.isPaused = this.isPaused;
+    });
 
-    const index = this.map.getTilesetIndex(name);
-
-    if (className && index) {
-      this.map.createFromObjects(
-        'objects',
-        this.map.tilesets[index].firstgid,
-        name,
-        0,
-        true,
-        false,
-        group,
-        className,
-      );
-    } else if (index) {
-      this.map.createFromObjects(
-        'objects',
-        this.map.tilesets[index].firstgid,
-        name,
-        0,
-        true,
-        false,
-        group,
-      );
-    }
-
-    return group;
-  }
-
-  render() {
-    // Phaser hook; required for Phaser to call.
-  }
-
-  update() {
-    // Phaser hook; required for Phaser to call.
+    this.input.keyboard?.addKey(keys.skip).once('down', () => {
+      this.startNextLevel();
+    });
   }
 
   gameOver() {
     this.blackScreen.setText('Game Over. Reload Level.');
-    this.game.add
-      .tween(this.blackScreen)
-      .to({ alpha: 1 }, Phaser.Timer.SECOND * 3, Phaser.Easing.Linear.None, true)
-      .onComplete.add(() => {
-        this.game.state.start(this.game.state.current);
-      });
+    this.tweens.add({
+      targets: this.blackScreen,
+      alpha: 1,
+      duration: 3000,
+      ease: 'Linear',
+      onComplete: () => {
+        this.scene.start(this.sys.settings.key);
+      },
+    });
   }
 
   startNextLevel() {
     settings.storage.setHealthPoints(this.player.health.toString());
-    this.game.state.start(this.getNextLevel());
+    this.scene.start(this.getNextLevel());
   }
 
   getNextLevel() {
-    switch (this.game.state.current) {
+    switch (this.sys.settings.key) {
       case Levels[Levels.Zone1Level1]:
         return Stories[Stories.Story2];
       case Levels[Levels.Zone2Level1]:

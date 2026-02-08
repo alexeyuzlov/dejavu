@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <title>Dejavu</title>
     <link rel="icon" href="%BASE_URL%assets/images/favicon.svg" type="image/svg+xml" />
-    <script src="%BASE_URL%vendor/phaser.min.js"></script>
     <script type="module" src="/src/main.ts"></script>
 
     <style>
@@ -47,15 +46,40 @@
       a:hover {
         text-decoration: none;
       }
+
+      .level-links {
+        margin-top: 6px;
+      }
     </style>
   </head>
   <body>
     <div id="game"></div>
     <div id="description">
       <p class="left">Left / Right - move left / right; Z - jump; X - attack; P - pause</p>
+      <p class="left level-links">
+        Level:
+        <a href="#" data-level="Zone1Level1">Zone1Level1</a>
+        <a href="#" data-level="Zone2Level1">Zone2Level1</a>
+        <a href="#" data-level="Zone3Level1">Zone3Level1</a>
+        <a href="#" data-level="Zone4Level1">Zone4Level1</a>
+      </p>
       <p class="right">
         <a target="_blank" href="https://github.com/alexeyuzlov/dejavu">Github</a>
       </p>
     </div>
+    <script>
+      document.querySelectorAll('[data-level]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          const level = link.getAttribute('data-level');
+          if (!level) {
+            return;
+          }
+
+          localStorage.setItem('currentLevel', level);
+          location.reload();
+        });
+      });
+    </script>
   </body>
 </html>

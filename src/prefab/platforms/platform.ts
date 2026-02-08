@@ -1,58 +1,52 @@
+import type { Scene } from 'phaser';
 import { Direction } from '../../global-config';
+import type { TextureKeyValue } from '../../texture-keys';
 import { ArcadePrefab } from '../arcade-prefab';
 import type { Player } from '../player';
-import type { Transparent } from '../transparent';
-import type { TextureKeyValue } from '../../texture-keys';
 
 export abstract class Platform extends ArcadePrefab {
   direction: Direction;
   velocity = 100;
 
-  constructor(game: Phaser.Game, x: number, y: number, texture: TextureKeyValue) {
-    super(game, x, y, texture);
-    this.body.immovable = true;
+  constructor(scene: Scene, x: number, y: number, texture: TextureKeyValue) {
+    super(scene, x, y, texture);
+    this.body.setImmovable(true);
+
+    this.scene.physics.add.collider(
+      this.level.player,
+      this,
+      undefined,
+      (player: Player, platform: Platform) => {
+        return player.y - platform.body.height <= platform.y;
+      },
+    );
+
+    this.scene.physics.add.collider(this, this.level.transparents, () => {
+      this.toggleDirection();
+    });
   }
 
   toggleDirection() {
     switch (this.direction) {
       case Direction.Up:
         this.direction = Direction.Down;
-        this.body.velocity.y = this.velocity;
+        this.body.setVelocityY(this.velocity);
         break;
       case Direction.Down:
         this.direction = Direction.Up;
-        this.body.velocity.y = -this.velocity;
+        this.body.setVelocityY(-this.velocity);
         break;
       case Direction.Left:
         this.direction = Direction.Right;
-        this.body.velocity.x = this.velocity;
+        this.body.setVelocityX(this.velocity);
         break;
       case Direction.Right:
         this.direction = Direction.Left;
-        this.body.velocity.x = -this.velocity;
+        this.body.setVelocityX(-this.velocity);
         break;
       default:
         // Don't doing something
         break;
     }
-  }
-
-  update() {
-    this.game.physics.arcade.collide(
-      this.level.player,
-      this,
-      null,
-      (player: Player, platform: Platform) => {
-        return player.y - platform.body.height <= platform.y;
-      },
-    );
-
-    this.game.physics.arcade.collide(
-      this,
-      this.level.transparents,
-      (platform: Platform, _transparent: Transparent) => {
-        platform.toggleDirection();
-      },
-    );
   }
 }

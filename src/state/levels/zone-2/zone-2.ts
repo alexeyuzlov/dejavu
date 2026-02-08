@@ -1,43 +1,42 @@
-import { TextureKey } from '../../../texture-keys';
+import type { GameObjects, Textures } from 'phaser';
+import { BlendModes } from 'phaser';
 import { AbstractZone } from '../abstract-zone';
 
 export class Zone2 extends AbstractZone {
-  bg: Phaser.TileSprite;
   lightRadius = 150;
-  shadowTexture: Phaser.BitmapData;
-  lightSprite: Phaser.Image;
+  shadowTexture: Textures.CanvasTexture;
+  lightSprite: GameObjects.Image;
 
   preload() {
-    this.game.load.image(TextureKey.Bg, 'assets/images/zone2.png');
+    this.load.image(this.bgKey, 'assets/images/zone2.png');
     super.preload();
   }
 
   create() {
-    this.bg = this.game.add.tileSprite(
-      0,
-      0,
-      this.game.world.width,
-      this.game.world.height,
-      TextureKey.Bg,
-    );
-    this.bg.fixedToCamera = true;
-
     super.create();
 
-    this.game.stage.backgroundColor = '#330169';
+    this.cameras.main.setBackgroundColor('#330169');
 
-    this.shadowTexture = this.game.add.bitmapData(this.map.widthInPixels, this.map.heightInPixels);
-    this.lightSprite = this.game.add.image(0, 0, this.shadowTexture);
-    this.lightSprite.blendMode = PIXI.blendModes.MULTIPLY;
+    if (!this.textures.exists('zone2-shadow')) {
+      this.shadowTexture = this.textures.createCanvas(
+        'zone2-shadow',
+        this.map.widthInPixels,
+        this.map.heightInPixels,
+      );
+    } else {
+      this.shadowTexture = this.textures.get('zone2-shadow') as Textures.CanvasTexture;
+    }
+    this.lightSprite = this.add.image(0, 0, 'zone2-shadow').setOrigin(0, 0);
+    this.lightSprite.setBlendMode(BlendModes.MULTIPLY);
   }
 
-  update() {
-    super.update();
+  update(time: number, delta: number) {
+    super.update(time, delta);
     this.shadowUpdate();
 
-    this.hud.bringToTop();
+    this.children.bringToTop(this.hud);
 
-    this.bg.tilePosition.x = -this.player.x / 5;
+    this.bg.tilePositionX = -this.player.x / 5;
   }
 
   shadowUpdate() {
@@ -66,6 +65,6 @@ export class Zone2 extends AbstractZone {
     );
     this.shadowTexture.context.fill();
 
-    this.shadowTexture.dirty = true;
+    this.shadowTexture.refresh();
   }
 }

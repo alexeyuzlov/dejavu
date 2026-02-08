@@ -1,12 +1,17 @@
 import { TextureKey } from '../texture-keys';
+import { Scene } from 'phaser';
 
-export class Boot extends Phaser.State {
+export class Boot extends Scene {
+  constructor() {
+    super({ key: 'boot' });
+  }
+
   preload() {
     this.load.image(TextureKey.PreloadBar, 'assets/images/prefabs/preload-bar.png');
   }
 
   create() {
-    this.game.stage.backgroundColor = '#000000';
-    this.game.state.start('preload');
+    this.cameras.main.setBackgroundColor('#000000');
+    this.scene.start('preload');
   }
 }

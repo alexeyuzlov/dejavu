@@ -1,20 +1,32 @@
+import type { Scene } from 'phaser';
+import type { TextureKeyValue } from '../../texture-keys';
 import { ArcadePrefab } from '../arcade-prefab';
 import { Player } from '../player';
-import type { TextureKeyValue } from '../../texture-keys';
 
 export class AbstractEnemy extends ArcadePrefab {
   immortalState = false;
   immortalStateAt: number;
-  immortalStateDuration = Phaser.Timer.SECOND / 3;
+  immortalStateDuration = 1000 / 3;
   defensePoints = 0;
   damagePoints = 0;
 
-  constructor(game: Phaser.Game, x: number, y: number, texture: TextureKeyValue) {
-    super(game, x, y, texture);
-    this.alive = true;
-    this.anchor.set(0, 0.5);
+  constructor(scene: Scene, x: number, y: number, texture: TextureKeyValue) {
+    super(scene, x, y, texture);
+    this.setActive(true);
 
-    this.immortalStateAt = game.time.now;
+    this.immortalStateAt = this.scene.time.now;
+
+    this.scene.physics.add.overlap(
+      this.level.player,
+      this,
+      (player: Player, enemy: AbstractEnemy) => {
+        if (player.attackState) {
+          enemy.makeDamage(player.damagePoints);
+        } else {
+          this.level.player.makeDamage(enemy.damagePoints);
+        }
+      },
+    );
   }
 
   makeDamage(damagePoint: number) {
@@ -34,34 +46,28 @@ export class AbstractEnemy extends ArcadePrefab {
         strokeThickness: 1,
       };
 
-      const text = this.game.add.text(this.x, this.y, damagePoint.toString(), textStyle);
-      const tween = this.game.add
-        .tween(text)
-        .to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true, 0, 0, false);
-
-      tween.onComplete.add(() => {
-        text.destroy();
+      const text = this.scene.add.text(this.x, this.y, damagePoint.toString(), textStyle);
+      this.scene.tweens.add({
+        targets: text,
+        alpha: 0,
+        duration: 1000,
+        ease: 'Linear',
+        onComplete: () => {
+          text.destroy();
+        },
       });
 
-      this.immortalStateAt = this.game.time.now;
+      this.immortalStateAt = this.scene.time.now;
       this.immortalState = true;
     }
   }
 
-  update() {
-    this.game.physics.arcade.overlap(
-      this.level.player,
-      this,
-      (player: Player, enemy: AbstractEnemy) => {
-        if (player.attackState) {
-          enemy.makeDamage(player.damagePoints);
-        } else {
-          this.level.player.makeDamage(enemy.damagePoints);
-        }
-      },
-    );
-
-    if (this.immortalState && Date.now() - this.immortalStateAt > this.immortalStateDuration) {
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
+    if (
+      this.immortalState &&
+      this.scene.time.now - this.immortalStateAt > this.immortalStateDuration
+    ) {
       this.immortalState = false;
     }
   }

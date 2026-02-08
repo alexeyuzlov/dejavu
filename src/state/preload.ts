@@ -2,14 +2,16 @@ import { settings } from '../global-config';
 import { PreloadBar } from '../prefab';
 import { TextureKey } from '../texture-keys';
 
-export class Preload extends Phaser.State {
+export class Preload extends Phaser.Scene {
+  constructor() {
+    super({ key: 'preload' });
+  }
+
   preload() {
-    const preloadBar = new PreloadBar(
-      this.game,
-      this.game.world.width - 10,
-      this.game.world.height - 10,
-    );
-    this.load.setPreloadSprite(preloadBar);
+    const preloadBar = new PreloadBar(this, this.scale.width - 10, this.scale.height - 10);
+    this.load.on('progress', (value: number) => {
+      preloadBar.setProgress(value);
+    });
 
     this.load.atlasXML(
       TextureKey.Player,
@@ -79,6 +81,6 @@ export class Preload extends Phaser.State {
   }
 
   create() {
-    this.game.state.start(settings.storage.getCurrentState());
+    this.scene.start(settings.storage.getCurrentState());
   }
 }

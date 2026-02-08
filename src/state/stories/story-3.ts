@@ -1,7 +1,11 @@
-import { Levels } from '../../global-config';
+import { Levels, Stories } from '../../global-config';
 import { AbstractStory } from './abstract-story';
 
 export class Story3 extends AbstractStory {
+  constructor() {
+    super({ key: Stories[Stories.Story3] });
+  }
+
   nextLevel = Levels[Levels.Zone3Level1];
   content = [
     '',

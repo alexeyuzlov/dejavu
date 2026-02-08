@@ -1,19 +1,16 @@
+import type { Scene } from 'phaser';
 import { TextureKey } from '../texture-keys';
 import { ArcadePrefab } from './arcade-prefab';
-import type { Player } from './player';
 
 export class Spike extends ArcadePrefab {
   damagePoints = 10;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.Spike);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.Spike);
 
-    this.body.immovable = true;
-  }
-
-  update() {
-    this.game.physics.arcade.collide(this.level.player, this, (_player: Player, spike: Spike) => {
-      this.level.player.makeDamage(spike.damagePoints);
+    this.body.setImmovable(true);
+    this.scene.physics.add.overlap(this.level.player, this, () => {
+      this.level.player.makeDamage(this.damagePoints);
     });
   }
 }

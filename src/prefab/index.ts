@@ -1,4 +1,3 @@
-export { AbstractPrefab } from './abstract-prefab';
 export { BlackScreen } from './black-screen';
 export { PreloadBar } from './preload-bar';
 export { Player } from './player';
@@ -23,3 +22,4 @@ export { Boss } from './enemies/boss';
 export { Egg } from './bullets/egg';
 export { Bullet } from './bullets/bullet';
 export { BulletReject } from './bullets/bullet-reject';
+export { RainEffect } from './rain-effect';

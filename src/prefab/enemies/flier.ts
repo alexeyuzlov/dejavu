@@ -1,3 +1,5 @@
+import type { Scene } from 'phaser';
+import { Math as PhaserMath } from 'phaser';
 import { TextureKey } from '../../texture-keys';
 import { AbstractEnemy } from './abstract-enemy';
 
@@ -8,46 +10,58 @@ export class Flier extends AbstractEnemy {
   speed = 150;
   defensePoints = 7;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.Flier);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.Flier);
 
-    this.anchor.set(0.5, 0.5);
+    this.setOrigin(0.5, 0.5);
+    this.body.setAllowGravity(false);
     this.health = 84;
 
     this.minDistance = this.level.player.width / 2;
     this.isActive = true;
 
-    this.animations.add(
-      'fly',
-      Phaser.Animation.generateFrameNames('flier-', 1, 4, '.png', 0),
-      20,
-      true,
-    );
-    this.animations.play('fly');
+    if (!this.scene.anims.exists('flier-fly')) {
+      this.scene.anims.create({
+        key: 'flier-fly',
+        frames: this.scene.anims.generateFrameNames(TextureKey.Flier, {
+          prefix: 'flier-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 20,
+        repeat: -1,
+      });
+    }
+    this.play('flier-fly', true);
   }
 
-  update() {
-    super.update();
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
 
-    if (!this.inCamera || !this.alive) {
-      this.body.velocity.setTo(0, 0);
+    if (!this.scene.cameras.main.worldView.contains(this.x, this.y) || !this.active) {
+      this.body.setVelocity(0, 0);
       return;
     }
 
-    const distance = Phaser.Math.distance(this.x, this.y, this.level.player.x, this.level.player.y);
+    const distance = PhaserMath.Distance.Between(
+      this.x,
+      this.y,
+      this.level.player.x,
+      this.level.player.y,
+    );
 
     if (distance > this.minDistance) {
-      const rotation = Phaser.Math.angleBetween(
+      const rotation = PhaserMath.Angle.Between(
         this.x,
         this.y,
         this.level.player.x,
         this.level.player.y,
       );
 
-      this.body.velocity.x = Math.cos(rotation) * this.speed;
-      this.body.velocity.y = Math.sin(rotation) * this.speed;
+      this.body.setVelocity(Math.cos(rotation) * this.speed, Math.sin(rotation) * this.speed);
     } else {
-      this.body.velocity.setTo(0, 0);
+      this.body.setVelocity(0, 0);
     }
   }
 }

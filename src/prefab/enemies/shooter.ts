@@ -1,59 +1,76 @@
-import { Bullet } from '../bullets/bullet';
+import type { GameObjects, Scene } from 'phaser';
 import { TextureKey } from '../../texture-keys';
+import { Bullet } from '../bullets/bullet';
 import { AbstractEnemy } from './abstract-enemy';
 
 export class Shooter extends AbstractEnemy {
   gravity = 300;
   lastBulletShotAt: number;
-  bullets: Phaser.Group;
+  bullets: GameObjects.Group;
   countBullets = 10;
-  shotDelay = Phaser.Timer.SECOND * 3;
+  shotDelay = 3000;
   damagePoints = 10;
   defensePoints = 5;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.Shooter);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.Shooter);
 
-    this.body.gravity.y = this.gravity;
-    this.lastBulletShotAt = this.game.time.now;
+    this.body.setGravityY(this.gravity);
+    this.lastBulletShotAt = this.scene.time.now;
 
-    this.bullets = this.game.add.group();
+    this.bullets = this.scene.add.group();
+    this.bullets.runChildUpdate = true;
     for (let i = 0; i < this.countBullets; i++) {
-      const bullet = new Bullet(game, 0, 0);
+      const bullet = new Bullet(scene, 0, 0);
       this.bullets.add(bullet);
     }
     this.health = 100;
 
-    this.game.onResume.add(() => {
-      this.lastBulletShotAt += this.game.time.pauseDuration;
+    this.scene.physics.add.collider(this, this.level.layer);
+    this.scene.physics.add.overlap(this.level.player, this.bullets, (_player, bullet) => {
+      const activeBullet = bullet as Bullet;
+      if (!activeBullet.active) return;
+      activeBullet.kill();
+      this.level.player.makeDamage(activeBullet.damagePoints);
     });
 
-    this.animations.add('stay', ['shooter-stay-1.png'], 10, true);
-    this.animations.add('shot', ['shooter-shot-1.png'], 10, true);
-    this.animations.play('stay');
-    this.anchor.set(0.5, 0.5);
+    if (!this.scene.anims.exists('shooter-stay')) {
+      this.scene.anims.create({
+        key: 'shooter-stay',
+        frames: [{ key: TextureKey.Shooter, frame: 'shooter-stay-1.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+    if (!this.scene.anims.exists('shooter-shot')) {
+      this.scene.anims.create({
+        key: 'shooter-shot',
+        frames: [{ key: TextureKey.Shooter, frame: 'shooter-shot-1.png' }],
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
+    this.play('shooter-stay', true);
   }
 
-  update() {
-    super.update();
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
 
-    this.game.physics.arcade.collide(this, this.level.layer);
-
-    if (!this.inCamera || !this.alive) {
-      this.body.velocity.setTo(0, 0);
+    if (!this.scene.cameras.main.worldView.contains(this.x, this.y) || !this.active) {
+      this.body.setVelocity(0, 0);
       return;
     }
 
-    if (this.game.time.now - this.lastBulletShotAt < Phaser.Timer.SECOND / 4) {
-      this.animations.play('shot');
+    if (this.scene.time.now - this.lastBulletShotAt < 250) {
+      this.play('shooter-shot', true);
     } else {
-      this.animations.play('stay');
+      this.play('shooter-stay', true);
     }
 
-    if (this.game.time.now - this.lastBulletShotAt < this.shotDelay) return;
-    this.lastBulletShotAt = this.game.time.now;
+    if (this.scene.time.now - this.lastBulletShotAt < this.shotDelay) return;
+    this.lastBulletShotAt = this.scene.time.now;
 
-    const bullet = this.bullets.getFirstDead();
+    const bullet = this.bullets.getFirstDead(false) as Bullet | null;
 
     if (bullet === null || bullet === undefined) return;
 
@@ -61,13 +78,13 @@ export class Shooter extends AbstractEnemy {
     bullet.reset(this.x, this.y);
 
     if (this.x > this.level.player.x) {
-      this.scale.x = -1;
-      bullet.scale.x = -1;
-      bullet.body.velocity.x = -bullet.speed;
+      this.setFlipX(true);
+      bullet.setFlipX(true);
+      bullet.body.setVelocityX(-bullet.speed);
     } else {
-      this.scale.x = 1;
-      bullet.scale.x = 1;
-      bullet.body.velocity.x = bullet.speed;
+      this.setFlipX(false);
+      bullet.setFlipX(false);
+      bullet.body.setVelocityX(bullet.speed);
     }
   }
 }

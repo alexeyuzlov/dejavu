@@ -1,10 +1,18 @@
+import type { Scene } from 'phaser';
+import { GameObjects, Math as PhaserMath } from 'phaser';
 import { TextureKey } from '../texture-keys';
-import { AbstractPrefab } from './abstract-prefab';
 
-export class PreloadBar extends AbstractPrefab {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.PreloadBar);
+export class PreloadBar extends GameObjects.Sprite {
+  private fullWidth: number;
 
-    this.anchor.setTo(1, 1);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.PreloadBar);
+    scene.add.existing(this);
+    this.fullWidth = this.width;
+  }
+
+  setProgress(value: number) {
+    const clamped = PhaserMath.Clamp(value, 0, 1);
+    this.setDisplaySize(this.fullWidth * clamped, this.height);
   }
 }

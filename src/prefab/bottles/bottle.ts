@@ -1,13 +1,14 @@
+import type { Scene } from 'phaser';
 import { ArcadePrefab } from '../arcade-prefab';
-import type { Player } from '../player';
 
 export abstract class Bottle extends ArcadePrefab {
   abstract drink(): void;
 
-  update() {
-    this.game.physics.arcade.overlap(this.level.player, this, (_player: Player, bottle: Bottle) => {
-      bottle.drink();
-      bottle.kill();
+  constructor(scene: Scene, x: number, y: number, texture: string) {
+    super(scene, x, y, texture);
+    this.scene.physics.add.overlap(this.level.player, this, () => {
+      this.drink();
+      this.kill();
     });
   }
 }

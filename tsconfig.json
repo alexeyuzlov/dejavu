@@ -6,6 +6,6 @@
     "skipLibCheck": true,
     "types": ["vite/client"]
   },
-  "include": ["src/**/*.ts", "src/typing/**/*.d.ts", "node_modules/phaser/typescript/phaser.d.ts"],
-  "exclude": ["src/**/*.spec.ts"]
+  "include": ["src/**/*.ts", "src/typing/**/*.d.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/test/**"]
 }

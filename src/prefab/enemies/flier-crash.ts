@@ -1,3 +1,5 @@
+import type { GameObjects, Scene } from 'phaser';
+import { Math as PhaserMath } from 'phaser';
 import { TextureKey } from '../../texture-keys';
 import { Egg } from '../bullets/egg';
 import { AbstractEnemy } from './abstract-enemy';
@@ -10,45 +12,54 @@ export class FlierCrash extends AbstractEnemy {
   velocity = 100;
   defensePoints = 6;
   lastEggShotAt: number;
-  eggs: Phaser.Group;
+  eggs: GameObjects.Group;
   countEggs: number;
   shotDelay = 1500;
 
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y, TextureKey.FlierCrash);
+  constructor(scene: Scene, x: number, y: number) {
+    super(scene, x, y, TextureKey.FlierCrash);
 
-    this.anchor.set(0.5, 0.5);
+    this.setOrigin(0.5, 0.5);
+    this.body.setAllowGravity(false);
     this.health = 52;
 
-    this.eggs = this.game.add.group();
+    this.eggs = this.scene.add.group();
+    this.eggs.runChildUpdate = true;
     this.countEggs = 10;
     for (let i = 0; i < this.countEggs; i++) {
-      const egg = new Egg(game, 0, 0);
+      const egg = new Egg(scene, 0, 0);
       this.eggs.add(egg);
     }
 
     this.minDistance = this.level.player.width / 2;
-    this.lastEggShotAt = this.game.time.now;
+    this.lastEggShotAt = this.scene.time.now;
 
-    this.animations.add(
-      'fly',
-      Phaser.Animation.generateFrameNames('flier-crash-', 1, 4, '.png', 0),
-      20,
-      true,
-    );
-    this.animations.play('fly');
+    if (!this.scene.anims.exists('flier-crash-fly')) {
+      this.scene.anims.create({
+        key: 'flier-crash-fly',
+        frames: this.scene.anims.generateFrameNames(TextureKey.FlierCrash, {
+          prefix: 'flier-crash-',
+          start: 1,
+          end: 4,
+          suffix: '.png',
+        }),
+        frameRate: 20,
+        repeat: -1,
+      });
+    }
+    this.play('flier-crash-fly', true);
   }
 
-  update() {
-    super.update();
+  preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
 
-    if (!this.inCamera || !this.alive) {
-      this.body.velocity.setTo(0, 0);
+    if (!this.scene.cameras.main.worldView.contains(this.x, this.y) || !this.active) {
+      this.body.setVelocity(0, 0);
       return;
     }
 
     if (!this.isAttackOver) {
-      const distance = Phaser.Math.distance(
+      const distance = PhaserMath.Distance.Between(
         this.x,
         this.y,
         this.level.player.x,
@@ -56,35 +67,38 @@ export class FlierCrash extends AbstractEnemy {
       );
 
       if (distance > this.minDistance) {
-        const rotation = Phaser.Math.angleBetween(
+        const rotation = PhaserMath.Angle.Between(
           this.x,
           this.y,
           this.level.player.x,
           this.level.player.y - this.level.player.body.height * 4,
         );
 
-        this.body.velocity.x = Math.cos(rotation) * this.velocity;
-        this.body.velocity.y = Math.sin(rotation) * this.velocity;
+        this.body.setVelocity(
+          Math.cos(rotation) * this.velocity,
+          Math.sin(rotation) * this.velocity,
+        );
       } else {
-        this.body.velocity.y = -30;
+        this.body.setVelocityY(-30);
 
         if (this.level.player.x > this.x) {
-          this.body.velocity.x = this.velocity;
+          this.body.setVelocityX(this.velocity);
         } else {
-          this.body.velocity.x = -this.velocity;
+          this.body.setVelocityX(-this.velocity);
         }
       }
     }
 
-    if (this.game.time.now - this.lastEggShotAt < this.shotDelay) return;
-    this.lastEggShotAt = this.game.time.now;
+    if (this.scene.time.now - this.lastEggShotAt < this.shotDelay) return;
+    this.lastEggShotAt = this.scene.time.now;
 
-    const egg = this.eggs.getFirstDead();
+    const egg = this.eggs.getFirstDead(false) as Egg | null;
     if (egg === null || egg === undefined) return;
 
     egg.revive();
     egg.reset(this.x, this.y);
-    egg.body.velocity.y = egg.speed;
-    egg.animations.play('egg');
+    egg.resetEggState();
+    egg.body.setVelocityY(egg.speed);
+    egg.play('egg', true);
   }
 }
