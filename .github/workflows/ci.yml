@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  # Run checks for every push/PR, deploy only on master pushes.
   push:
     branches: ['**']
   pull_request:
@@ -12,7 +13,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
+      # Match GitHub Pages base path during CI builds.
       BASE_URL: /dejavu/
     steps:
       - uses: actions/checkout@v4
@@ -27,28 +30,37 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck:tests
       - run: npm run test:unit
-      - run: npm run build
-      - name: Run Playwright in Docker
-        run: |
-          docker build -t e2e -f Dockerfile.playwright .
-          docker run --rm e2e
 
       - name: Set build metadata
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "VITE_BUILD_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
           echo "VITE_BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_ENV"
 
       - run: npm run build
       - name: Upload artifact for Pages
+        # Only prepare Pages artifact for master deploys.
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Playwright in Docker
+        # Containerized Playwright keeps browser deps stable.
+        run: |
+          docker build -t e2e -f Dockerfile.playwright .
+          docker run --rm e2e
+
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, e2e]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    timeout-minutes: 15
     permissions:
       pages: write
       id-token: write

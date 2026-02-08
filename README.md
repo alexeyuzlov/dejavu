@@ -1,59 +1,62 @@
 # Dejavu
 
-## Overview
+2D platformer built with Phaser 3.90.0.
 
-Dejavu is a 2D platformer game built with the Phaser framework. Traverse through challenging levels, face enemies, and prepare for an epic boss fight at the end. Immerse yourself in this fast-paced, retro-style adventure.
+## Requirements
 
-## Build Instructions
+- Node.js 20.19.0
+- npm
+- Docker (optional, only for Playwright Docker runs)
 
-To set up and build the project, follow these steps:
+## Quick start
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-2. **Start dev server**:
-   ```bash
-   npm run dev
-   ```
-3. **Build the project (local `/`)**:
-   ```bash
-   npm run build
-   ```
-4. **Build for GitHub Pages**:
-   ```bash
-   BASE_URL=/dejavu/ npm run build
-   ```
+```bash
+npm ci
+npm run dev
+```
 
-## E2E Tests
+## Common scripts
 
-Local e2e uses Playwright with browsers installed into `node_modules`.
+```bash
+npm run format:check
+npm run lint
+npm run typecheck:tests
+npm run test:unit
+npm run build
+```
 
-1. **Install Playwright browsers (local)**:
-   ```bash
-   npm run test:e2e:install
-   ```
-2. **Build the project (local `/`)**:
-   ```bash
-   npm run build
-   ```
-3. **Build for GitHub Pages**:
-   ```bash
-   BASE_URL=/dejavu/ npm run build
-   ```
-4. **Run e2e locally**:
-   ```bash
-   npm run test:e2e
-   ```
+## Build targets
 
-### Docker e2e
+- Local build (root `/`):
+  ```bash
+  npm run build
+  ```
+- GitHub Pages build:
+  ```bash
+  BASE_URL=/dejavu/ npm run build
+  ```
 
-Run the e2e tests inside the Playwright Docker image:
+## E2E tests (Playwright)
+
+Local run uses Playwright with browsers installed into `node_modules`:
+
+```bash
+npm run test:e2e:install
+npm run test:e2e
+```
+
+Docker run (mirrors CI):
 
 ```bash
 npm run test:e2e:docker
 ```
 
+## CI/CD
+
+- Checks (format, lint, typecheck, unit, build) run on every push and PR.
+- Playwright e2e runs on every push and PR in Docker.
+- Deploy runs only on `master` pushes after checks and e2e succeed.
+
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+MIT, see `LICENSE`.

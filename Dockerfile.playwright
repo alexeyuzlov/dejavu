@@ -1,12 +1,13 @@
 FROM mcr.microsoft.com/playwright:v1.58.1-jammy
 
+# Install app deps inside the container for e2e.
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci
 
+# App code + base path for preview server used by Playwright.
 COPY . .
 ENV BASE_URL=/dejavu/
-RUN npm run build
 
 CMD ["npx", "playwright", "test"]
